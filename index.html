@@ -1,87 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PortfolioPDB | Pablo Domínguez</title>
-  <meta name="description" content="Portfolio profesional de Pablo Domínguez. Tecnología, estrategia y ejecución de proyectos." />
-  <link rel="stylesheet" href="css/styles.css" />
-</head>
-<body>
-
-  <header class="header">
-    <nav class="nav">
-      <div class="logo">PortfolioPDB</div>
-      <ul class="nav-links">
-        <li><a href="#about">Sobre mí</a></li>
-        <li><a href="#projects">Proyectos</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#contact">Contacto</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main>
-    <!-- HERO -->
-    <section class="hero">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PortfolioPDB | Pablo Domínguez</title>
+    <meta
+      name="description"
+      content="Portfolio profesional de Pablo Domínguez. Tecnología, estrategia y ejecución de proyectos."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <!-- Gridstack CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/gridstack@10.1.0/dist/gridstack.min.css"
+    />
+  </head>
+  <body>
+    <header class="header">
       <h1>Pablo Domínguez Borreguero</h1>
       <h2>Ingeniero · Tecnología · Estrategia</h2>
-      <p>
-        Desarrollo soluciones simples, eficientes y escalables.
-      </p>
+      <p>Desarrollo soluciones simples, eficientes y escalables.</p>
       <a class="btn" href="https://www.linkedin.com" target="_blank">
         Ver perfil en LinkedIn
       </a>
-    </section>
+    </header>
 
-    <!-- ABOUT -->
-    <section id="about" class="section">
-      <h3>Sobre mí</h3>
-      <p>
-        Profesional orientado a la ejecución y al pensamiento estratégico.
-        Me interesa construir sistemas claros, mantenibles y que aporten valor real.
-      </p>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects" class="section">
-      <h3>Proyectos destacados</h3>
-      <div class="cards">
-        <div class="card">
-          <h4>Gestión de proyectos</h4>
-          <p>Seguimiento tipo Gantt y control de ejecución.</p>
+    <main>
+      <div class="parent">
+        <div class="div1 card">
+          <h3>Sobre mí</h3>
+          <p>
+            Profesional orientado a la ejecución y al pensamiento estratégico.
+            Me interesa construir sistemas claros, mantenibles y que aporten
+            valor real.
+          </p>
         </div>
-        <div class="card">
-          <h4>Automatización</h4>
-          <p>Optimización de procesos y reducción de tareas repetitivas.</p>
+        <div class="div2">
+          <div class="grid-stack-item" gs-w="4" gs-h="2">
+            <div class="grid-stack-item-content card">
+              <h2>Sobre mí</h2>
+              <p>Desarrollador con interés en web, datos y automatización.</p>
+            </div>
+          </div>
         </div>
+        <!-- <div class="div3 card">3</div> -->
+        <div class="div3">
+          <div class="grid-stack-item" gs-w="4" gs-h="2">
+            <div class="grid-stack-item-content card">
+              <h2>Proyecto 1</h2>
+              <p>Descripción breve del proyecto.</p>
+            </div>
+          </div>
+        </div>
+        <div class="div4 card">4</div>
       </div>
-    </section>
+    </main>
 
-    <!-- SKILLS -->
-    <section id="skills" class="section">
-      <h3>Skills</h3>
-      <ul class="skills">
-        <li>HTML / CSS / JavaScript</li>
-        <li>Arquitectura simple (KISS)</li>
-        <li>Automatización</li>
-        <li>Análisis y estrategia</li>
-      </ul>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="section">
+    <footer class="footer">
+      <!-- CONTACT -->
       <h3>Contacto</h3>
-      <p>
-        Puedes contactarme a través de LinkedIn.
-      </p>
-    </section>
-  </main>
+      <p>Puedes contactarme a través de LinkedIn.</p>
+      <p>© 2026 · PortfolioPDB</p>
+    </footer>
 
-  <footer class="footer">
-    <p>© 2026 · PortfolioPDB</p>
-  </footer>
+    <!-- Gridstack JS -->
+    <script src="https://cdn.jsdelivr.net/npm/gridstack@10.1.0/dist/gridstack-all.js"></script>
 
-  <script src="js/main.js"></script>
-</body>
+    <script src="js/main.js"></script>
+  </body>
 </html>
+<!--   ABOUT -->
+<!--
+      <section id="about" class="section">
+        <h3>Sobre mí</h3>
+        <p>
+          Profesional orientado a la ejecución y al pensamiento estratégico. Me
+          interesa construir sistemas claros, mantenibles y que aporten valor
+          real.
+        </p>
+      </section>
+      <section id="projects" class="cards"></section>
+
+      <div class="grid-stack">
+        <div class="grid-stack-item" gs-w="4" gs-h="2">
+          <div class="grid-stack-item-content card">
+            <h2>Sobre mí</h2>
+            <p>Desarrollador con interés en web, datos y automatización.</p>
+          </div>
+        </div>
+
+        <div class="grid-stack-item" gs-w="4" gs-h="2">
+          <div class="grid-stack-item-content card">
+            <h2>Proyecto 1</h2>
+            <p>Descripción breve del proyecto.</p>
+          </div>
+        </div>
+
+        <div class="grid-stack-item" gs-w="4" gs-h="2">
+          <div class="grid-stack-item-content card">
+            <h2>Contacto</h2>
+            <p>Email · GitHub · LinkedIn</p>
+             
+            <section id="projects" class="section">
+              <h3>Proyectos destacados</h3>
+              <div class="cards">
+                <div class="card">
+                  <h4>Gestión de proyectos</h4>
+                  <p>Seguimiento tipo Gantt y control de ejecución.</p>
+                </div>
+                <div class="card">
+                  <h4>Automatización</h4>
+                  <p>
+                    Optimización de procesos y reducción de tareas repetitivas.
+                  </p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+        <div class="grid-stack-item" gs-w="4" gs-h="2">
+          <div class="grid-stack-item-content card">
+            <h2>Skills</h2>
+            <p></p>
+            <ul class="skills">
+              <li>HTML / CSS / JavaScript</li>
+              <li>Arquitectura simple (KISS)</li>
+              <li>Automatización</li>
+              <li>Análisis y estrategia</li>
+            </ul>
+          </div>
+        </div>
+      </div> -->
