@@ -4,8 +4,35 @@
   grid-template-rows: auto 1fr auto;
 
 } */
+ :root {
+  --font-heading: 'Sen', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Sen', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color:whitesmoke
+}
+h2, h3, p {
+  color:#0C4A6E
+}
+.color-wheat {
+  color:wheat
+}
+.profile-img {
+  width: 120px;
+  height: 120px;          /* cuadrada */
+  object-fit: cover;     /* recorta bien la cara */
+  border-radius: 50%;    /* círculo perfecto */
+  border: 3px solid #ddd;
+  display: block;
+  margin: 0 auto;
+}
+
+
+
 body {
-  font-family: system-ui, sans-serif;
+  font-family:  var(--font-body);
   margin: 0;
   background: #f4f6f8;
 }
@@ -14,6 +41,10 @@ header {
   padding: 1.5rem;
   background: #111;
   color: white;
+  display: flex;
+  align-items: center;   /* misma altura */
+  gap: 1rem;             /* espacio entre foto y texto */
+  padding: 1.5rem;
 }
 
 .grid-stack {
@@ -31,59 +62,56 @@ header {
 .parent {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(9, 1fr);
+    grid-template-rows: repeat(5, 1fr);
     gap: 8px;
 }
     
 .div1 {
-    grid-row: span 9 / span 9;
+    grid-row: span 5 / span 5;
     grid-column-start: 2;
 }
 
 .div2 {
     grid-column: span 2 / span 2;
-    grid-row: span 2 / span 2;
     grid-column-start: 3;
 }
 
 .div3 {
     grid-column: span 2 / span 2;
-    grid-row: span 2 / span 2;
     grid-column-start: 3;
-    grid-row-start: 3;
+    grid-row-start: 2;
 }
 
 .div4 {
     grid-column: span 2 / span 2;
-    grid-row: span 2 / span 2;
     grid-column-start: 3;
-    grid-row-start: 5;
+    grid-row-start: 3;
 }
 
 .div5 {
     grid-column: span 2 / span 2;
-    grid-row: span 2 / span 2;
     grid-column-start: 3;
-    grid-row-start: 7;
+    grid-row-start: 4;
 }
 
 .div6 {
-    grid-column-start: 5;
-    grid-row-start: 1;
+    grid-column: span 2 / span 2;
+    grid-column-start: 3;
+    grid-row-start: 5;
 }
 
 .div7 {
     grid-column-start: 5;
-    grid-row-start: 3;
+    grid-row-start: 1;
 }
 
 .div8 {
     grid-column-start: 5;
-    grid-row-start: 5;
+    grid-row-start: 2;
 }
 
 .div9 {
     grid-column-start: 5;
-    grid-row-start: 7;
+    grid-row-start: 3;
 }
         
