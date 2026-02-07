@@ -408,7 +408,41 @@ a:hover { text-decoration: underline; }
 }
 .footer-inner p { margin: 0; }
 
+/* =========================
+   Experience collapsible
+   ========================= */
 
+.company-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.toggle-roles {
+  background: transparent;
+  border: none;
+  color: var(--btn);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+.toggle-roles:hover {
+  background: rgba(10, 102, 194, 0.08);
+}
+
+.experience-roles {
+  margin-top: 12px;
+  display: grid;
+  gap: 16px;
+}
+
+/* transición suave */
+.experience-roles[hidden] {
+  display: none;
+}
 
 
 

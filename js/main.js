@@ -1,3 +1,27 @@
+// ==============================
+// Experience: collapse / expand
+// ==============================
+;(function setupExperienceToggles() {
+  const toggles = document.querySelectorAll('[data-toggle="roles"]')
+
+  toggles.forEach((btn) => {
+    const company = btn.closest('.experience-company')
+    const roles = company.querySelector('.experience-roles')
+
+    if (!roles) return
+
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true'
+
+      btn.setAttribute('aria-expanded', String(!expanded))
+      roles.hidden = expanded
+
+      btn.textContent = expanded
+        ? btn.textContent.replace('Ver menos', 'Ver roles')
+        : 'Ver menos'
+    })
+  })
+})()
 // PortfolioPDB - public JS (simple y mantenible)
 
 // 1) "Ver más / ver menos" (Acerca de)
