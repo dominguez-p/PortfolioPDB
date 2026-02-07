@@ -6,6 +6,300 @@
     <title>PortfolioPDB | Pablo Domínguez</title>
     <meta
       name="description"
+      content="Portfolio profesional de Pablo Domínguez. Perfil tipo LinkedIn, proyectos y experiencia."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+
+  <body>
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="brand">
+          <span class="brand-dot" aria-hidden="true"></span>
+          <span class="brand-name">PortfolioPDB</span>
+        </div>
+
+        <nav class="topnav" aria-label="Navegación principal">
+          <a class="topnav-link" href="#about">Acerca de</a>
+          <a class="topnav-link" href="#experience">Experiencia</a>
+          <a class="topnav-link" href="#projects">Proyectos</a>
+          <a class="topnav-link" href="#skills">Aptitudes</a>
+          <a class="topnav-link" href="#contact">Contacto</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container layout">
+      <!-- Columna izquierda (main) -->
+      <section class="col-main">
+        <!-- Profile card -->
+        <article class="card profile" aria-label="Perfil">
+          <div class="profile-cover" role="img" aria-label="Portada"></div>
+
+          <div class="profile-body">
+            <div class="profile-avatar" aria-hidden="true">
+              <!-- Si luego quieres imagen real, metes <img> aquí -->
+              <span class="avatar-initials">PD</span>
+            </div>
+
+            <div class="profile-head">
+              <div class="profile-title">
+                <h1>Pablo Domínguez</h1>
+                <p class="headline">
+                  Ingeniero · Tecnología · Estrategia · Ejecución
+                </p>
+                <p class="meta">
+                  <span>Madrid, España</span>
+                  <span class="dot">•</span>
+                  <a href="#contact">Información de contacto</a>
+                </p>
+              </div>
+
+              <div class="profile-actions">
+                <a
+                  class="btn primary"
+                  href="https://www.linkedin.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  >LinkedIn</a
+                >
+                <a class="btn" href="#projects">Ver proyectos</a>
+              </div>
+            </div>
+
+            <div class="profile-sub">
+              <p class="subline">
+                Creo soluciones simples, rápidas y mantenibles. Me enfoco en
+                claridad, impacto y entregables.
+              </p>
+              <div class="pill-row" role="list" aria-label="Resumen rápido">
+                <span class="pill" role="listitem">Automatización</span>
+                <span class="pill" role="listitem">Arquitectura KISS</span>
+                <span class="pill" role="listitem">Productividad</span>
+                <span class="pill" role="listitem">Datos y análisis</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- About -->
+        <article id="about" class="card section" aria-label="Acerca de">
+          <header class="section-head">
+            <h2>Acerca de</h2>
+          </header>
+
+          <div class="section-content">
+            <p class="clamp" data-clamp="about">
+              Soy un profesional orientado a la ejecución con mentalidad de
+              producto. Me gusta convertir ideas en sistemas simples y
+              sostenibles: menos complejidad, más valor. Trabajo bien con
+              incertidumbre, ordenando requisitos, priorizando y entregando.
+              <br /><br />
+              Me interesan especialmente la automatización, el diseño de
+              procesos, la analítica y construir herramientas internas que
+              ahorren tiempo y reduzcan errores. Si algo puede simplificarse, lo
+              simplifico.
+            </p>
+
+            <button
+              class="linklike"
+              type="button"
+              data-toggle="about"
+              aria-expanded="false"
+            >
+              Ver más
+            </button>
+          </div>
+        </article>
+
+        <!-- Experience -->
+        <article id="experience" class="card section" aria-label="Experiencia">
+          <header class="section-head">
+            <h2>Experiencia</h2>
+          </header>
+
+          <div class="section-content">
+            <ul class="timeline" aria-label="Lista de experiencias">
+              <li class="timeline-item">
+                <div class="timeline-icon" aria-hidden="true"></div>
+                <div class="timeline-body">
+                  <div class="row">
+                    <h3 class="item-title">Rol / Posición</h3>
+                    <span class="item-date">2024 — Actualidad</span>
+                  </div>
+                  <p class="item-subtitle">Empresa / Proyecto · Madrid</p>
+                  <p class="item-desc">
+                    • Logro/impacto 1 (métricas si tienes)<br />
+                    • Logro/impacto 2<br />
+                    • Logro/impacto 3
+                  </p>
+                </div>
+              </li>
+
+              <li class="timeline-item">
+                <div class="timeline-icon" aria-hidden="true"></div>
+                <div class="timeline-body">
+                  <div class="row">
+                    <h3 class="item-title">Rol / Posición anterior</h3>
+                    <span class="item-date">2022 — 2024</span>
+                  </div>
+                  <p class="item-subtitle">
+                    Empresa / Proyecto · (Remoto / Madrid)
+                  </p>
+                  <p class="item-desc">
+                    • Responsabilidad/impacto principal<br />
+                    • Mejora concreta realizada<br />
+                    • Colaboración / liderazgo
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Projects -->
+        <article id="projects" class="card section" aria-label="Proyectos">
+          <header class="section-head">
+            <h2>Proyectos destacados</h2>
+          </header>
+
+          <div class="section-content">
+            <div class="grid">
+              <a class="project" href="#" aria-label="Proyecto 1">
+                <div class="project-top">
+                  <h3>Control de proyecto (Gantt)</h3>
+                  <span class="badge">Planificación</span>
+                </div>
+                <p>
+                  Seguimiento de ejecución con hitos, riesgos y estados.
+                  Enfoque: claridad y trazabilidad.
+                </p>
+                <div class="project-meta">
+                  <span>HTML</span><span>CSS</span><span>JS</span>
+                </div>
+              </a>
+
+              <a class="project" href="#" aria-label="Proyecto 2">
+                <div class="project-top">
+                  <h3>Automatización y reporting</h3>
+                  <span class="badge">Eficiencia</span>
+                </div>
+                <p>
+                  Automatizaciones para reducir trabajo repetitivo y mejorar
+                  consistencia. Export/import de datos.
+                </p>
+                <div class="project-meta">
+                  <span>JS</span><span>JSON</span><span>GitHub</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Skills -->
+        <article id="skills" class="card section" aria-label="Aptitudes">
+          <header class="section-head">
+            <h2>Aptitudes</h2>
+          </header>
+
+          <div class="section-content">
+            <div class="skills">
+              <span class="skill">HTML</span>
+              <span class="skill">CSS</span>
+              <span class="skill">JavaScript</span>
+              <span class="skill">Automatización</span>
+              <span class="skill">Arquitectura simple (KISS)</span>
+              <span class="skill">Análisis</span>
+              <span class="skill">Documentación</span>
+              <span class="skill">Priorización</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Contact -->
+        <article id="contact" class="card section" aria-label="Contacto">
+          <header class="section-head">
+            <h2>Contacto</h2>
+          </header>
+
+          <div class="section-content">
+            <div class="contact">
+              <div class="contact-row">
+                <span class="label">LinkedIn</span>
+                <a
+                  href="https://www.linkedin.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  >Abrir perfil</a
+                >
+              </div>
+
+              <div class="contact-row">
+                <span class="label">Email</span>
+                <a href="mailto:pablo.dominguezb@gmail.com"
+                  >pablo.dominguezb@gmail.com</a
+                >
+              </div>
+
+              <p class="fineprint">
+                *Esta es la parte pública. La parte privada (dashboard del
+                proyecto) la añadiremos después.
+              </p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- Columna derecha (sidebar) -->
+      <aside class="col-side" aria-label="Panel lateral">
+        <div class="card sidecard">
+          <h3>Enlaces</h3>
+          <div class="side-links">
+            <a href="#about">Acerca de</a>
+            <a href="#experience">Experiencia</a>
+            <a href="#projects">Proyectos</a>
+            <a href="#skills">Aptitudes</a>
+            <a href="#contact">Contacto</a>
+          </div>
+        </div>
+
+        <div class="card sidecard">
+          <h3>Destacado</h3>
+          <p class="muted">
+            Aquí pondremos (más adelante) un “Featured” como LinkedIn: CV
+            descargable, proyecto estrella, demo, etc.
+          </p>
+        </div>
+
+        <div class="card sidecard">
+          <h3>Disponibilidad</h3>
+          <p class="muted">
+            Si quieres, añade una frase: “Abierto a colaborar en…” o “Busco…”
+          </p>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <p>© 2026 · PortfolioPDB</p>
+        <p class="muted">Hecho con HTML/CSS/JS · Deploy en GitHub Pages</p>
+      </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
+
+<!-- <!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PortfolioPDB | Pablo Domínguez</title>
+    <meta
+      name="description"
       content="Portfolio profesional de Pablo Domínguez. Tecnología, estrategia y ejecución de proyectos."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,7 +308,7 @@
       href="https://fonts.googleapis.com/css2?family=Sen:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <!-- Gridstack CSS -->
+Gridstack CSS 
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/gridstack@10.1.0/dist/gridstack.min.css"
@@ -86,7 +380,7 @@
             </div>
           </div>
         </div>
-        <!-- <div class="div3 card">3</div> -->
+ <div class="div3 card">3</div>
         <div class="div3">
           <div class="grid-stack-item" gs-w="4" gs-h="2">
             <div class="grid-stack-item-content card">
@@ -156,18 +450,18 @@
     </main>
 
     <footer class="footer">
-      <!-- CONTACT -->
+CONTACT 
       <h3>Contacto</h3>
       <p>Puedes contactarme a través de LinkedIn.</p>
       <p>© 2026 · PortfolioPDB</p>
     </footer>
 
-    <!-- Gridstack JS -->
+Gridstack JS 
     <script src="https://cdn.jsdelivr.net/npm/gridstack@10.1.0/dist/gridstack-all.js"></script>
 
     <script src="js/main.js"></script>
   </body>
-</html>
+</html> -->
 <!--   ABOUT -->
 <!--
       <section id="about" class="section">
