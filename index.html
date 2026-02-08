@@ -9,6 +9,12 @@
       content="Portfolio profesional de Pablo Domínguez. Perfil tipo LinkedIn, proyectos y experiencia."
     />
     <link rel="stylesheet" href="./css/styles.css" />
+    <link
+      rel="preload"
+      as="image"
+      href="assets/img/profile-avatar.webp"
+      type="image/webp"
+    />
   </head>
 
   <body>
@@ -35,11 +41,28 @@
       <section class="col-main">
         <!-- Profile card -->
         <article class="card profile" aria-label="Perfil">
-          <div class="profile-cover" role="img" aria-label="Portada"></div>
+          <!--     <div class="profile-cover" role="img" aria-label="Portada"></div> -->
+          <div class="profile-cover">
+            <img
+              src="assets/img/profile-cover.webp"
+              alt="Portada del perfil"
+              width="1600"
+              height="400"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
 
           <div class="profile-body">
-            <div class="profile-avatar" aria-hidden="true">
-              <!-- Si luego quieres imagen real, metes <img> aquí -->
+            <div class="profile-avatar">
+              <img
+                src="assets/img/profile-avatar.webp"
+                alt="Foto de Pablo Domínguez"
+                width="112"
+                height="112"
+                loading="eager"
+                decoding="async"
+              />
               <span class="avatar-initials">PD</span>
             </div>
 
