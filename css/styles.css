@@ -479,7 +479,152 @@ a:hover { text-decoration: underline; }
 }
 
 
+/* =========================
+   Experience (Accordion)
+   ========================= */
 
+.experience {
+  display: grid;
+  gap: 14px;
+}
+
+.exp-company {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.exp-company-toggle {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 6px 0;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+}
+
+.exp-company-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.exp-company-name {
+  margin: 0;
+  font-size: 18px;
+}
+
+.exp-company-period {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.exp-company-cta {
+  color: var(--btn);
+  font-weight: 650;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Roles list spacing */
+.exp-company-body .exp-collapsible-inner {
+  margin-top: 8px;
+  display: grid;
+  gap: 10px;
+}
+
+/* Role row */
+.exp-role {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.exp-role:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.exp-role-toggle {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 8px 0;
+  cursor: pointer;
+
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+}
+
+.exp-role-line {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.exp-role-title {
+  font-weight: 750;
+}
+
+.exp-role-meta {
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.exp-role-cta {
+  color: var(--btn);
+  font-weight: 650;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Current role highlight */
+.exp-role[data-current="true"] .exp-role-toggle {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(10, 102, 194, 0.25);
+  background: rgba(10, 102, 194, 0.06);
+}
+
+.exp-role[data-current="true"] .exp-role-title::before {
+  content: "★ ";
+  color: var(--btn);
+}
+
+/* Collapsible animation (smooth) */
+.exp-collapsible {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 220ms ease, opacity 220ms ease;
+}
+
+.exp-collapsible-inner {
+  overflow: hidden;
+}
+
+.exp-collapsible.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+/* Detail bullets */
+.exp-bullets {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.exp-bullets li {
+  margin-bottom: 6px;
+}
 
 
 
