@@ -103,6 +103,142 @@
   document.head.appendChild(style)
 })()
 
+// ======================================================
+// Experience accordion:
+// - One company open at a time
+// - One role open at a time
+// - Default: current company + current role open
+// - No persistence
+// ======================================================
+;(function setupExperienceAccordion() {
+  const root = document.querySelector('.experience')
+  if (!root) return
+
+  const companies = Array.from(root.querySelectorAll('[data-company]'))
+
+  const setCollapsibleOpen = (collapsibleEl, open) => {
+    if (!collapsibleEl) return
+    collapsibleEl.classList.toggle('is-open', open)
+  }
+
+  const setCompanyOpen = (companyEl, open) => {
+    const btn = companyEl.querySelector('.exp-company-toggle')
+    const body = companyEl.querySelector('.exp-company-body[data-collapsible]')
+
+    if (!btn || !body) return
+
+    btn.setAttribute('aria-expanded', String(open))
+    const cta = btn.querySelector('.exp-company-cta')
+    if (cta) cta.textContent = open ? 'Ocultar' : 'Ver'
+
+    setCollapsibleOpen(body, open)
+
+    // If closing a company, also close any open role inside
+    if (!open) {
+      const openRole = companyEl.querySelector(
+        ".exp-role-toggle[aria-expanded='true']",
+      )
+      if (openRole) {
+        setRoleOpen(openRole.closest('[data-role]'), false)
+      }
+    }
+  }
+
+  const setRoleOpen = (roleEl, open) => {
+    const btn = roleEl.querySelector('.exp-role-toggle')
+    const detail = roleEl.querySelector('.exp-role-detail[data-collapsible]')
+
+    if (!btn || !detail) return
+
+    btn.setAttribute('aria-expanded', String(open))
+    const cta = btn.querySelector('.exp-role-cta')
+    if (cta) cta.textContent = open ? 'Ver menos' : 'Ver más'
+
+    setCollapsibleOpen(detail, open)
+  }
+
+  const closeAllCompaniesExcept = (keepCompany) => {
+    companies.forEach((c) => {
+      if (c !== keepCompany) setCompanyOpen(c, false)
+    })
+  }
+
+  const closeAllRoles = () => {
+    companies.forEach((company) => {
+      const roles = company.querySelectorAll('[data-role]')
+      roles.forEach((r) => setRoleOpen(r, false))
+    })
+  }
+
+  // ---------
+  // Init state
+  // ---------
+  // Start: close everything
+  companies.forEach((c) => setCompanyOpen(c, false))
+  closeAllRoles()
+
+  // Open current company (fallback to first)
+  const currentCompany =
+    companies.find((c) => c.getAttribute('data-current') === 'true') ||
+    companies[0]
+  if (currentCompany) {
+    setCompanyOpen(currentCompany, true)
+    closeAllCompaniesExcept(currentCompany)
+
+    // Open current role within current company (fallback to first role)
+    const roles = Array.from(currentCompany.querySelectorAll('[data-role]'))
+    const currentRole =
+      roles.find((r) => r.getAttribute('data-current') === 'true') || roles[0]
+
+    if (currentRole) {
+      closeAllRoles()
+      setRoleOpen(currentRole, true)
+    }
+  }
+
+  // -----------------
+  // Click interactions
+  // -----------------
+  root.addEventListener('click', (e) => {
+    const companyBtn = e.target.closest('.exp-company-toggle')
+    if (companyBtn) {
+      const company = companyBtn.closest('[data-company]')
+      const isOpen = companyBtn.getAttribute('aria-expanded') === 'true'
+
+      if (isOpen) {
+        setCompanyOpen(company, false)
+      } else {
+        closeAllCompaniesExcept(company)
+        setCompanyOpen(company, true)
+        // When opening a company, do not auto-open a role (keeps user control)
+        // But if you prefer: open first role automatically, you can add it here.
+      }
+      return
+    }
+
+    const roleBtn = e.target.closest('.exp-role-toggle')
+    if (roleBtn) {
+      const role = roleBtn.closest('[data-role]')
+      const isOpen = roleBtn.getAttribute('aria-expanded') === 'true'
+
+      // Ensure the parent company is open
+      const company = roleBtn.closest('[data-company]')
+      if (company) {
+        closeAllCompaniesExcept(company)
+        setCompanyOpen(company, true)
+      }
+
+      // Accordion: only one role open at a time
+      if (isOpen) {
+        setRoleOpen(role, false)
+      } else {
+        closeAllRoles()
+        setRoleOpen(role, true)
+      }
+    }
+  })
+})()
+
 /* // JS mínimo por ahora
 console.log('PortfolioPDB cargado correctamente')
 
