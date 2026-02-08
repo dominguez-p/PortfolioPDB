@@ -131,16 +131,29 @@ a:hover { text-decoration: underline; }
 
 /* ========== Profile card ========== */
 .profile { margin-top: 12px; }
-.profile-cover {
+/* .profile-cover {
   height: 140px;
   background:
     radial-gradient(1200px 220px at 20% 0%, rgba(255,255,255,0.35), rgba(255,255,255,0) 60%),
     linear-gradient(135deg, #0a66c2, #0b3a6b);
 }
+ */
+ .profile-cover {
+  height: 140px;
+  overflow: hidden;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
 
+.profile-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .profile-body { padding: 16px 18px 18px; position: relative; }
 
-.profile-avatar {
+/* .profile-avatar {
   width: 112px;
   height: 112px;
   border-radius: 999px;
@@ -152,6 +165,27 @@ a:hover { text-decoration: underline; }
   position: absolute;
   top: -56px;
   left: 18px;
+} */
+ .profile-avatar {
+  width: 112px;
+  height: 112px;
+  border-radius: 999px;
+  background: #fff;
+  border: 4px solid #fff;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  display: grid;
+  place-items: center;
+  position: absolute;
+  top: -56px;
+  left: 18px;
+  overflow: hidden;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .avatar-initials {
