@@ -732,19 +732,31 @@ a:hover { text-decoration: underline; }
   margin-bottom: 6px;
 }
 
+/* =========================
+   Articles – with images
+   ========================= */
 
+.article-item {
+  display: grid;
+  gap: 10px;
+}
 
+.article-cover {
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+}
 
+.article-cover img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 200ms ease;
+}
 
-
-
-
-
-
-
-
-
-
+.article-cover:hover img {
+  transform: scale(1.03);
+}
 /* div.parent {
   display: grid;
   min-height: 60dvh;      
