@@ -31,3 +31,14 @@ git push -u origin feature/footer-links
 git checkout main
 git pull
 git branch -d feature/footer-links
+
+# 7) worker en cloudfare:
+
+https://portfoliopdb-counter.pablo-dominguezb.workers.dev/
+
+# 8) slugs (artículos)
+
+data-article="retro-primeros-cuatro-años"
+data-article="golden-circle-en-trabajo"
+data-article="retro-segundos-cuatro-años"
+data-article="liderazgo-interior"

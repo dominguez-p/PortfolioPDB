@@ -239,6 +239,93 @@
   })
 })()
 
+// ========================================
+// Counters (Cloudflare Worker - Option C)
+// ========================================
+
+const COUNTER_API = 'https://portfoliopdb-counter.pablo-dominguezb.workers.dev'
+
+// ------------------------
+// Load counters on page load
+// ------------------------
+document.addEventListener('DOMContentLoaded', () => {
+  loadCounters()
+  bindArticleClicks()
+})
+
+// ------------------------
+// Fetch and display ranges
+// ------------------------
+async function loadCounters() {
+  const articleEls = document.querySelectorAll('[data-article]')
+  const slugs = Array.from(articleEls).map((el) => el.dataset.article)
+
+  const url = `${COUNTER_API}/stats?articles=${slugs.join(',')}`
+
+  try {
+    const res = await fetch(url)
+    if (!res.ok) return
+
+    const data = await res.json()
+
+    // Global site counter
+    const siteEl = document.getElementById('siteCounter')
+    if (siteEl && data.site) {
+      siteEl.textContent = data.site
+    }
+
+    // Article counters
+    articleEls.forEach((el) => {
+      const slug = el.dataset.article
+      const countEl = el.querySelector('[data-article-count]')
+      if (countEl && data.articles && data.articles[slug]) {
+        countEl.textContent = data.articles[slug]
+      }
+    })
+  } catch (err) {
+    console.warn('Counter API not available', err)
+  }
+}
+
+// ------------------------
+// Increment on article click
+// ------------------------
+function bindArticleClicks() {
+  document.querySelectorAll('[data-article-link]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const articleEl = link.closest('[data-article]')
+      if (!articleEl) return
+
+      const slug = articleEl.dataset.article
+
+      sendHit({
+        type: 'article',
+        slug,
+      })
+    })
+  })
+}
+document.querySelectorAll('[data-site-hit]').forEach((link) => {
+  link.addEventListener('click', () => {
+    sendHit({ type: 'site' })
+  })
+})
+// ------------------------
+// Fire-and-forget hit
+// ------------------------
+function sendHit(payload) {
+  try {
+    fetch(`${COUNTER_API}/hit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true, // importante para no bloquear navegación
+    })
+  } catch (_) {
+    // Silencioso a propósito
+  }
+}
+
 /* // JS mínimo por ahora
 console.log('PortfolioPDB cargado correctamente')
 
