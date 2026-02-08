@@ -29,7 +29,7 @@
         <nav class="topnav" aria-label="Navegación principal">
           <a class="topnav-link" href="#about">Acerca de</a>
           <a class="topnav-link" href="#experience">Experiencia</a>
-          <a class="topnav-link" href="#articles">Artículos</a>
+          <a class="topnav-link" href="#articles" data-site-hit>Artículos</a>
           <a class="topnav-link" href="#projects">Proyectos</a>
           <a class="topnav-link" href="#skills">Aptitudes</a>
           <a class="topnav-link" href="#contact">Contacto</a>
@@ -585,12 +585,17 @@
             </p>
             <!-- ARTICULOS -->
             <div class="article-list">
-              <article class="article-item">
+              <article
+                class="article-item"
+                data-article="retro-primeros-cuatro-años"
+              >
                 <a
                   class="article-cover"
                   href="https://www.linkedin.com/pulse/cuatro-a%C3%B1os-en-mil-palabras-puedes-contarlas-pablo"
                   target="_blank"
                   rel="noreferrer"
+                  class="article-link"
+                  data-article-link
                 >
                   <img
                     src="./assets/img/articles/article-cuatroaños.webp"
@@ -607,10 +612,16 @@
                 <p class="article-excerpt">
                   Resumen de mis primeros cuatro años en BBVA
                 </p>
-                <p class="article-meta">Diciembre 2020 · Artículo · LinkedIn</p>
+                <p class="article-meta">
+                  Diciembre 2020 · Artículo · LinkedIn · Leído por
+                  <strong data-article-count>+500</strong> personas
+                </p>
               </article>
 
-              <article class="article-item">
+              <article
+                class="article-item"
+                data-article="golden-circle-en-trabajo"
+              >
                 <h3 class="article-title">
                   Quien comparta tu “por qué”, es tuyo
                 </h3>
@@ -619,6 +630,8 @@
                   href="https://www.linkedin.com/pulse/quien-comparta-tu-por-qu%C3%A9-es-tuyo-whoever-shares-your-pablo"
                   target="_blank"
                   rel="noreferrer"
+                  class="article-link"
+                  data-article-link
                 >
                   <img
                     src="./assets/img/articles/article-simonsinek.webp"
@@ -633,14 +646,23 @@
                   Reflexión sobre el "Golden Circle" de Simon Sinek aplicado a
                   tu profesión
                 </p>
-                <p class="article-meta">Diciembre 2021 · Artículo · LinkedIn</p>
+                <p class="article-meta">
+                  Diciembre 2021 · Artículo · LinkedIn · Leído por
+                  <strong data-article-count>+100</strong> personas
+                </p>
               </article>
-              <article class="article-item">
+
+              <article
+                class="article-item"
+                data-article="retro-segundos-cuatro-años"
+              >
                 <a
                   class="article-cover"
                   href="https://www.linkedin.com/pulse/otros-cuatro-a%C3%B1os-en-otras-mil-palabras-puedes-pablo-a0l6f"
                   target="_blank"
                   rel="noreferrer"
+                  class="article-link"
+                  data-article-lin
                 >
                   <img
                     src="./assets/img/articles/article-otroscuatroaños.webp"
@@ -658,10 +680,13 @@
                   Reflexiones del segundo mandato en BBVA. No pretende dar
                   consejos, sino desnudar un poco mi mente
                 </p>
-                <p class="article-meta">Diciembre 2024 · Artículo · LinkedIn</p>
+                <p class="article-meta">
+                  Diciembre 2024 · Artículo · LinkedIn · Leído por
+                  <strong data-article-count>+400</strong> personas
+                </p>
               </article>
 
-              <article class="article-item">
+              <article class="article-item" data-article="liderazgo-interior">
                 <h3 class="article-title">
                   Cascando almendras con la piedra Rosetta
                 </h3>
@@ -670,6 +695,8 @@
                   href="https://www.linkedin.com/pulse/cascando-almendras-con-la-piedra-rosetta-dom%C3%ADnguez-borreguero-pmp--ugagf"
                   target="_blank"
                   rel="noreferrer"
+                  class="article-link"
+                  data-article-link
                 >
                   <img
                     src="./assets/img/articles/article-roseta.webp"
@@ -681,7 +708,10 @@
                   />
                 </a>
                 <p class="article-excerpt">Reflexión sobre liderazgo</p>
-                <p class="article-meta">Febrero 2025 · Artículo · LinkedIn</p>
+                <p class="article-meta">
+                  Febrero 2025 · Artículo · LinkedIn · Leído por
+                  <strong data-article-count>+300</strong> personas
+                </p>
               </article>
             </div>
           </div>
@@ -756,9 +786,10 @@
               <div class="contact-row">
                 <span class="label">LinkedIn</span>
                 <a
-                  href="www.linkedin.com/in/pablodominguezb"
+                  href="https://www.linkedin.com/in/pablodominguezb"
                   target="_blank"
                   rel="noreferrer"
+                  data-site-hit
                   >Abrir perfil</a
                 >
               </div>
@@ -787,7 +818,7 @@
           <div class="side-links">
             <a href="#about">Acerca de</a>
             <a href="#experience">Experiencia</a>
-            <a href="#articles">Artículos</a>
+            <a href="#articles" data-site-hit>Artículos</a>
             <a href="#projects">Proyectos</a>
             <a href="#skills">Aptitudes</a>
             <a href="#contact">Contacto</a>
@@ -858,10 +889,10 @@
     </main>
 
     <footer class="footer">
-      <div class="container footer-inner">
-        <p>© 2026 · PortfolioPDB</p>
-        <p class="muted">Hecho con HTML/CSS/JS · Deploy en GitHub Pages</p>
-      </div>
+      <p>
+        © Pablo Domínguez · Tráfico del portfolio:
+        <strong id="siteCounter">+50</strong> interacciones
+      </p>
     </footer>
 
     <script src="js/main.js"></script>
