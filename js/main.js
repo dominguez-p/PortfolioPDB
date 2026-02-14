@@ -268,6 +268,8 @@ async function loadCounters() {
 
     const data = await res.json()
 
+    console.log('📊 Counter stats received:', data)
+
     // Global site counter
     const siteEl = document.getElementById('siteCounter')
     if (siteEl && data.site) {
