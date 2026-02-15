@@ -328,6 +328,50 @@ function sendHit(payload) {
   }
 }
 
+// =====================
+// Theme toggle (non-persistent)
+// =====================
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('themeToggle')
+  if (!btn) return
+
+  // default = light
+  document.body.classList.remove('dark')
+
+  btn.addEventListener('click', () => {
+    document.body.classList.toggle('dark')
+  })
+})
+
+// =====================================
+// Experience Accordion (editorial style)
+// =====================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  const roles = document.querySelectorAll('.experience-role')
+
+  roles.forEach((role) => {
+    const btn = role.querySelector('.role-toggle')
+
+    btn.addEventListener('click', () => {
+      const isActive = role.classList.contains('active')
+
+      // Cerrar todos
+      roles.forEach((r) => r.classList.remove('active'))
+
+      // Abrir solo si no estaba abierto
+      if (!isActive) {
+        role.classList.add('active')
+      }
+    })
+  })
+
+  // Abrir el primer rol por defecto
+  if (roles.length > 0) {
+    roles[0].classList.add('active')
+  }
+})
+
 /* // JS mínimo por ahora
 console.log('PortfolioPDB cargado correctamente')
 

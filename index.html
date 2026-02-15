@@ -3,1132 +3,172 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PortfolioPDB | Pablo Domínguez</title>
-    <meta
-      name="description"
-      content="Portfolio profesional de Pablo Domínguez. Perfil tipo LinkedIn, proyectos y experiencia."
-    />
-    <link rel="stylesheet" href="./css/styles.css" />
+    <title>Pablo Domínguez — Tech Lead & AI Strategist</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      rel="preload"
-      as="image"
-      href="assets/img/profile-avatar.webp"
-      type="image/webp"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
     />
+
+    <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" href="favicon.ico" />
   </head>
 
   <body>
-    <!-- Top bar -->
-    <header class="topbar">
-      <div class="container topbar-inner">
-        <div class="brand">
-          <span class="brand-dot" aria-hidden="true"></span>
-          <span class="brand-name">PortfolioPDB</span>
+    <header class="header">
+      <div class="container nav">
+        <div>
+          <strong>Pablo Domínguez</strong>
         </div>
 
-        <nav class="topnav" aria-label="Navegación principal">
-          <a class="topnav-link" href="#about">Acerca de</a>
-          <a class="topnav-link" href="#experience">Experiencia</a>
-          <a class="topnav-link" href="#articles" data-site-hit>Artículos</a>
-          <a class="topnav-link" href="#projects">Proyectos</a>
-          <a class="topnav-link" href="#skills">Aptitudes</a>
-          <a class="topnav-link" href="#contact">Contacto</a>
-        </nav>
+        <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
+          🌙
+        </button>
       </div>
     </header>
 
-    <main class="container layout">
-      <!-- Columna izquierda (main) -->
-      <section class="col-main">
-        <!-- Profile card -->
-        <article class="card profile" aria-label="Perfil">
-          <!--     <div class="profile-cover" role="img" aria-label="Portada"></div> -->
-          <div class="profile-cover">
-            <img
-              src="assets/img/profile-cover.webp"
-              alt="Portada del perfil"
-              width="1600"
-              height="400"
-              loading="eager"
-              decoding="async"
-            />
-          </div>
+    <main>
+      <!-- HERO -->
+      <section class="section">
+        <div class="container">
+          <h1>Tech Lead & AI Product Strategist</h1>
 
-          <div class="profile-body">
-            <div class="profile-avatar">
-              <img
-                src="assets/img/profile-avatar.webp"
-                alt="Foto de Pablo Domínguez"
-                width="112"
-                height="112"
-                loading="eager"
-                decoding="async"
-              />
-              <span class="avatar-initials">PD</span>
-            </div>
-
-            <div class="profile-head">
-              <div class="profile-title">
-                <h1>Pablo Domínguez</h1>
-                <p class="headline">
-                  Program Tech Lead en BBVA | Arquitectura, Datos, IA Generativa
-                  y Estrategia Tecnológica
-                </p>
-                <p class="subline">
-                  Ingeniero informático con más de 20 años de experiencia
-                  liderando soluciones tecnológicas complejas alineadas con
-                  negocio y personas.
-                </p>
-              </div>
-
-              <div class="profile-actions">
-                <a
-                  class="btn primary"
-                  href="http://www.linkedin.com/in/pablodominguezb"
-                  target="_blank"
-                  rel="noreferrer"
-                  >LinkedIn</a
-                >
-                <a class="btn" href="#projects">Ver proyectos</a>
-              </div>
-            </div>
-
-            <div class="profile-sub">
-              <p class="subline">
-                Creo soluciones simples, rápidas y mantenibles. Me enfoco en
-                claridad, impacto y entregables.
-              </p>
-              <div class="pill-row" role="list" aria-label="Resumen rápido">
-                <span class="pill" role="listitem">Automatización</span>
-                <span class="pill" role="listitem">Arquitectura KISS</span>
-                <span class="pill" role="listitem">Productividad</span>
-                <span class="pill" role="listitem">Datos y análisis</span>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- About -->
-        <article id="about" class="card section">
-          <header class="section-head">
-            <h2>Acerca de</h2>
-          </header>
-
-          <div class="section-content">
-            <p class="clamp is-clamped" data-clamp="about">
-              Ingeniero informático de gestión con más de veinte años de
-              experiencia en el sector IT, habiendo desempeñado roles muy
-              diversos a lo largo de mi carrera: desde programador hasta
-              director, pasando por preventa técnica, jefe de proyecto,
-              arquitecto de soluciones y líder técnico.
-              <br /><br />
-              Actualmente soy Program Tech Lead en BBVA, donde lidero
-              técnicamente el programa AIxBanker, enfocado en potenciar las
-              capacidades de los gestores mediante soluciones basadas en IA
-              Generativa. Mi responsabilidad abarca el diseño end-to-end de los
-              productos, su despliegue en distintos países, la gestión de
-              equipos y el alineamiento con la estrategia de negocio y
-              tecnología.
-              <br /><br />
-              A lo largo de mi trayectoria he trabajado en organizaciones como
-              ABAST, IBM, PAPYRUM y BBVA, combinando profundidad técnica con
-              visión estratégica y gestión de personas.
-              <br /><br />
-              Me considero una persona afortunada por haber trabajado siempre en
-              aquello que me apasiona: la tecnología y las personas. Doy mucha
-              importancia a la formación continua y al aprendizaje, y aunque hoy
-              la programación es más un hobby que una actividad diaria, sigue
-              siendo una parte fundamental de mi identidad profesional.
-            </p>
-
-            <button class="linklike" type="button" data-toggle="about">
-              Ver más
-            </button>
-          </div>
-        </article>
-
-        <!-- Experience -->
-        <article
-          id="experience"
-          class="card section"
-          aria-label="Experiencia profesional"
-        >
-          <header class="section-head">
-            <h2>Experiencia</h2>
-          </header>
-
-          <div class="section-content experience">
-            <!-- ===================== -->
-            <!-- EMPRESA: BBVA (ACTUAL) -->
-            <!-- ===================== -->
-            <section class="exp-company" data-company data-current="true">
-              <button
-                class="exp-company-toggle"
-                type="button"
-                aria-expanded="true"
-              >
-                <div class="exp-company-left">
-                  <h3 class="exp-company-name">BBVA</h3>
-                  <span class="exp-company-period">2016 — Actualidad</span>
-                </div>
-                <span class="exp-company-cta">Ocultar</span>
-              </button>
-
-              <div class="exp-collapsible exp-company-body" data-collapsible>
-                <div class="exp-collapsible-inner">
-                  <!-- Cargo (ACTUAL) -->
-                  <div class="exp-role" data-role data-current="true">
-                    <button
-                      class="exp-role-toggle"
-                      type="button"
-                      aria-expanded="true"
-                    >
-                      <span class="exp-role-line">
-                        <strong class="exp-role-title"
-                          >Program Tech Lead – AIxBanker</strong
-                        >
-                        <span class="exp-role-meta"
-                          >Madrid · Oct 2025 — Actualidad</span
-                        >
-                      </span>
-                      <span class="exp-role-cta">Ver menos</span>
-                    </button>
-
-                    <div
-                      class="exp-collapsible exp-role-detail"
-                      data-collapsible
-                    >
-                      <div class="exp-collapsible-inner">
-                        <ul class="exp-bullets">
-                          <li>
-                            Responsable técnico del programa AIxBanker dentro
-                            del área de Modelos de Relación.
-                          </li>
-                          <li>
-                            Diseño end-to-end de soluciones basadas en IA
-                            Generativa.
-                          </li>
-                          <li>
-                            Despliegue en países, gestión de equipos y
-                            alineamiento con estrategia.
-                          </li>
-                          <li>
-                            Foco en aportar valor y llevar soluciones a
-                            producción.
-                          </li>
-                        </ul>
-                        <div class="related-articles">
-                          <p class="related-title">Artículos relacionados</p>
-                          <ul class="related-list">
-                            <li>
-                              <a
-                                href="https://www.linkedin.com/pulse/cascando-almendras-con-la-piedra-rosetta-dom%C3%ADnguez-borreguero-pmp--ugagf"
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                Cascando almendras con la piedra Rosetta
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Cargo -->
-                  <div class="exp-role" data-role>
-                    <button
-                      class="exp-role-toggle"
-                      type="button"
-                      aria-expanded="false"
-                    >
-                      <span class="exp-role-line">
-                        <strong class="exp-role-title"
-                          >Tech Lead – Asset Management & Global Wealth</strong
-                        >
-                        <span class="exp-role-meta"
-                          >Madrid · May 2023 — Oct 2025</span
-                        >
-                      </span>
-                      <span class="exp-role-cta">Ver más</span>
-                    </button>
-
-                    <div
-                      class="exp-collapsible exp-role-detail"
-                      data-collapsible
-                    >
-                      <div class="exp-collapsible-inner">
-                        <ul class="exp-bullets">
-                          <li>
-                            Diseño de soluciones para Asset Management & Global
-                            Wealth.
-                          </li>
-                          <li>
-                            Liderazgo de equipos multidisciplinares en varios
-                            países.
-                          </li>
-                          <li>
-                            Gestión de proveedores, backlog y perfiles técnicos.
-                          </li>
-                          <li>
-                            Ámbito: datos, cloud providers e innovación
-                            (blockchain & LLMs).
-                          </li>
-                        </ul>
-                        <div class="related-articles">
-                          <p class="related-title">Artículos relacionados</p>
-                          <ul class="related-list">
-                            <li>
-                              <a
-                                href="https://www.linkedin.com/pulse/otros-cuatro-a%C3%B1os-en-otras-mil-palabras-puedes-pablo-a0l6f"
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                Otros cuatro años en otras mil palabras (puedes
-                                contarlas)
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Cargo -->
-                  <div class="exp-role" data-role>
-                    <button
-                      class="exp-role-toggle"
-                      type="button"
-                      aria-expanded="false"
-                    >
-                      <span class="exp-role-line">
-                        <strong class="exp-role-title"
-                          >Global Solution Architect</strong
-                        >
-                        <span class="exp-role-meta"
-                          >Madrid · Jun 2018 — May 2023</span
-                        >
-                      </span>
-                      <span class="exp-role-cta">Ver más</span>
-                    </button>
-
-                    <div
-                      class="exp-collapsible exp-role-detail"
-                      data-collapsible
-                    >
-                      <div class="exp-collapsible-inner">
-                        <ul class="exp-bullets">
-                          <li>
-                            Arquitectura de soluciones, especialmente en Cloud y
-                            Datos.
-                          </li>
-                          <li>
-                            Alineamiento con estrategia y participación en
-                            iniciativas de alto impacto.
-                          </li>
-                          <li>
-                            Evolución de arquitectura para nuevas necesidades y
-                            tendencias de mercado.
-                          </li>
-                        </ul>
-                        <div class="related-articles">
-                          <p class="related-title">Artículos relacionados</p>
-                          <ul class="related-list">
-                            <li>
-                              <a
-                                href="https://www.linkedin.com/pulse/quien-comparta-tu-por-qu%C3%A9-es-tuyo-whoever-shares-your-pablo"
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                Quien comparta tu “por qué”, es tuyo
-                              </a>
-                            </li>
-                            <li>
-                              <a
-                                href="https://www.linkedin.com/pulse/cuatro-a%C3%B1os-en-mil-palabras-puedes-contarlas-pablo"
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                Cuatro años en mil palabras (puedes contarlas)
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Cargo -->
-                  <div class="exp-role" data-role>
-                    <button
-                      class="exp-role-toggle"
-                      type="button"
-                      aria-expanded="false"
-                    >
-                      <span class="exp-role-line">
-                        <strong class="exp-role-title"
-                          >Global Reliability Engineer</strong
-                        >
-                        <span class="exp-role-meta"
-                          >Madrid · Dec 2016 — Jun 2018</span
-                        >
-                      </span>
-                      <span class="exp-role-cta">Ver más</span>
-                    </button>
-
-                    <div
-                      class="exp-collapsible exp-role-detail"
-                      data-collapsible
-                    >
-                      <div class="exp-collapsible-inner">
-                        <ul class="exp-bullets">
-                          <li>
-                            Definición e implantación del framework de
-                            Reliability a nivel global.
-                          </li>
-                          <li>
-                            Objetivo de disponibilidad 99,999% y planes de
-                            recuperación ante desastres.
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <!-- ===================== -->
-            <!-- EMPRESA: Papyrum -->
-            <!-- ===================== -->
-            <section class="exp-company" data-company>
-              <button
-                class="exp-company-toggle"
-                type="button"
-                aria-expanded="false"
-              >
-                <div class="exp-company-left">
-                  <h3 class="exp-company-name">Papyrum</h3>
-                  <span class="exp-company-period">2016</span>
-                </div>
-                <span class="exp-company-cta">Ver</span>
-              </button>
-
-              <div class="exp-collapsible exp-company-body" data-collapsible>
-                <div class="exp-collapsible-inner">
-                  <div class="exp-role" data-role>
-                    <button
-                      class="exp-role-toggle"
-                      type="button"
-                      aria-expanded="false"
-                    >
-                      <span class="exp-role-line">
-                        <strong class="exp-role-title"
-                          >Director de Producción – España & LATAM</strong
-                        >
-                        <span class="exp-role-meta"
-                          >España · Feb 2016 — Dec 2016</span
-                        >
-                      </span>
-                      <span class="exp-role-cta">Ver más</span>
-                    </button>
-
-                    <div
-                      class="exp-collapsible exp-role-detail"
-                      data-collapsible
-                    >
-                      <div class="exp-collapsible-inner">
-                        <ul class="exp-bullets">
-                          <li>Dirección de producción para España y LATAM.</li>
-                          <li>
-                            Gestión de equipos (España, Perú y Argentina).
-                          </li>
-                          <li>
-                            Digitalización, extracción e integración de
-                            documentos con ERPs.
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <!-- ===================== -->
-            <!-- EMPRESA: ABAST -->
-            <!-- ===================== -->
-            <section class="exp-company" data-company>
-              <button
-                class="exp-company-toggle"
-                type="button"
-                aria-expanded="false"
-              >
-                <div class="exp-company-left">
-                  <h3 class="exp-company-name">ABAST</h3>
-                  <span class="exp-company-period">2002 — 2016</span>
-                </div>
-                <span class="exp-company-cta">Ver</span>
-              </button>
-
-              <div class="exp-collapsible exp-company-body" data-collapsible>
-                <div class="exp-collapsible-inner">
-                  <div class="exp-role" data-role>
-                    <button
-                      class="exp-role-toggle"
-                      type="button"
-                      aria-expanded="false"
-                    >
-                      <span class="exp-role-line">
-                        <strong class="exp-role-title"
-                          >Senior Manager (varios roles)</strong
-                        >
-                        <span class="exp-role-meta"
-                          >España · Jun 2002 — Feb 2016</span
-                        >
-                      </span>
-                      <span class="exp-role-cta">Ver más</span>
-                    </button>
-
-                    <div
-                      class="exp-collapsible exp-role-detail"
-                      data-collapsible
-                    >
-                      <div class="exp-collapsible-inner">
-                        <ul class="exp-bullets">
-                          <li>
-                            Evolución desde programador BI a analista,
-                            consultor, formador, preventa y jefe de proyecto.
-                          </li>
-                          <li>
-                            Gestión documental con software in-house y
-                            tecnologías OCR y BPM.
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <!-- ===================== -->
-            <!-- EMPRESA: IBM -->
-            <!-- ===================== -->
-            <section class="exp-company" data-company>
-              <button
-                class="exp-company-toggle"
-                type="button"
-                aria-expanded="false"
-              >
-                <div class="exp-company-left">
-                  <h3 class="exp-company-name">IBM</h3>
-                  <span class="exp-company-period">2012 — 2013</span>
-                </div>
-                <span class="exp-company-cta">Ver</span>
-              </button>
-
-              <div class="exp-collapsible exp-company-body" data-collapsible>
-                <div class="exp-collapsible-inner">
-                  <div class="exp-role" data-role>
-                    <button
-                      class="exp-role-toggle"
-                      type="button"
-                      aria-expanded="false"
-                    >
-                      <span class="exp-role-line">
-                        <strong class="exp-role-title">Preventa Técnica</strong>
-                        <span class="exp-role-meta"
-                          >España · Sep 2012 — Nov 2013</span
-                        >
-                      </span>
-                      <span class="exp-role-cta">Ver más</span>
-                    </button>
-
-                    <div
-                      class="exp-collapsible exp-role-detail"
-                      data-collapsible
-                    >
-                      <div class="exp-collapsible-inner">
-                        <ul class="exp-bullets">
-                          <li>
-                            Preventa técnica de BPM (procesos) y ODM (reglas y
-                            eventos).
-                          </li>
-                          <li>
-                            Trabajo en entorno internacional y colaboración
-                            IBM–ABAST.
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </div>
-        </article>
-        <!-- Articles -->
-        <article
-          id="articles"
-          class="card section"
-          aria-label="Artículos y reflexiones"
-        >
-          <header class="section-head">
-            <h2>Artículos & Reflexiones</h2>
-          </header>
-
-          <div class="section-content">
-            <p class="muted" style="margin-bottom: 12px">
-              Selección de artículos publicados en LinkedIn. Iré incorporando
-              nuevas reflexiones con el tiempo.
-            </p>
-            <!-- ARTICULOS -->
-            <div class="article-list">
-              <article
-                class="article-item"
-                data-article="retro-primeros-cuatro-años"
-              >
-                <a
-                  class="article-cover"
-                  href="https://www.linkedin.com/pulse/cuatro-a%C3%B1os-en-mil-palabras-puedes-contarlas-pablo"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="article-link"
-                  data-article-link
-                >
-                  <img
-                    src="./assets/img/articles/article-cuatroaños.webp"
-                    alt="Cuatro años en mil palabras (puedes contarlas)"
-                    width="640"
-                    height="360"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </a>
-                <h3 class="article-title">
-                  Cuatro años en mil palabras (puedes contarlas)
-                </h3>
-                <p class="article-excerpt">
-                  Resumen de mis primeros cuatro años en BBVA
-                </p>
-                <p class="article-meta">
-                  Diciembre 2020 · Artículo · LinkedIn · Leído por
-                  <strong data-article-count>+500</strong> personas
-                </p>
-              </article>
-
-              <article
-                class="article-item"
-                data-article="golden-circle-en-trabajo"
-              >
-                <h3 class="article-title">
-                  Quien comparta tu “por qué”, es tuyo
-                </h3>
-                <a
-                  class="article-cover"
-                  href="https://www.linkedin.com/pulse/quien-comparta-tu-por-qu%C3%A9-es-tuyo-whoever-shares-your-pablo"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="article-link"
-                  data-article-link
-                >
-                  <img
-                    src="./assets/img/articles/article-simonsinek.webp"
-                    alt="Quien comparta tu por qué, es tuyo"
-                    width="640"
-                    height="360"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </a>
-                <p class="article-excerpt">
-                  Reflexión sobre el "Golden Circle" de Simon Sinek aplicado a
-                  tu profesión
-                </p>
-                <p class="article-meta">
-                  Diciembre 2021 · Artículo · LinkedIn · Leído por
-                  <strong data-article-count>+100</strong> personas
-                </p>
-              </article>
-
-              <article
-                class="article-item"
-                data-article="retro-segundos-cuatro-años"
-              >
-                <a
-                  class="article-cover"
-                  href="https://www.linkedin.com/pulse/otros-cuatro-a%C3%B1os-en-otras-mil-palabras-puedes-pablo-a0l6f"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="article-link"
-                  data-article-lin
-                >
-                  <img
-                    src="./assets/img/articles/article-otroscuatroaños.webp"
-                    alt="Otros cuatro años en otras mil palabras (puedes contarlas)"
-                    width="640"
-                    height="360"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </a>
-                <h3 class="article-title">
-                  Otros cuatro años en otras mil palabras (puedes contarlas)
-                </h3>
-                <p class="article-excerpt">
-                  Reflexiones del segundo mandato en BBVA. No pretende dar
-                  consejos, sino desnudar un poco mi mente
-                </p>
-                <p class="article-meta">
-                  Diciembre 2024 · Artículo · LinkedIn · Leído por
-                  <strong data-article-count>+400</strong> personas
-                </p>
-              </article>
-
-              <article class="article-item" data-article="liderazgo-interior">
-                <h3 class="article-title">
-                  Cascando almendras con la piedra Rosetta
-                </h3>
-                <a
-                  class="article-cover"
-                  href="https://www.linkedin.com/pulse/cascando-almendras-con-la-piedra-rosetta-dom%C3%ADnguez-borreguero-pmp--ugagf"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="article-link"
-                  data-article-link
-                >
-                  <img
-                    src="./assets/img/articles/article-roseta.webp"
-                    alt="Cascando almendras con la piedra Rosetta"
-                    width="640"
-                    height="360"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </a>
-                <p class="article-excerpt">Reflexión sobre liderazgo</p>
-                <p class="article-meta">
-                  Febrero 2025 · Artículo · LinkedIn · Leído por
-                  <strong data-article-count>+300</strong> personas
-                </p>
-              </article>
-            </div>
-          </div>
-        </article>
-        <!-- Projects -->
-        <article id="projects" class="card section" aria-label="Proyectos">
-          <header class="section-head">
-            <h2>Proyectos destacados</h2>
-          </header>
-
-          <div class="section-content">
-            <div class="grid">
-              <a class="project" href="#" aria-label="Proyecto 1">
-                <div class="project-top">
-                  <h3>Control de proyecto (Gantt)</h3>
-                  <span class="badge">Planificación</span>
-                </div>
-                <p>
-                  Seguimiento de ejecución con hitos, riesgos y estados.
-                  Enfoque: claridad y trazabilidad.
-                </p>
-                <div class="project-meta">
-                  <span>HTML</span><span>CSS</span><span>JS</span>
-                </div>
-              </a>
-
-              <a class="project" href="#" aria-label="Proyecto 2">
-                <div class="project-top">
-                  <h3>Automatización y reporting</h3>
-                  <span class="badge">Eficiencia</span>
-                </div>
-                <p>
-                  Automatizaciones para reducir trabajo repetitivo y mejorar
-                  consistencia. Export/import de datos.
-                </p>
-                <div class="project-meta">
-                  <span>JS</span><span>JSON</span><span>GitHub</span>
-                </div>
-              </a>
-            </div>
-          </div>
-        </article>
-
-        <!-- Skills -->
-        <article id="skills" class="card section" aria-label="Aptitudes">
-          <header class="section-head">
-            <h2>Aptitudes</h2>
-          </header>
-
-          <div class="section-content">
-            <div class="skills">
-              <span class="skill">HTML</span>
-              <span class="skill">CSS</span>
-              <span class="skill">JavaScript</span>
-              <span class="skill">Automatización</span>
-              <span class="skill">Arquitectura simple (KISS)</span>
-              <span class="skill">Análisis</span>
-              <span class="skill">Documentación</span>
-              <span class="skill">Priorización</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Contact -->
-        <article id="contact" class="card section" aria-label="Contacto">
-          <header class="section-head">
-            <h2>Contacto</h2>
-          </header>
-
-          <div class="section-content">
-            <div class="contact">
-              <div class="contact-row">
-                <span class="label">LinkedIn</span>
-                <a
-                  href="https://www.linkedin.com/in/pablodominguezb"
-                  target="_blank"
-                  rel="noreferrer"
-                  data-site-hit
-                  >Abrir perfil</a
-                >
-              </div>
-
-              <div class="contact-row">
-                <span class="label">Email</span>
-                <a href="mailto:pablo.dominguezb@gmail.com"
-                  >pablo.dominguezb@gmail.com</a
-                >
-              </div>
-
-              <p class="fineprint">
-                *Esta es la parte pública. La parte privada (dashboard del
-                proyecto) la añadiremos después.
-              </p>
-            </div>
-          </div>
-        </article>
+          <p class="muted" style="max-width: 640px; font-size: 18px">
+            Arquitectura, datos e inteligencia artificial aplicada a negocio.
+            Construyendo sistemas inteligentes con impacto real.
+          </p>
+        </div>
       </section>
 
-      <!-- Columna derecha (sidebar) -->
-      <aside class="col-side" aria-label="Panel lateral">
-        <!-- Side card enlaces -->
-        <div class="card sidecard">
-          <h3>Enlaces</h3>
-          <div class="side-links">
-            <a href="#about">Acerca de</a>
-            <a href="#experience">Experiencia</a>
-            <a href="#articles" data-site-hit>Artículos</a>
-            <a href="#projects">Proyectos</a>
-            <a href="#skills">Aptitudes</a>
-            <a href="#contact">Contacto</a>
-          </div>
-        </div>
-        <!-- Side card destacado -->
-        <!--         <div class="card sidecard">
-            <h3>Destacado</h3>
-          <p class="muted">
-            Aquí pondremos (más adelante) un “Featured” como LinkedIn: CV
-            descargable, proyecto estrella, demo, etc.
+      <!-- ABOUT -->
+      <section class="section section--alt">
+        <div class="container" style="max-width: 800px">
+          <h2>Sobre mí</h2>
+
+          <p>
+            Lidero equipos técnicos y proyectos estratégicos donde tecnología y
+            negocio convergen. Mi foco está en arquitectura escalable,
+            inteligencia artificial aplicada y construcción de productos
+            digitales con impacto medible.
           </p>
-        </div> -->
-        <div class="card sidecard">
-          <h3>Destacado</h3>
 
-          <div class="featured-list">
-            <!-- TODO: pon aquí tus 2–3 mejores artículos -->
-            <a
-              class="featured-item"
-              href="https://www.linkedin.com/pulse/otros-cuatro-a%C3%B1os-en-otras-mil-palabras-puedes-pablo-a0l6f"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span class="featured-kicker">📝 Artículo</span>
-              <span class="featured-title"
-                >Otros cuatro años en otras mil palabras (puedes
-                contarlas)</span
-              >
-              <span class="featured-meta">LinkedIn</span>
-            </a>
-
-            <a
-              class="featured-item"
-              href="https://www.linkedin.com/pulse/cuatro-a%C3%B1os-en-mil-palabras-puedes-contarlas-pablo"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span class="featured-kicker">📝 Artículo</span>
-              <span class="featured-title"
-                >Cuatro años en mil palabras (puedes contarlas)</span
-              >
-              <span class="featured-meta">LinkedIn</span>
-            </a>
-
-            <a
-              class="featured-item"
-              href="https://www.linkedin.com/pulse/quien-comparta-tu-por-qu%C3%A9-es-tuyo-whoever-shares-your-pablo"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span class="featured-kicker">📝 Artículo</span>
-              <span class="featured-title"
-                >Quien comparta tu “por qué”, es tuyo</span
-              >
-              <span class="featured-meta">LinkedIn</span>
-            </a>
-          </div>
-        </div>
-        <!-- Side card disponibilidad -->
-        <div class="card sidecard">
-          <h3>Disponibilidad</h3>
-          <p class="muted">
-            Si quieres, añade una frase: “Abierto a colaborar en…” o “Busco…”
+          <p>
+            He trabajado en entornos complejos de banca y transformación
+            digital, combinando liderazgo técnico, visión estratégica y
+            ejecución rigurosa.
           </p>
         </div>
-      </aside>
+      </section>
+
+      <!-- EXPERIENCE -->
+      <section class="section">
+        <div class="container">
+          <h2>Experiencia</h2>
+
+          <div class="experience-group">
+            <h3>BBVA</h3>
+
+            <div class="experience-role">
+              <button class="role-toggle">
+                Program Tech Lead — Madrid · 2025 — Actualidad
+              </button>
+
+              <div class="role-content">
+                <ul>
+                  <li>
+                    Definición de arquitectura tecnológica para productos
+                    financieros.
+                  </li>
+                  <li>Liderazgo de equipos multidisciplinares.</li>
+                  <li>Integración de IA generativa en procesos internos.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="experience-role">
+              <button class="role-toggle">
+                Tech Lead Asset Management — Madrid · 2021 — 2025
+              </button>
+
+              <div class="role-content">
+                <ul>
+                  <li>Modernización de plataformas de inversión.</li>
+                  <li>Gobernanza de datos y calidad.</li>
+                  <li>Optimización de procesos críticos.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ARTICLES -->
+      <section class="section section--alt">
+        <div class="container">
+          <h2>Artículos</h2>
+
+          <article
+            class="article-item"
+            data-article="retro-primeros-cuatro-anos"
+          >
+            <h3>
+              <a href="#" target="_blank" data-article-link>
+                Retrospectiva: primeros cuatro años
+              </a>
+            </h3>
+            <p class="muted">
+              Leído por <strong data-article-count>+0</strong> personas
+            </p>
+          </article>
+
+          <article class="article-item" data-article="golden-circle-en-trabajo">
+            <h3>
+              <a href="#" target="_blank" data-article-link>
+                El Golden Circle aplicado al liderazgo técnico
+              </a>
+            </h3>
+            <p class="muted">
+              Leído por <strong data-article-count>+0</strong> personas
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="section">
+        <div class="container" style="max-width: 700px">
+          <h2>Contacto</h2>
+
+          <p>
+            Puedes conectar conmigo a través de LinkedIn o escribirme
+            directamente.
+          </p>
+
+          <p>
+            <a
+              href="https://www.linkedin.com/in/pablodominguezb/"
+              target="_blank"
+              data-site-hit
+            >
+              LinkedIn →
+            </a>
+          </p>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">
-      <p>
-        © Pablo Domínguez · Tráfico del portfolio:
-        <strong id="siteCounter">+50</strong> interacciones
-      </p>
+      <div class="container">
+        <p>
+          © Pablo Domínguez · Tráfico del portfolio:
+          <strong id="siteCounter">+0</strong>
+        </p>
+      </div>
     </footer>
 
     <script src="js/main.js"></script>
   </body>
 </html>
-
-<!-- <!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PortfolioPDB | Pablo Domínguez</title>
-    <meta
-      name="description"
-      content="Portfolio profesional de Pablo Domínguez. Tecnología, estrategia y ejecución de proyectos."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Sen:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-Gridstack CSS 
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/gridstack@10.1.0/dist/gridstack.min.css"
-    />
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body>
-    <header class="header">
-      <h1>Pablo Domínguez Borreguero</h1>
-      <h2 class="color-wheat">
-        Ingeniero · Tecnología · Estrategia · Desarrollo soluciones simples,
-        eficientes y escalables.
-      </h2>
-      <a
-        class="btn color-wheat"
-        href="https://www.linkedin.com/in/pablodominguezb"
-        target="_blank"
-      >
-        Ver perfil en LinkedIn
-      </a>
-      <img
-        src="./assets/img/Foto_perfil.jpeg"
-        alt="Foto de Pablo"
-        class="profile-img"
-      />
-    </header>
-
-    <main>
-      <div class="parent">
-        <div class="div1 card">
-          <h3>Sobre mí</h3>
-
-          <p>
-            Soy un ingeniero informático de gestión, con más de veinte años de
-            experiencia en el sector, he trabajado en varios roles durante ese
-            periodo, desde programador a director, pasando por preventa, jefe de
-            proyecto , consultor, arquitecto de soluciones y líder técnico,
-            siempre en el sector de TI. He trabajado en cuatro empresas durante
-            mi carrera: ABAST, mi casa durante catorce años; IBM donde hice
-            preventa técnica; PAPYRUM donde fui director de producción de España
-            y Latam; y BBVA, donde he desempeñado varias funciones en los
-            últimos años: Global Reliability Engineering, Global Solution
-            Architect y actualmente soy Líder Tecnico. También soy Embajador
-            Design Thinking y puntualmente profesor en Campus BBVA. Me considero
-            una persona afortunada porque siempre he podido trabajar en lo que
-            me gusta y he podido crecer, asumiendo cada vez más responsabilidad
-            y atesorando más conocimiento. Doy mucha importancia a la formación,
-            a la que dedico bastante de mi tiempo libre. Y me apasiona la
-            programación, aunque en los roles que he desempeñado últimamente no
-            me permite dedicarle tanto tiempo como me gustaría.
-          </p>
-        </div>
-        <div class="div2">
-          <div class="grid-stack-item" gs-w="4" gs-h="2">
-            <div class="grid-stack-item-content card">
-              <h2>BBVA</h2>
-              <p>
-                Dentro del área de Modelos de Relación, soy el responsable
-                técnico del programa AIxBanker, que busca potenciar las
-                capacidades de los gestores gracias a soluciones basadas en IA
-                Generativa. Desde dar forma a los productos, velar por el E2E,
-                desplegar en países, gestión de equipos, alinear con la
-                estratégia y hacer que todo lo que creamos aporte valor y acabe
-                en producción. En esta etapa estoy aprendiendo mucho de las
-                personas que lideran el programa desde los ámbitos de Negocio,
-                Data y Diseño, sobre todo en temas de gestión de equipos y de
-                estrategia.
-              </p>
-            </div>
-          </div>
-        </div>
- <div class="div3 card">3</div>
-        <div class="div3">
-          <div class="grid-stack-item" gs-w="4" gs-h="2">
-            <div class="grid-stack-item-content card">
-              <h2>PAPYRUM</h2>
-              <p>
-                En Papyrum, una empresa de gestión documental con clientes como
-                Telefónica, Prosegur o Daimler, fui director de producción de
-                España y Latam, con la misión de digitalizar, extraer la
-                información y entregar a los ERPs de los clientes todos los
-                documentos (facturas, contratos, albaranes, etc) que recibíamos
-                diariamente en nuestras oficinas. Contaba con un equipo de 12
-                personas en España y 25 en Perú y Argentina. De Papyrum aprendí
-                mucho sobre la gestión de las personas.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="div4">
-          <div class="grid-stack-item" gs-w="4" gs-h="2">
-            <div class="grid-stack-item-content card">
-              <h2>ABAST</h2>
-              <p>
-                En Abast empecé mi carrera profesional como programador, en el
-                área de Business Intelligence. Después pasé como analista
-                programador al departamento de Gestión Documental, donde trabajé
-                también como jefe de proyecto, preventa, consultor y formador.
-                Trabajaba tanto con un software desarrollado in-house, como con
-                tecnología del mercado relacionada con OCR y el BPM. En Abast
-                tuve la oportunidad de moverme en diferentes roles sin tener que
-                cambiar de empresa, y adquirí los mimbres que me han convertido
-                en el profesional que soy hoy.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="div5">
-          <div class="grid-stack-item" gs-w="4" gs-h="2">
-            <div class="grid-stack-item-content card">
-              <h2>IBM</h2>
-              <p>
-                En IBM trabajé durante un año como preventa técnica de su
-                producto de BPM (procesos) y de ODM (reglas y eventos), en un
-                acuerdo de colaboración entre ABAST e IBM. En IBM aprendí a
-                trabajar en una empresa internacional, y fue mi primer contacto
-                con otra cultura empresarial.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="div6">
-          <div class="grid-stack-item" gs-w="4" gs-h="2">
-            <div class="grid-stack-item-content card">
-              <h2>SGS</h2>
-              <p>
-                En SGS trabajé de becario en el departamento de informática, y
-                pude realizar mi proyecto fin de carrera cubriendo su necesidad
-                de liquidación de nota de gastos de la empresa.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="div7 card">7</div>
-        <div class="div8 card">8</div>
-        <div class="div9 card">9</div>
-      </div>
-    </main>
-
-    <footer class="footer">
-CONTACT 
-      <h3>Contacto</h3>
-      <p>Puedes contactarme a través de LinkedIn.</p>
-      <p>© 2026 · PortfolioPDB</p>
-    </footer>
-
-Gridstack JS 
-    <script src="https://cdn.jsdelivr.net/npm/gridstack@10.1.0/dist/gridstack-all.js"></script>
-
-    <script src="js/main.js"></script>
-  </body>
-</html> -->
-<!--   ABOUT -->
-<!--
-      <section id="about" class="section">
-        <h3>Sobre mí</h3>
-        <p>
-          Profesional orientado a la ejecución y al pensamiento estratégico. Me
-          interesa construir sistemas claros, mantenibles y que aporten valor
-          real.
-        </p>
-      </section>
-      <section id="projects" class="cards"></section>
-
-      <div class="grid-stack">
-        <div class="grid-stack-item" gs-w="4" gs-h="2">
-          <div class="grid-stack-item-content card">
-            <h2>Sobre mí</h2>
-            <p>Desarrollador con interés en web, datos y automatización.</p>
-          </div>
-        </div>
-
-        <div class="grid-stack-item" gs-w="4" gs-h="2">
-          <div class="grid-stack-item-content card">
-            <h2>Proyecto 1</h2>
-            <p>Descripción breve del proyecto.</p>
-          </div>
-        </div>
-
-        <div class="grid-stack-item" gs-w="4" gs-h="2">
-          <div class="grid-stack-item-content card">
-            <h2>Contacto</h2>
-            <p>Email · GitHub · LinkedIn</p>
-             
-            <section id="projects" class="section">
-              <h3>Proyectos destacados</h3>
-              <div class="cards">
-                <div class="card">
-                  <h4>Gestión de proyectos</h4>
-                  <p>Seguimiento tipo Gantt y control de ejecución.</p>
-                </div>
-                <div class="card">
-                  <h4>Automatización</h4>
-                  <p>
-                    Optimización de procesos y reducción de tareas repetitivas.
-                  </p>
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
-        <div class="grid-stack-item" gs-w="4" gs-h="2">
-          <div class="grid-stack-item-content card">
-            <h2>Skills</h2>
-            <p></p>
-            <ul class="skills">
-              <li>HTML / CSS / JavaScript</li>
-              <li>Arquitectura simple (KISS)</li>
-              <li>Automatización</li>
-              <li>Análisis y estrategia</li>
-            </ul>
-          </div>
-        </div>
-      </div> -->
