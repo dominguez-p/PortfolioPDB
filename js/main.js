@@ -371,6 +371,29 @@ document.addEventListener('DOMContentLoaded', () => {
     roles[0].classList.add('active')
   }
 })
+// =====================================
+// Fade-in on scroll (editorial)
+// =====================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  const items = document.querySelectorAll('.fade-in')
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible')
+          observer.unobserve(entry.target)
+        }
+      })
+    },
+    {
+      threshold: 0.15,
+    },
+  )
+
+  items.forEach((item) => observer.observe(item))
+})
 
 /* // JS mínimo por ahora
 console.log('PortfolioPDB cargado correctamente')
