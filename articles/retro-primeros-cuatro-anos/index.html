@@ -3,36 +3,95 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Título del artículo</title>
-
+    <title>Mi primer artículo | Pablo Domínguez</title>
+    <meta
+      name="description"
+      content="Primer artículo publicado directamente en mi web como parte de la evolución hacia una plataforma editorial propia."
+    />
     <link rel="stylesheet" href="../../css/styles.css" />
+    <link rel="icon" href="../../favicon.ico" />
   </head>
 
   <body>
     <header class="header">
-      <div class="container">
-        <a href="../../index.html">← Volver</a>
+      <div class="container nav">
+        <div class="container">
+          <a href="../../index.html">← Volver</a>
+        </div>
+
+        <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
+          🌙
+        </button>
       </div>
     </header>
 
-    <main class="section">
-      <div class="container" style="max-width: 800px">
-        <title>Cuatro años en mil palabras (puedes contarlas).</title>
+    <main>
+      <section class="section fade-in">
+        <div class="container" style="max-width: 760px">
+          <p class="muted">
+            <a href="../../index.html">Inicio</a> ·
+            <a href="../index.html">Artículos</a>
+          </p>
 
-        <h1>en construcción</h1>
+          <article data-article="mi-primer-articulo">
+            <header style="margin-bottom: 2rem">
+              <p class="muted">Editorial</p>
+              <h1>Mi primer artículo</h1>
+              <p class="muted">Abril 2026 · 3 min lectura</p>
+              <p>
+                Esta es la primera pieza publicada directamente en mi web, como
+                punto de partida de una plataforma editorial propia.
+              </p>
+            </header>
 
-        <p class="muted">Abril 2026 · 3 min lectura</p>
+            <div class="article-body">
+              <p>
+                Durante mucho tiempo, LinkedIn ha sido el lugar natural para
+                publicar ideas profesionales. Tiene distribución, visibilidad y
+                un formato suficientemente cómodo para compartir reflexión y
+                experiencia.
+              </p>
 
-        <p>mientras acabo, puedes accedera al artículo aquí:</p>
-        <a
-          href="https://www.linkedin.com/pulse/cuatro-a%C3%B1os-en-mil-palabras-puedes-contarlas-pablo"
-          target="_blank"
-          data-article-link
-        >
-          Cuatro años en mil palabras (puedes contarlas).
-        </a>
-      </div>
+              <p>
+                Pero también tiene una limitación evidente: el contenido no vive
+                realmente en tu casa digital. Vive en una plataforma ajena.
+              </p>
+
+              <h2>Por qué mover el origen del contenido</h2>
+              <p>
+                Quiero que esta web no sea solo un portfolio, sino el lugar
+                desde el que publicar pensamiento, experiencia, criterio y
+                visión sobre tecnología, producto e inteligencia artificial.
+              </p>
+
+              <p>
+                Eso significa que LinkedIn pasa a ser un distribuidor. El
+                contenido original vive aquí.
+              </p>
+
+              <h2>Qué viene ahora</h2>
+              <p>
+                Este artículo es solo el primer paso. A partir de aquí, la web
+                irá incorporando una estructura editorial más sólida, un índice
+                de artículos, mejor navegación, analítica más útil y una
+                experiencia de lectura más consistente.
+              </p>
+
+              <p>
+                Lo importante no es solo publicar. Lo importante es construir
+                una base que permita seguir publicando bien.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
     </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>© Pablo Domínguez</p>
+      </div>
+    </footer>
 
     <script src="../../js/main.js"></script>
   </body>
