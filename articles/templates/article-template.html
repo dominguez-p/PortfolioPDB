@@ -12,65 +12,89 @@ CHECKLIST ARTÍCULO
 
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Título del artículo | Pablo Domínguez</title>
-    <meta
-      name="description"
-      content="Resumen breve del artículo para SEO y compartición."
-    />
-    <link rel="stylesheet" href="../../css/styles.css" />
-    <link rel="icon" href="../../favicon.ico" />
-  </head>
 
-  <body>
-    <header class="header">
-      <div class="container nav">
-        <div class="container">
-          <a href="../../index.html">← Volver</a>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Título del artículo | Pablo Domínguez</title>
+  <meta name="description" content="Resumen breve del artículo para SEO y compartición." />
+  <link rel="stylesheet" href="../../css/styles.css" />
+  <link rel="icon" href="../../favicon.ico" />
+</head>
+
+<body>
+  <header class="header">
+    <div class="container nav">
+      <div class="container">
+        <a href="../../index.html">← Volver</a>
+      </div>
+
+      <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
+        🌙
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- <section class="section fade-in"> -->
+    <div class="container" style="max-width: 760px">
+      <p class="muted">
+        <a href="../../index.html">Inicio</a> ·
+        <a href="../index.html">Artículos</a>
+      </p>
+
+      <article>
+        <header style="margin-bottom: 2rem">
+          <p class="muted">Categoría</p>
+          <img src="../../assets/img/articles" alt="Pablo Domínguez" />
+          <h2>Título del artículo</h2>
+          <h5 class="muted">23 de diciembre de 2020 · 5 min lectura</h5>
+        </header>
+
+        <div class="article-body">
+          <p>Primer párrafo del artículo.</p>
+
+          <h3>Primer bloque</h3>
+          <p>Desarrollo del contenido.</p>
+          <img src="../../assets/img/articles/" alt="Pablo Domínguez" />
         </div>
 
-        <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
-          🌙
-        </button>
-      </div>
-    </header>
+        <section class="article-feedback" data-feedback-slug="slug-name">
+          <h2>¿Qué te ha parecido este artículo?</h2>
+          <p class="muted">Tu feedback me ayuda a mejorar la línea editorial.</p>
 
-    <main>
-      <!-- <section class="section fade-in"> -->
-      <div class="container" style="max-width: 760px">
-        <p class="muted">
-          <a href="../../index.html">Inicio</a> ·
-          <a href="../index.html">Artículos</a>
-        </p>
-
-        <article>
-          <header style="margin-bottom: 2rem">
-            <p class="muted">Categoría</p>
-            <img src="../../assets/img/articles" alt="Pablo Domínguez" />
-            <h2>Título del artículo</h2>
-            <h5 class="muted">23 de diciembre de 2020 · 5 min lectura</h5>
-          </header>
-
-          <div class="article-body">
-            <p>Primer párrafo del artículo.</p>
-
-            <h3>Primer bloque</h3>
-            <p>Desarrollo del contenido.</p>
-            <img src="../../assets/img/articles/" alt="Pablo Domínguez" />
+          <div class="feedback-actions">
+            <button type="button" data-feedback-value="useful">
+              Me ha aportado valor
+            </button>
+            <button type="button" data-feedback-value="debatable">
+              Interesante, pero debatible
+            </button>
+            <button type="button" data-feedback-value="not_convinced">
+              No me convence
+            </button>
+            <button type="button" data-feedback-value="more_like_this">
+              Quiero más sobre este tema
+            </button>
           </div>
-        </article>
-      </div>
-      <!-- </section> -->
-    </main>
 
-    <footer class="footer">
-      <div class="container">
-        <p>© Pablo Domínguez</p>
-      </div>
-    </footer>
+          <p class="feedback-message" hidden>
+            Gracias. Me ayuda mucho para seguir afinando el contenido.
+          </p>
+        </section>
 
-    <script src="../../js/main.js"></script>
-  </body>
+      </article>
+    </div>
+    <!-- </section> -->
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© Pablo Domínguez</p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+</body>
+
 </html>

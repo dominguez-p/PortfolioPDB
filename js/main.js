@@ -1,4 +1,8 @@
 const COUNTER_API = "https://portfoliopdb-counter.pablo-dominguezb.workers.dev";
+const PORTFOLIO_DEBUG =
+  location.hostname === "localhost" || location.hostname === "127.0.0.1";
+let latestPortfolioStats = null;
+// const COUNTER_API = "https://portfoliopdb-counter.pablo-dominguezb.workers.dev";
 
 document.addEventListener("DOMContentLoaded", () => {
   initThemeToggle();
@@ -7,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadCounters();
   bindArticleClicks();
   bindSiteClicks();
+  initArticleFeedback();
 });
 
 // =====================
@@ -75,7 +80,9 @@ function initFadeIn() {
 // =====================
 async function loadCounters() {
   const articleEls = document.querySelectorAll("[data-article]");
-  const slugs = Array.from(articleEls).map((el) => el.dataset.article);
+  const slugs = Array.from(articleEls)
+    .map((el) => el.dataset.article)
+    .filter(Boolean);
 
   if (!slugs.length) return;
 
@@ -86,24 +93,13 @@ async function loadCounters() {
     if (!res.ok) return;
 
     const data = await res.json();
+    latestPortfolioStats = data;
 
-    console.log("📊 Counter stats received:", data);
-
-    const siteEl = document.getElementById("siteCounter");
-    if (siteEl && data.site) {
-      siteEl.textContent = data.site;
+    if (PORTFOLIO_DEBUG) {
+      // console.log("📊 Portfolio stats:", data);
     }
-
-    articleEls.forEach((el) => {
-      const slug = el.dataset.article;
-      const countEl = el.querySelector("[data-article-count]");
-
-      if (countEl && data.articles && data.articles[slug]) {
-        countEl.textContent = data.articles[slug];
-      }
-    });
   } catch (err) {
-    if (location.hostname === "localhost") {
+    if (PORTFOLIO_DEBUG) {
       console.warn("Counter API not available", err);
     }
   }
@@ -140,4 +136,72 @@ function sendHit(payload) {
   } catch (_) {
     // silencioso a propósito
   }
+}
+function portfolioStats() {
+  if (!latestPortfolioStats) {
+    console.log("No hay estadísticas cargadas todavía.");
+    return;
+  }
+
+  console.log("📊 Estadísticas actuales del portfolio:");
+  console.log(latestPortfolioStats);
+}
+
+window.portfolioStats = portfolioStats;
+
+function initArticleFeedback() {
+  const feedbackBlocks = document.querySelectorAll("[data-feedback-slug]");
+  if (!feedbackBlocks.length) return;
+
+  feedbackBlocks.forEach((block) => {
+    const slug = block.dataset.feedbackSlug;
+    const buttons = block.querySelectorAll("[data-feedback-value]");
+    const message = block.querySelector(".feedback-message");
+
+    if (!slug || !buttons.length) return;
+
+    const storageKey = `portfolio-feedback:${slug}`;
+    const previousVote = localStorage.getItem(storageKey);
+
+    if (previousVote) {
+      buttons.forEach((button) => {
+        if (button.dataset.feedbackValue === previousVote) {
+          button.classList.add("is-selected");
+        }
+        button.disabled = true;
+      });
+
+      if (message) {
+        message.hidden = false;
+      }
+
+      return;
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const value = button.dataset.feedbackValue;
+        if (!value) return;
+
+        localStorage.setItem(storageKey, value);
+
+        sendHit({
+          type: "feedback",
+          slug,
+          value,
+        });
+
+        buttons.forEach((btn) => {
+          if (btn === button) {
+            btn.classList.add("is-selected");
+          }
+          btn.disabled = true;
+        });
+
+        if (message) {
+          message.hidden = false;
+        }
+      });
+    });
+  });
 }
