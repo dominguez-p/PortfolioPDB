@@ -553,3 +553,39 @@ img {
   padding-top: 2rem;
   border-top: 1px solid rgba(128, 128, 128, 0.2);
 }
+
+.article-feedback {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.feedback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.feedback-actions button {
+  padding: 0.65rem 0.9rem;
+  border: 1px solid rgba(128, 128, 128, 0.35);
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+}
+
+.feedback-actions button:hover {
+  transform: translateY(-1px);
+}
+
+.feedback-actions button.is-selected,
+.feedback-actions button:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.feedback-message {
+  margin-top: 1rem;
+}
