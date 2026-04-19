@@ -1,264 +1,82 @@
-// ==============================
-// Experience: collapse / expand
-// ==============================
-;(function setupExperienceToggles() {
-  const toggles = document.querySelectorAll('[data-toggle="roles"]')
+const COUNTER_API = 'https://portfoliopdb-counter.pablo-dominguezb.workers.dev'
 
-  toggles.forEach((btn) => {
-    const company = btn.closest('.experience-company')
-    const roles = company.querySelector('.experience-roles')
+document.addEventListener('DOMContentLoaded', () => {
+  initThemeToggle()
+  initExperienceAccordion()
+  initFadeIn()
+  loadCounters()
+  bindArticleClicks()
+  bindSiteClicks()
+})
 
-    if (!roles) return
+// =====================
+// Theme toggle
+// =====================
+function initThemeToggle() {
+  const btn = document.getElementById('themeToggle')
+  if (!btn) return
 
-    btn.addEventListener('click', () => {
-      const expanded = btn.getAttribute('aria-expanded') === 'true'
-
-      btn.setAttribute('aria-expanded', String(!expanded))
-      roles.hidden = expanded
-
-      btn.textContent = expanded
-        ? btn.textContent.replace('Ver menos', 'Ver roles')
-        : 'Ver menos'
-    })
-  })
-})()
-// PortfolioPDB - public JS (simple y mantenible)
-
-// 1) "Ver más / ver menos" (Acerca de)
-;(function setupClamps() {
-  const clampEl = document.querySelector('[data-clamp="about"]')
-  const btn = document.querySelector('[data-toggle="about"]')
-
-  if (!clampEl || !btn) return
-
-  // Empieza clamped
-  clampEl.classList.add('is-clamped')
+  document.body.classList.remove('dark')
 
   btn.addEventListener('click', () => {
-    const isClamped = clampEl.classList.toggle('is-clamped')
-    btn.textContent = isClamped ? 'Ver más' : 'Ver menos'
-    btn.setAttribute('aria-expanded', String(!isClamped))
+    document.body.classList.toggle('dark')
   })
-})()
+}
 
-// 2) Scroll suave y compensación por topbar (evita que el título quede tapado)
-;(function setupAnchorScroll() {
-  const topbar = document.querySelector('.topbar')
-  const offset = topbar ? topbar.offsetHeight + 10 : 66
+// =====================
+// Experience accordion
+// =====================
+function initExperienceAccordion() {
+  const roles = document.querySelectorAll('.experience-role')
+  if (!roles.length) return
 
-  document.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href^="#"]')
-    if (!a) return
+  roles.forEach((role) => {
+    const btn = role.querySelector('.role-toggle')
+    if (!btn) return
 
-    const id = a.getAttribute('href')
-    if (!id || id === '#') return
+    btn.addEventListener('click', () => {
+      const isActive = role.classList.contains('active')
 
-    const target = document.querySelector(id)
-    if (!target) return
+      roles.forEach((item) => item.classList.remove('active'))
 
-    e.preventDefault()
-    const y = target.getBoundingClientRect().top + window.scrollY - offset
-
-    window.scrollTo({ top: y, behavior: 'smooth' })
-    history.replaceState(null, '', id)
+      if (!isActive) {
+        role.classList.add('active')
+      }
+    })
   })
-})()
 
-// 3) Resaltar sección activa en el menú superior (estilo LinkedIn-lite)
-;(function setupActiveNav() {
-  const links = Array.from(document.querySelectorAll('.topnav-link'))
-  if (!links.length) return
+  roles[0].classList.add('active')
+}
 
-  const sections = links
-    .map((l) => document.querySelector(l.getAttribute('href')))
-    .filter(Boolean)
-
-  const setActive = (id) => {
-    links.forEach((l) =>
-      l.classList.toggle('is-active', l.getAttribute('href') === id),
-    )
-  }
+// =====================
+// Fade-in on scroll
+// =====================
+function initFadeIn() {
+  const items = document.querySelectorAll('.fade-in')
+  if (!items.length) return
 
   const observer = new IntersectionObserver(
     (entries) => {
-      const visible = entries
-        .filter((e) => e.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-
-      if (visible?.target?.id) setActive('#' + visible.target.id)
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        entry.target.classList.add('visible')
+        observer.unobserve(entry.target)
+      })
     },
-    { root: null, threshold: [0.2, 0.35, 0.5, 0.65] },
+    { threshold: 0.15 },
   )
 
-  sections.forEach((s) => observer.observe(s))
+  items.forEach((item) => observer.observe(item))
+}
 
-  // Clase CSS para el activo (inyectada simple)
-  const style = document.createElement('style')
-  style.textContent = `
-    .topnav-link.is-active {
-      background: rgba(255,255,255,0.14);
-      text-decoration: none;
-    }
-  `
-  document.head.appendChild(style)
-})()
-
-// ======================================================
-// Experience accordion:
-// - One company open at a time
-// - One role open at a time
-// - Default: current company + current role open
-// - No persistence
-// ======================================================
-;(function setupExperienceAccordion() {
-  const root = document.querySelector('.experience')
-  if (!root) return
-
-  const companies = Array.from(root.querySelectorAll('[data-company]'))
-
-  const setCollapsibleOpen = (collapsibleEl, open) => {
-    if (!collapsibleEl) return
-    collapsibleEl.classList.toggle('is-open', open)
-  }
-
-  const setCompanyOpen = (companyEl, open) => {
-    const btn = companyEl.querySelector('.exp-company-toggle')
-    const body = companyEl.querySelector('.exp-company-body[data-collapsible]')
-
-    if (!btn || !body) return
-
-    btn.setAttribute('aria-expanded', String(open))
-    const cta = btn.querySelector('.exp-company-cta')
-    if (cta) cta.textContent = open ? 'Ocultar' : 'Ver'
-
-    setCollapsibleOpen(body, open)
-
-    // If closing a company, also close any open role inside
-    if (!open) {
-      const openRole = companyEl.querySelector(
-        ".exp-role-toggle[aria-expanded='true']",
-      )
-      if (openRole) {
-        setRoleOpen(openRole.closest('[data-role]'), false)
-      }
-    }
-  }
-
-  const setRoleOpen = (roleEl, open) => {
-    const btn = roleEl.querySelector('.exp-role-toggle')
-    const detail = roleEl.querySelector('.exp-role-detail[data-collapsible]')
-
-    if (!btn || !detail) return
-
-    btn.setAttribute('aria-expanded', String(open))
-    const cta = btn.querySelector('.exp-role-cta')
-    if (cta) cta.textContent = open ? 'Ver menos' : 'Ver más'
-
-    setCollapsibleOpen(detail, open)
-  }
-
-  const closeAllCompaniesExcept = (keepCompany) => {
-    companies.forEach((c) => {
-      if (c !== keepCompany) setCompanyOpen(c, false)
-    })
-  }
-
-  const closeAllRoles = () => {
-    companies.forEach((company) => {
-      const roles = company.querySelectorAll('[data-role]')
-      roles.forEach((r) => setRoleOpen(r, false))
-    })
-  }
-
-  // ---------
-  // Init state
-  // ---------
-  // Start: close everything
-  companies.forEach((c) => setCompanyOpen(c, false))
-  closeAllRoles()
-
-  // Open current company (fallback to first)
-  const currentCompany =
-    companies.find((c) => c.getAttribute('data-current') === 'true') ||
-    companies[0]
-  if (currentCompany) {
-    setCompanyOpen(currentCompany, true)
-    closeAllCompaniesExcept(currentCompany)
-
-    // Open current role within current company (fallback to first role)
-    const roles = Array.from(currentCompany.querySelectorAll('[data-role]'))
-    const currentRole =
-      roles.find((r) => r.getAttribute('data-current') === 'true') || roles[0]
-
-    if (currentRole) {
-      closeAllRoles()
-      setRoleOpen(currentRole, true)
-    }
-  }
-
-  // -----------------
-  // Click interactions
-  // -----------------
-  root.addEventListener('click', (e) => {
-    const companyBtn = e.target.closest('.exp-company-toggle')
-    if (companyBtn) {
-      const company = companyBtn.closest('[data-company]')
-      const isOpen = companyBtn.getAttribute('aria-expanded') === 'true'
-
-      if (isOpen) {
-        setCompanyOpen(company, false)
-      } else {
-        closeAllCompaniesExcept(company)
-        setCompanyOpen(company, true)
-        // When opening a company, do not auto-open a role (keeps user control)
-        // But if you prefer: open first role automatically, you can add it here.
-      }
-      return
-    }
-
-    const roleBtn = e.target.closest('.exp-role-toggle')
-    if (roleBtn) {
-      const role = roleBtn.closest('[data-role]')
-      const isOpen = roleBtn.getAttribute('aria-expanded') === 'true'
-
-      // Ensure the parent company is open
-      const company = roleBtn.closest('[data-company]')
-      if (company) {
-        closeAllCompaniesExcept(company)
-        setCompanyOpen(company, true)
-      }
-
-      // Accordion: only one role open at a time
-      if (isOpen) {
-        setRoleOpen(role, false)
-      } else {
-        closeAllRoles()
-        setRoleOpen(role, true)
-      }
-    }
-  })
-})()
-
-// ========================================
-// Counters (Cloudflare Worker - Option C)
-// ========================================
-
-const COUNTER_API = 'https://portfoliopdb-counter.pablo-dominguezb.workers.dev'
-
-// ------------------------
-// Load counters on page load
-// ------------------------
-document.addEventListener('DOMContentLoaded', () => {
-  loadCounters()
-  bindArticleClicks()
-})
-
-// ------------------------
-// Fetch and display ranges
-// ------------------------
+// =====================
+// Counters
+// =====================
 async function loadCounters() {
   const articleEls = document.querySelectorAll('[data-article]')
   const slugs = Array.from(articleEls).map((el) => el.dataset.article)
+
+  if (!slugs.length) return
 
   const url = `${COUNTER_API}/stats?articles=${slugs.join(',')}`
 
@@ -270,16 +88,15 @@ async function loadCounters() {
 
     console.log('📊 Counter stats received:', data)
 
-    // Global site counter
     const siteEl = document.getElementById('siteCounter')
     if (siteEl && data.site) {
       siteEl.textContent = data.site
     }
 
-    // Article counters
     articleEls.forEach((el) => {
       const slug = el.dataset.article
       const countEl = el.querySelector('[data-article-count]')
+
       if (countEl && data.articles && data.articles[slug]) {
         countEl.textContent = data.articles[slug]
       }
@@ -289,9 +106,6 @@ async function loadCounters() {
   }
 }
 
-// ------------------------
-// Increment on article click
-// ------------------------
 function bindArticleClicks() {
   document.querySelectorAll('[data-article-link]').forEach((link) => {
     link.addEventListener('click', () => {
@@ -299,109 +113,28 @@ function bindArticleClicks() {
       if (!articleEl) return
 
       const slug = articleEl.dataset.article
-
-      sendHit({
-        type: 'article',
-        slug,
-      })
+      sendHit({ type: 'article', slug })
     })
   })
 }
-document.querySelectorAll('[data-site-hit]').forEach((link) => {
-  link.addEventListener('click', () => {
-    sendHit({ type: 'site' })
+
+function bindSiteClicks() {
+  document.querySelectorAll('[data-site-hit]').forEach((link) => {
+    link.addEventListener('click', () => {
+      sendHit({ type: 'site' })
+    })
   })
-})
-// ------------------------
-// Fire-and-forget hit
-// ------------------------
+}
+
 function sendHit(payload) {
   try {
     fetch(`${COUNTER_API}/hit`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
-      keepalive: true, // importante para no bloquear navegación
+      keepalive: true,
     })
   } catch (_) {
-    // Silencioso a propósito
+    // silencioso a propósito
   }
 }
-
-// =====================
-// Theme toggle (non-persistent)
-// =====================
-document.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('themeToggle')
-  if (!btn) return
-
-  // default = light
-  document.body.classList.remove('dark')
-
-  btn.addEventListener('click', () => {
-    document.body.classList.toggle('dark')
-  })
-})
-
-// =====================================
-// Experience Accordion (editorial style)
-// =====================================
-
-document.addEventListener('DOMContentLoaded', () => {
-  const roles = document.querySelectorAll('.experience-role')
-
-  roles.forEach((role) => {
-    const btn = role.querySelector('.role-toggle')
-
-    btn.addEventListener('click', () => {
-      const isActive = role.classList.contains('active')
-
-      // Cerrar todos
-      roles.forEach((r) => r.classList.remove('active'))
-
-      // Abrir solo si no estaba abierto
-      if (!isActive) {
-        role.classList.add('active')
-      }
-    })
-  })
-
-  // Abrir el primer rol por defecto
-  if (roles.length > 0) {
-    roles[0].classList.add('active')
-  }
-})
-// =====================================
-// Fade-in on scroll (editorial)
-// =====================================
-
-document.addEventListener('DOMContentLoaded', () => {
-  const items = document.querySelectorAll('.fade-in')
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible')
-          observer.unobserve(entry.target)
-        }
-      })
-    },
-    {
-      threshold: 0.15,
-    },
-  )
-
-  items.forEach((item) => observer.observe(item))
-})
-
-/* // JS mínimo por ahora
-console.log('PortfolioPDB cargado correctamente')
-
-document.addEventListener('DOMContentLoaded', () => {
-  GridStack.init({
-    cellHeight: 80,
-    margin: 5,
-  })
-})
- */
