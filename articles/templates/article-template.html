@@ -3,29 +3,68 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Título del artículo</title>
-
+    <title>Título del artículo | Pablo Domínguez</title>
+    <meta
+      name="description"
+      content="Resumen breve del artículo para SEO y compartición."
+    />
     <link rel="stylesheet" href="../../css/styles.css" />
+    <link rel="icon" href="../../favicon.ico" />
   </head>
 
   <body>
     <header class="header">
-      <div class="container">
-        <a href="../../index.html">← Volver</a>
+      <div class="container nav">
+        <div>
+          <strong><a href="../../index.html">Pablo Domínguez</a></strong>
+        </div>
+
+        <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
+          🌙
+        </button>
       </div>
     </header>
 
-    <main class="section">
-      <div class="container" style="max-width: 800px">
-        <h1>Título del artículo</h1>
+    <main>
+      <section class="section fade-in">
+        <div class="container" style="max-width: 760px">
+          <p class="muted">
+            <a href="../../index.html">Inicio</a> ·
+            <a href="../index.html">Artículos</a>
+          </p>
 
-        <p class="muted">Fecha · Tiempo de lectura</p>
+          <article>
+            <header style="margin-bottom: 2rem">
+              <p class="muted">Categoría</p>
+              <h1>Título del artículo</h1>
+              <p class="muted">Abril 2026 · 4 min lectura</p>
+              <p>
+                Este es el resumen breve del artículo. Debe explicar por qué
+                merece la pena leerlo.
+              </p>
+            </header>
 
-        <p>Aquí empieza tu contenido...</p>
+            <div class="article-body">
+              <p>Primer párrafo del artículo.</p>
 
-        <p>Sigue escribiendo con estructura editorial.</p>
-      </div>
+              <h2>Primer bloque</h2>
+              <p>Desarrollo del contenido.</p>
+
+              <h2>Cierre</h2>
+              <p>
+                Idea final, reflexión o llamada a seguir leyendo más piezas.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
     </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>© Pablo Domínguez</p>
+      </div>
+    </footer>
 
     <script src="../../js/main.js"></script>
   </body>
