@@ -38,7 +38,7 @@ https://portfoliopdb-counter.pablo-dominguezb.workers.dev/
 
 # 8) slugs (artículos)
 
-data-article="retro-primeros-cuatro-años"
+data-article="retro-primeros-cuatro-anos"
 data-article="golden-circle-en-trabajo"
-data-article="retro-segundos-cuatro-años"
+data-article="retro-segundos-cuatro-anos"
 data-article="liderazgo-interior"
