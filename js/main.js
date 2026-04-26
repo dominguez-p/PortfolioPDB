@@ -108,8 +108,9 @@ async function loadCounters() {
 function bindArticleClicks() {
   document.querySelectorAll("[data-article-link]").forEach((link) => {
     link.addEventListener("click", () => {
+      const articleEl = link.closest("[data-article]");
+
       if (!articleEl || !articleEl.dataset.article) return;
-      if (!articleEl) return;
 
       const slug = articleEl.dataset.article;
       sendHit({ type: "article", slug });
@@ -140,11 +141,40 @@ function sendHit(payload) {
 function portfolioStats() {
   if (!latestPortfolioStats) {
     console.log("No hay estadísticas cargadas todavía.");
+    console.log(
+      "Prueba a recargar la página y volver a ejecutar portfolioStats().",
+    );
     return;
   }
 
-  console.log("📊 Estadísticas actuales del portfolio:");
+  const siteVisits = latestPortfolioStats.site ?? "Sin datos";
+  const articles = latestPortfolioStats.articles ?? {};
+
+  console.group("📊 Estadísticas del portfolio");
+
+  console.group("🌍 Visitas del sitio");
+  console.log("Total:", siteVisits);
+  console.groupEnd();
+
+  console.group("📝 Estadísticas por artículo");
+
+  if (!Object.keys(articles).length) {
+    console.log("No hay estadísticas de artículos disponibles.");
+  } else {
+    Object.entries(articles).forEach(([slug, visits]) => {
+      console.group(slug);
+      console.log("Visitas / clics:", visits);
+      console.groupEnd();
+    });
+  }
+
+  console.groupEnd();
+
+  console.group("🧪 Datos brutos");
   console.log(latestPortfolioStats);
+  console.groupEnd();
+
+  console.groupEnd();
 }
 
 window.portfolioStats = portfolioStats;
