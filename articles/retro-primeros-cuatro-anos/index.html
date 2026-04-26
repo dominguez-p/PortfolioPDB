@@ -15,7 +15,7 @@
   <header class="header">
     <div class="container nav">
       <div class="container">
-        <a href="../../index.html">← Volver</a>
+        <a href="../../index.html" data-i18n="back_home">← Volver</a>
       </div>
 
       <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
@@ -28,17 +28,19 @@
     <!-- <section class="section fade-in"> -->
     <div class="container" style="max-width: 760px">
       <p class="muted">
-        <a href="../../index.html">Inicio</a> ·
-        <a href="../index.html">Artículos</a>
+        <a href="../../index.html" data-i18n="breadcrumb_home">Inicio</a> ·
+        <a href="../index.html" data-i18n="breadcrumb_articles">Artículos</a>
       </p>
 
       <article data-article="retro-primeros-cuatro-anos">
         <header style="margin-bottom: 2rem">
-          <p class="muted">Editorial</p>
+          <p class="muted" data-i18n="article_category_editorial">Editorial</p>
           <img src="../../assets/img/articles/retro-primeros-cuatro-anos/article-cuatroaños.webp"
             alt="Pablo Domínguez" />
           <h2>Cuatro años en mil palabras (puedes contarlas).</h2>
-          <h5 class="muted">23 de diciembre de 2020 · 5 min lectura</h5>
+          <h5 class="muted" data-i18n="article_retro_1_meta">
+            23 de diciembre de 2020 · 5 min lectura
+          </h5>
         </header>
 
         <div class="article-body">
@@ -156,23 +158,27 @@
           <img src="../../assets/img/articles/retro-primeros-cuatro-anos/parrafo5.jfif" alt="Pablo Domínguez" />
         </div>
         <section class="article-feedback" data-feedback-slug="retro-primeros-cuatro-anos">
-          <h2>¿Qué te ha parecido este artículo?</h2>
-          <p class="muted">Tu feedback me ayuda a mejorar la línea editorial.</p>
+          <h2 data-i18n="feedback_title">¿Qué te ha parecido este artículo?</h2>
 
-          <div class="feedback-actions">
-            <button type="button" data-feedback-value="useful">
-              Me ha aportado valor
-            </button>
-            <button type="button" data-feedback-value="debatable">
-              Interesante, pero debatible
-            </button>
-            <button type="button" data-feedback-value="not_convinced">
-              No me convence
-            </button>
-            <button type="button" data-feedback-value="more_like_this">
-              Quiero más sobre este tema
-            </button>
-          </div>
+          <p class="muted" data-i18n="feedback_intro">
+            Tu feedback me ayuda a mejorar la línea editorial.
+          </p>
+
+          <button type="button" data-feedback-value="useful" data-i18n="feedback_useful">
+            Me ha aportado valor
+          </button>
+
+          <button type="button" data-feedback-value="debatable" data-i18n="feedback_debatable">
+            Interesante, pero debatible
+          </button>
+
+          <button type="button" data-feedback-value="not_convinced" data-i18n="feedback_not_convinced">
+            No me convence
+          </button>
+
+          <button type="button" data-feedback-value="more_like_this" data-i18n="feedback_more_like_this">
+            Quiero más sobre este tema
+          </button>
 
           <p class="feedback-message" hidden>
             Gracias. Me ayuda mucho para seguir afinando el contenido.
