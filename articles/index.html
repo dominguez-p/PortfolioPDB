@@ -18,18 +18,24 @@
         <strong><a href="../index.html">Pablo Domínguez</a></strong>
       </div>
 
-      <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
-        🌙
-      </button>
+      <div class="header-actions">
+        <button id="langToggle" class="lang-toggle" aria-label="Cambiar idioma">
+          ES
+        </button>
+
+        <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
+          🌙
+        </button>
+      </div>
     </div>
   </header>
 
   <main>
     <section class="section fade-in">
       <div class="container" style="max-width: 900px">
-        <p class="muted">Publicación</p>
-        <h1>Artículos</h1>
-        <p class="muted">
+        <p class="muted" data-i18n="publication_label">Publicación</p>
+        <h1 data-i18n="articles_page_title">Artículos</h1>
+        <p class="muted" data-i18n="articles_page_intro">
           Ideas, aprendizajes y reflexiones sobre tecnología, producto,
           inteligencia artificial y liderazgo.
         </p>
