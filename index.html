@@ -38,50 +38,67 @@
 
   <main>
     <!-- ARTICLES -->
+    <!-- ARTICLES -->
     <section class="section section--alt">
       <div class="container">
+        <p class="muted" data-i18n="articles_label">Publicación</p>
+
         <h2 data-i18n="latest_articles">Últimos artículos</h2>
+
         <p class="muted" data-i18n="latest_articles_intro">
           Ideas sobre tecnología, producto, IA y liderazgo técnico.
         </p>
-        <p style="margin-top: 2rem">
-          <a href="./articles/" data-i18n="view_all_articles">
-            Ver todos los artículos →
+
+        <div class="articles-grid">
+          <article class="article-item article-item--featured fade-in" data-article="retro-primeros-cuatro-anos">
+            <p class="article-category">Liderazgo técnico</p>
+
+            <h3>
+              <a href="./articles/retro-primeros-cuatro-anos/" data-article-link>
+                Cuatro años en mil palabras (puedes contarlas)
+              </a>
+            </h3>
+
+            <p class="muted">
+              Una retrospectiva profesional sobre aprendizaje, cambio, tecnología y evolución dentro de BBVA.
+            </p>
+          </article>
+
+          <article class="article-item fade-in" data-article="golden-circle-en-trabajo">
+            <p class="article-category">Producto & propósito</p>
+
+            <h3>
+              <a href="./articles/golden-circle-en-trabajo/" data-article-link>
+                Quien comparta tu “por qué”, es tuyo
+              </a>
+            </h3>
+
+            <p class="muted">
+              El círculo de oro de Simon Sinek aplicado al trabajo y al liderazgo.
+            </p>
+          </article>
+
+          <article class="article-item fade-in" data-article="retro-segundos-cuatro-anos">
+            <p class="article-category">Carrera profesional</p>
+
+            <h3>
+              <a href="https://www.linkedin.com/pulse/otros-cuatro-a%C3%B1os-en-otras-mil-palabras-puedes-pablo-a0l6f"
+                target="_blank" data-article-link>
+                Otros cuatro años en otras mil palabras
+              </a>
+            </h3>
+
+            <p class="muted">
+              Segunda retrospectiva profesional sobre evolución, contexto y aprendizaje.
+            </p>
+          </article>
+        </div>
+
+        <p class="articles-cta">
+          <a href="./articles/" class="cta" data-i18n="view_all_articles">
+            Seguir leyendo →
           </a>
         </p>
-        <article class="article-item fade-in" data-article="retro-primeros-cuatro-anos">
-          <h3>
-            <a href="./articles/retro-primeros-cuatro-anos/" data-article-link>
-              Cuatro años en mil palabras (puedes contarlas)
-            </a>
-          </h3>
-          <p class="muted">
-            Primera pieza publicada directamente en la web.
-
-          </p>
-        </article>
-
-        <article class="article-item fade-in" data-article="golden-circle-en-trabajo">
-          <h3>
-            <a href="./articles/golden-circle-en-trabajo/" data-article-link>Quien comparta tu “por qué”, es tuyo.</a>
-          </h3>
-          <p class="muted">
-            El cícrculo de oro de Simon Sinek aplicado a tu trabajo
-
-          </p>
-        </article>
-
-        <article class="article-item fade-in" data-article="retro-segundos-cuatro-anos">
-          <h3>
-            <a href="https://www.linkedin.com/pulse/otros-cuatro-a%C3%B1os-en-otras-mil-palabras-puedes-pablo-a0l6f"
-              target="_blank" data-article-link>Otros cuatro años en otras mil palabras (puedes contarlas)
-            </a>
-          </h3>
-          <p class="muted">
-            Retro de los segundos 4 años en BBVA
-
-          </p>
-        </article>
       </div>
     </section>
     <!-- HERO -->
