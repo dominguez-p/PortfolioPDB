@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initExperienceAccordion();
   initFadeIn();
   loadCounters();
+  trackSiteVisit();
   bindArticleClicks();
   bindSiteClicks();
   initArticleFeedback();
@@ -234,4 +235,8 @@ function initArticleFeedback() {
       });
     });
   });
+}
+
+function trackSiteVisit() {
+  sendHit({ type: "site" });
 }
