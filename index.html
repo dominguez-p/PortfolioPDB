@@ -24,9 +24,15 @@
         <strong>Pablo Domínguez</strong>
       </div>
 
-      <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
-        🌙
-      </button>
+      <div class="header-actions">
+        <button id="langToggle" class="lang-toggle" aria-label="Cambiar idioma">
+          ES
+        </button>
+
+        <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
+          🌙
+        </button>
+      </div>
     </div>
   </header>
 
@@ -34,9 +40,14 @@
     <!-- ARTICLES -->
     <section class="section section--alt">
       <div class="container">
-        <h2>Últimos artículos</h2>
+        <h2 data-i18n="latest_articles">Últimos artículos</h2>
+        <p class="muted" data-i18n="latest_articles_intro">
+          Ideas sobre tecnología, producto, IA y liderazgo técnico.
+        </p>
         <p style="margin-top: 2rem">
-          <a href="./articles/">Ver todos los artículos →</a>
+          <a href="./articles/" data-i18n="view_all_articles">
+            Ver todos los artículos →
+          </a>
         </p>
         <article class="article-item fade-in" data-article="retro-primeros-cuatro-anos">
           <h3>
@@ -77,9 +88,8 @@
     <section class="section fade-in">
       <div class="container hero-grid">
         <div class="hero-text">
-          <h1>Tech Lead & AI Product Strategist</h1>
-
-          <p class="muted">
+          <h1 data-i18n="hero_title">Tech Lead & AI Product Strategist</h1>
+          <p class="muted" data-i18n="hero_subtitle">
             Arquitectura, datos e inteligencia artificial aplicada a negocio.
           </p>
         </div>
@@ -98,7 +108,7 @@
         </div>
 
         <div class="about-text">
-          <h2>Sobre mí</h2>
+          <h2 data-i18n="about_title">Sobre mí</h2>
 
           <p>
             Lidero equipos técnicos y proyectos estratégicos donde tecnología
@@ -125,7 +135,7 @@
     <!-- EXPERIENCE -->
     <section class="section fade-in">
       <div class="container">
-        <h2>Experiencia</h2>
+        <h2 data-i18n="experience_title">Experiencia</h2>
 
         <div class="experience-group">
           <div class="company-header">
@@ -227,11 +237,9 @@
     <!-- CONTACT -->
     <section class="section">
       <div class="container" style="max-width: 700px">
-        <h2>Contacto</h2>
-
-        <p>
-          Puedes conectar conmigo a través de LinkedIn o escribirme
-          directamente.
+        <h2 data-i18n="contact_title">Contacto</h2>
+        <p data-i18n="contact_intro">
+          Puedes conectar conmigo a través de LinkedIn o escribirme directamente.
         </p>
 
         <p>
