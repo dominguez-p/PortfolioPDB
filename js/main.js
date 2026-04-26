@@ -32,6 +32,11 @@ const translations = {
     feedback_more_like_this: "Quiero más sobre este tema",
     feedback_thanks:
       "Gracias. Me ayuda mucho para seguir afinando el contenido.",
+    articles_label: "Publicación",
+    latest_articles: "Últimos artículos",
+    latest_articles_intro:
+      "Ideas sobre tecnología, producto, IA y liderazgo técnico.",
+    view_all_articles: "Seguir leyendo →",
   },
   en: {
     latest_articles: "Latest articles",
@@ -57,6 +62,11 @@ const translations = {
     feedback_not_convinced: "I am not convinced",
     feedback_more_like_this: "I want more on this topic",
     feedback_thanks: "Thanks. This helps me keep improving the content.",
+    articles_label: "Publication",
+    latest_articles: "Latest articles",
+    latest_articles_intro:
+      "Ideas on technology, product, AI and technical leadership.",
+    view_all_articles: "Keep reading →",
   },
 };
 // const COUNTER_API = "https://portfoliopdb-counter.pablo-dominguezb.workers.dev";

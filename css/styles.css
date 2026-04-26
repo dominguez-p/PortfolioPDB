@@ -612,3 +612,41 @@ img {
 .lang-toggle:hover {
   border-color: var(--accent);
 }
+.articles-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.article-item--featured {
+  grid-row: span 2;
+  padding: 2rem;
+}
+
+.article-category {
+  margin-bottom: 0.75rem;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.articles-cta {
+  margin-top: 2rem;
+}
+
+.cta {
+  font-weight: 600;
+}
+
+@media (max-width: 800px) {
+  .articles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .article-item--featured {
+    grid-row: auto;
+  }
+}
