@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Retail Client Solutions Control Tower</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">BBVA</div>
+      <div class="tower-mark">⌂</div>
+      <div class="side-title">Control<br/>Tower</div>
+      <button class="home-link" data-route="landing">Inicio</button>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="breadcrumb">Retail Client Solutions</p>
+          <h1 id="pageTitle">Control Tower</h1>
+          <p id="pageSubtitle" class="subtitle">Portfolio overview, demanda estratégica y evolución de arquitectura</p>
+        </div>
+        <div class="data-status">
+          <span class="dot"></span>
+          <span id="dataStatus">Cargando datos…</span>
+        </div>
+      </header>
+
+      <section id="view"></section>
+    </main>
+  </div>
+
+  <template id="landing-template">
+    <section class="kpi-strip" id="portfolioKpis"></section>
+    <section class="section-title-row">
+      <h2>Programas RCS</h2>
+      <p>Vista ejecutiva de avance funcional, sistemas y arquitectura.</p>
+    </section>
+    <section class="program-grid" id="programGrid"></section>
+  </template>
+
+  <template id="program-template">
+    <section class="program-hero">
+      <div>
+        <button class="ghost-button" data-route="landing">← Volver</button>
+        <h2 id="programName"></h2>
+        <p id="programDescription"></p>
+      </div>
+      <div class="hero-metrics" id="programMetrics"></div>
+    </section>
+    <section class="module-grid" id="moduleGrid"></section>
+    <section class="two-column">
+      <article class="panel"><h3>Roles clave</h3><div id="rolesList" class="tag-list"></div></article>
+      <article class="panel"><h3>Prioridades</h3><div id="prioritiesList" class="stack-list"></div></article>
+    </section>
+  </template>
+
+  <template id="functional-template">
+    <button class="ghost-button" data-route="program-aixbanker">← Volver a AIxBanker</button>
+    <section class="section-title-row"><h2>Mapa funcional</h2><p>Dominios, capacidades y funcionalidades de AIxBanker.</p></section>
+    <section class="functional-map" id="functionalMap"></section>
+  </template>
+
+  <template id="systems-template">
+    <button class="ghost-button" data-route="program-aixbanker">← Volver a AIxBanker</button>
+    <section class="section-title-row"><h2>Mapa de sistemas</h2><p>Vista por capas e inventario AS IS.</p></section>
+    <section class="system-layers" id="systemLayers"></section>
+    <section class="panel"><h3>Inventario de sistemas</h3><div class="table-wrap"><table id="systemsTable"></table></div></section>
+  </template>
+
+  <script src="js/config.js"></script>
+  <script src="js/sample-data.js"></script>
+  <script src="js/google-sheets.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
