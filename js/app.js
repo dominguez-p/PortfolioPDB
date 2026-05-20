@@ -1,11 +1,16 @@
 let DATA = window.SAMPLE_DATA;
-
+let selectedCountry = "ES";
 const view = document.querySelector("#view");
 const title = document.querySelector("#pageTitle");
 const subtitle = document.querySelector("#pageSubtitle");
 const crumb = document.querySelector("#breadcrumb");
 const statusEl = document.querySelector("#dataStatus");
-
+const COUNTRIES = [
+  { id: "ES", label: "España", flagSrc: "assets/flags/es.svg" },
+  { id: "MX", label: "México", flagSrc: "assets/flags/mx.svg" },
+  { id: "PE", label: "Perú", flagSrc: "assets/flags/pe.svg" },
+  { id: "CO", label: "Colombia", flagSrc: "assets/flags/co.svg" },
+];
 function setHead(t, s, c = "Retail Client Solutions") {
   title.textContent = t;
   subtitle.textContent = s;
@@ -28,7 +33,15 @@ document.addEventListener("click", (e) => {
   const b = e.target.closest("[data-route]");
   if (b) route(b.dataset.route);
 });
+document.addEventListener("click", (e) => {
+  const countryButton = e.target.closest("[data-country]");
 
+  if (!countryButton) return;
+
+  selectedCountry = countryButton.dataset.country;
+
+  render();
+});
 function renderLanding() {
   setHead(
     "Retail Client Solutions Control Tower",
@@ -97,14 +110,19 @@ function renderProgram(programId) {
   }
 
   const modules = DATA.modules.filter((m) => m.programId === programId);
-  const roles = DATA.roles.filter((r) => r.programId === programId);
-  const priorities = DATA.priorities.filter((x) => x.programId === programId);
+  const roles = DATA.roles.filter(
+    (r) => r.programId === programId && r.country === selectedCountry,
+  );
+
+  const priorities = DATA.priorities.filter(
+    (x) => x.programId === programId && x.country === selectedCountry,
+  );
 
   setHead(p.name, p.description, `Retail Client Solutions > ${p.name}`);
 
   view.innerHTML = "";
   view.append(tpl("#program-template"));
-
+  view.insertAdjacentHTML("afterbegin", renderCountrySelector());
   programName.textContent = p.name;
   programDescription.textContent = p.description;
 
@@ -144,17 +162,20 @@ function renderProgram(programId) {
 function renderFunctional(programId) {
   const p = DATA.programs.find((x) => x.id === programId);
   const functionalItems = DATA.functional.filter(
-    (item) => item.programId === programId,
+    (item) => item.programId === programId && item.country === selectedCountry,
   );
+
+  const country = COUNTRIES.find((c) => c.id === selectedCountry);
 
   setHead(
     `${p?.name || "Programa"} · Mapa funcional`,
-    "Dominios, capacidades y funcionalidades",
-    `Retail Client Solutions > ${p?.name || programId} > Mapa funcional`,
+    `Dominios, capacidades y funcionalidades · ${country?.label || selectedCountry}`,
+    `Retail Client Solutions > ${p?.name || programId} > ${country?.label || selectedCountry} > Mapa funcional`,
   );
 
   view.innerHTML = "";
   view.append(tpl("#functional-template"));
+  view.insertAdjacentHTML("afterbegin", renderCountrySelector());
   const backButton = document.querySelector(".back-to-program-btn");
 
   if (backButton) {
@@ -165,34 +186,71 @@ function renderFunctional(programId) {
     .querySelector('[data-route="program/"]')
     ?.setAttribute("data-route", `program/${programId}`);
 
-  functionalMap.innerHTML = functionalItems
+  const groupedDomains = {};
+
+  functionalItems.forEach((item) => {
+    if (!groupedDomains[item.domain]) {
+      groupedDomains[item.domain] = [];
+    }
+
+    groupedDomains[item.domain].push(item);
+  });
+
+  functionalMap.innerHTML = Object.entries(groupedDomains)
     .map(
-      (d) => `
-        <article class="domain">
-          <h3>${d.domain}</h3>
-          <div class="capability">
-            <strong>${d.capability}</strong>
-            ${(d.features || []).map((f) => `<div class="feature">• ${f}</div>`).join("")}
-          </div>
-        </article>
-      `,
+      ([domainName, capabilities]) => `
+
+    <article class="domain">
+
+      <h3>${domainName}</h3>
+
+      ${capabilities
+        .map(
+          (capability) => `
+
+            <div class="capability">
+
+              <strong>${capability.capability}</strong>
+
+              ${(capability.features || [])
+                .map(
+                  (feature) => `
+                    <div class="feature">
+                      • ${feature}
+                    </div>
+                  `,
+                )
+                .join("")}
+
+            </div>
+
+          `,
+        )
+        .join("")}
+
+    </article>
+
+  `,
     )
     .join("");
 }
 function renderSystems(programId) {
   const p = DATA.programs.find((x) => x.id === programId);
   const systemItems = DATA.systems.filter(
-    (item) => item.programId === programId,
+    (item) => item.programId === programId && item.country === selectedCountry,
   );
 
+  const country = COUNTRIES.find((c) => c.id === selectedCountry);
+
   setHead(
-    `${p?.name || "Programa"} · Mapa de sistemas`,
-    "Capas, componentes e inventario AS IS",
-    `Retail Client Solutions > ${p?.name || programId} > Mapa de sistemas`,
+    `${p?.name || "Programa"} · Mapa funcional`,
+    `Dominios, capacidades y funcionalidades · ${country?.label || selectedCountry}`,
+    `Retail Client Solutions > ${p?.name || programId} > ${country?.label || selectedCountry} > Mapa funcional`,
   );
 
   view.innerHTML = "";
   view.append(tpl("#systems-template"));
+  view.insertAdjacentHTML("afterbegin", renderCountrySelector());
   const backButton = document.querySelector(".back-to-program-btn");
 
   if (backButton) {
@@ -246,7 +304,28 @@ function render() {
   else if (routeName === "systems") renderSystems(programId);
   else renderLanding();
 }
-
+function renderCountrySelector() {
+  return `
+    <div class="country-selector">
+      ${COUNTRIES.map(
+        (country) => `
+          <button
+            class="country-flag ${selectedCountry === country.id ? "active" : ""}"
+            type="button"
+            data-country="${country.id}"
+            title="${country.label}"
+            aria-label="${country.label}"
+          >
+            <img src="${country.flagSrc}" alt="${country.label}" />
+            </button>
+            <span>${country.label}</span>
+        `,
+      ).join("")}
+    </div>
+  `;
+}
+// <span>${country.flag}</span>
+// <small>${country.id}</small>
 async function init(showMessage = true) {
   try {
     if (window.APP_CONFIG.useGoogleSheets) {
