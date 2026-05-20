@@ -1,4 +1,126 @@
-async function csvToRows(text){const rows=[];let row=[],cell='',q=false;for(let i=0;i<text.length;i++){const c=text[i],n=text[i+1];if(c==='"'&&q&&n==='"'){cell+='"';i++;continue}if(c==='"'){q=!q;continue}if(c===','&&!q){row.push(cell);cell='';continue}if((c==='\n'||c==='\r')&&!q){if(c==='\r'&&n==='\n')i++;row.push(cell);if(row.some(v=>v!==''))rows.push(row);row=[];cell='';continue}cell+=c}row.push(cell);if(row.some(v=>v!==''))rows.push(row);return rows}
-function objects(rows){const h=rows[0]||[];return rows.slice(1).map(r=>Object.fromEntries(h.map((k,i)=>[k,(r[i]||'').trim()])))}
-async function loadSheet(name){const base=window.APP_CONFIG.googleSheetCsvBaseUrl;if(!base)throw new Error('Google Sheet CSV base URL not configured');const url=base+encodeURIComponent(name);const res=await fetch(url);if(!res.ok)throw new Error('Could not load '+name);return csvToRows(await res.text())}
-async function loadGoogleSheetsData(){const s=window.APP_CONFIG.sheets;const [kpis,programs,modules,roles,priorities,functional,systems]=await Promise.all([loadSheet(s.portfolioKpis),loadSheet(s.programs),loadSheet(s.modules),loadSheet(s.roles),loadSheet(s.priorities),loadSheet(s.functional),loadSheet(s.systems)]);return{portfolioKpis:kpis.slice(1),programs:objects(programs).map(p=>({...p,functional:+p.functional||0,systems:+p.systems||0,architecture:+p.architecture||0,enabled:String(p.enabled).toLowerCase()==='true'})),modules:objects(modules).map(m=>({...m,route:m.route||null})),roles:roles.slice(1),priorities:priorities.slice(1).map(r=>r[0]),functional:objects(functional).map(f=>({...f,features:(f.features||'').split('|').map(x=>x.trim()).filter(Boolean)})),systems:objects(systems)}}
+async function fetchSheetValues(sheetName) {
+  const { apiKey, spreadsheetId } = window.APP_CONFIG.googleSheetsApi || {};
+
+  if (
+    !apiKey ||
+    !spreadsheetId ||
+    apiKey.includes("REPLACE") ||
+    spreadsheetId.includes("REPLACE")
+  ) {
+    throw new Error(
+      "Google Sheets API Key or Spreadsheet ID is not configured.",
+    );
+  }
+
+  const encodedSheetName = encodeURIComponent(sheetName);
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodedSheetName}?key=${apiKey}`;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `Could not load sheet "${sheetName}". ${response.status} ${errorText}`,
+    );
+  }
+
+  const payload = await response.json();
+  return payload.values || [];
+}
+
+function rowsToObjects(rows) {
+  if (!rows.length) return [];
+  const headers = rows[0].map((header) => String(header || "").trim());
+
+  return rows
+    .slice(1)
+    .filter((row) => row.some((cell) => String(cell ?? "").trim() !== ""))
+    .map((row) => {
+      const obj = {};
+      headers.forEach((header, index) => {
+        obj[header] = String(row[index] ?? "").trim();
+      });
+      return obj;
+    });
+}
+
+function rowsToArray(rows) {
+  return rows
+    .slice(1)
+    .filter((row) => row.some((cell) => String(cell ?? "").trim() !== ""))
+    .map((row) => row.map((cell) => String(cell ?? "").trim()));
+}
+
+function toNumber(value, fallback = 0) {
+  const number = Number(
+    String(value ?? "")
+      .replace("%", "")
+      .replace(",", ".")
+      .trim(),
+  );
+  return Number.isNaN(number) ? fallback : number;
+}
+
+function toBoolean(value) {
+  return (
+    String(value ?? "")
+      .trim()
+      .toLowerCase() === "true"
+  );
+}
+
+function splitPipeList(value) {
+  return String(value ?? "")
+    .split("|")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+async function loadGoogleSheetsData() {
+  const sheetNames = window.APP_CONFIG.sheets;
+
+  const [
+    portfolioKpisRows,
+    programsRows,
+    modulesRows,
+    rolesRows,
+    prioritiesRows,
+    functionalRows,
+    systemsRows,
+  ] = await Promise.all([
+    fetchSheetValues(sheetNames.portfolioKpis),
+    fetchSheetValues(sheetNames.programs),
+    fetchSheetValues(sheetNames.modules),
+    fetchSheetValues(sheetNames.roles),
+    fetchSheetValues(sheetNames.priorities),
+    fetchSheetValues(sheetNames.functional),
+    fetchSheetValues(sheetNames.systems),
+  ]);
+
+  return {
+    portfolioKpis: rowsToArray(portfolioKpisRows),
+
+    programs: rowsToObjects(programsRows).map((program) => ({
+      ...program,
+      functional: toNumber(program.functional),
+      systems: toNumber(program.systems),
+      architecture: toNumber(program.architecture),
+      enabled: toBoolean(program.enabled),
+    })),
+
+    modules: rowsToObjects(modulesRows).map((module) => ({
+      ...module,
+      route: module.route || null,
+    })),
+
+    roles: rowsToObjects(rolesRows),
+
+    priorities: rowsToObjects(prioritiesRows),
+
+    functional: rowsToObjects(functionalRows).map((item) => ({
+      ...item,
+      features: splitPipeList(item.features),
+    })),
+
+    systems: rowsToObjects(systemsRows),
+  };
+}
