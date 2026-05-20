@@ -1,15 +1,18 @@
 window.APP_CONFIG = {
-  // Public Google Sheet CSV base URL. Publish your Google Sheet to web, then use:
-  // https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/gviz/tq?tqx=out:csv&sheet=
-  googleSheetCsvBaseUrl: '',
-  useGoogleSheets: false,
+  useGoogleSheets: true,
+
+  googleSheetsApi: {
+    apiKey: "AIzaSyAuQ7vbefn_W_JTFMwj4jnBTaJNgIOthNA",
+    spreadsheetId: "1VMEU6hUGWLlBtCzniE74pPp7fhuzaCdgYoDQsR7msrA",
+  },
+
   sheets: {
-    programs: 'programs',
-    portfolioKpis: 'portfolio_kpis',
-    modules: 'modules',
-    roles: 'roles',
-    priorities: 'priorities',
-    functional: 'functional_map',
-    systems: 'systems_inventory'
-  }
+    programs: "programs",
+    portfolioKpis: "portfolio_kpis",
+    modules: "modules",
+    roles: "roles",
+    priorities: "priorities",
+    functional: "functional_map",
+    systems: "systems_inventory",
+  },
 };
