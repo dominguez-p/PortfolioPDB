@@ -26,7 +26,16 @@
         </div>
         <div class="data-status">
           <span class="dot"></span>
+
           <span id="dataStatus">Cargando datos…</span>
+
+          <button id="refreshDataBtn" class="data-source-btn" type="button">
+            Actualizar datos
+          </button>
+
+          <button id="openDataSourceBtn" class="data-source-btn secondary" type="button">
+            Abrir origen
+          </button>
         </div>
       </header>
 
@@ -66,7 +75,9 @@
   </template>
 
   <template id="functional-template">
-    <button class="ghost-button" data-route="program/aixbanker">← Volver a AIxBanker</button>
+    <button class="ghost-button back-to-program-btn" data-route="">
+      ← Volver al programa
+    </button>
     <section class="section-title-row">
       <h2>Mapa funcional</h2>
       <p>Dominios, capacidades y funcionalidades de AIxBanker.</p>
@@ -75,7 +86,9 @@
   </template>
 
   <template id="systems-template">
-    <button class="ghost-button" data-route="program/aixbanker">← Volver a AIxBanker</button>
+    <button class="ghost-button back-to-program-btn" data-route="">
+      ← Volver al programa
+    </button>
     <section class="section-title-row">
       <h2>Mapa de sistemas</h2>
       <p>Vista por capas e inventario AS IS.</p>

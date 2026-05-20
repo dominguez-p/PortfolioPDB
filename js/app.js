@@ -82,13 +82,12 @@ function renderLanding() {
             </div>
           </div>
 
-          <button class="card-link" ${p.enabled ? 'data-route="program/${p.id}"' : "onclick=\"alert('Programa próximamente disponible')\""}>→ Ver programa</button>
+          <button class="card-link" ${p.enabled ? `data-route="program/${p.id}"` : `onclick=\"alert('Programa próximamente disponible')\"`}>→ Ver programa</button>
         </article>
       `,
     )
     .join("");
 }
-
 function renderProgram(programId) {
   const p = DATA.programs.find((x) => x.id === programId);
 
@@ -100,6 +99,47 @@ function renderProgram(programId) {
   const modules = DATA.modules.filter((m) => m.programId === programId);
   const roles = DATA.roles.filter((r) => r.programId === programId);
   const priorities = DATA.priorities.filter((x) => x.programId === programId);
+
+  setHead(p.name, p.description, `Retail Client Solutions > ${p.name}`);
+
+  view.innerHTML = "";
+  view.append(tpl("#program-template"));
+
+  programName.textContent = p.name;
+  programDescription.textContent = p.description;
+
+  programMetrics.innerHTML = ["functional", "systems", "architecture"]
+    .map(
+      (k) => `
+        <div class="metric-tile">
+          <strong>${p[k]}%</strong><br/>
+          <span>${k}</span>
+        </div>
+      `,
+    )
+    .join("");
+
+  moduleGrid.innerHTML = modules
+    .map(
+      (m) => `
+        <article
+          class="module-card ${m.route ? "active" : ""}"
+          ${m.route ? `data-route="${m.route}/${programId}"` : `onclick="alert('Módulo próximamente disponible')"`}>
+          <span class="pill ${m.route ? "" : "yellow"}">${m.status}</span>
+          <h3>${m.title}</h3>
+          <p>${m.description}</p>
+        </article>
+      `,
+    )
+    .join("");
+
+  rolesList.innerHTML = roles
+    .map((r) => `<span class="tag">${r.role} · ${r.description}</span>`)
+    .join("");
+
+  prioritiesList.innerHTML = priorities
+    .map((x) => `<div class="stack-item">${x.priority}</div>`)
+    .join("");
 }
 function renderFunctional(programId) {
   const p = DATA.programs.find((x) => x.id === programId);
@@ -115,9 +155,14 @@ function renderFunctional(programId) {
 
   view.innerHTML = "";
   view.append(tpl("#functional-template"));
+  const backButton = document.querySelector(".back-to-program-btn");
 
+  if (backButton) {
+    backButton.dataset.route = `program/${programId}`;
+    backButton.textContent = `← Volver a ${p?.name || "programa"}`;
+  }
   document
-    .querySelector('[data-route="program-aixbanker"]')
+    .querySelector('[data-route="program/"]')
     ?.setAttribute("data-route", `program/${programId}`);
 
   functionalMap.innerHTML = functionalItems
@@ -148,9 +193,14 @@ function renderSystems(programId) {
 
   view.innerHTML = "";
   view.append(tpl("#systems-template"));
+  const backButton = document.querySelector(".back-to-program-btn");
 
+  if (backButton) {
+    backButton.dataset.route = `program/${programId}`;
+    backButton.textContent = `← Volver a ${p?.name || "programa"}`;
+  }
   document
-    .querySelector('[data-route="program-aixbanker"]')
+    .querySelector('[data-route="program/"]')
     ?.setAttribute("data-route", `program/${programId}`);
 
   const layers = [...new Set(systemItems.map((s) => s.layer))];
@@ -197,11 +247,13 @@ function render() {
   else renderLanding();
 }
 
-async function init() {
+async function init(showMessage = true) {
   try {
     if (window.APP_CONFIG.useGoogleSheets) {
       DATA = await loadGoogleSheetsData();
-      statusEl.textContent = "Datos Google Sheets API v4 actualizados";
+      statusEl.textContent = showMessage
+        ? "Datos Google Sheets API v4 actualizados"
+        : "Datos sincronizados";
     } else {
       statusEl.textContent = "Datos demo locales";
     }
@@ -212,6 +264,66 @@ async function init() {
 
   render();
 }
+document.addEventListener("click", (event) => {
+  const button = event.target.closest("#openDataSourceBtn");
 
+  if (!button) return;
+
+  const spreadsheetId = window.APP_CONFIG.googleSheetsApi?.spreadsheetId;
+
+  if (!spreadsheetId || spreadsheetId.includes("REPLACE")) {
+    alert("No hay Spreadsheet ID configurado.");
+    return;
+  }
+
+  const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
+  window.open(url, "_blank", "noopener,noreferrer");
+});
+document.addEventListener("click", async (event) => {
+  const openButton = event.target.closest("#openDataSourceBtn");
+
+  if (openButton) {
+    const spreadsheetId = window.APP_CONFIG.googleSheetsApi?.spreadsheetId;
+
+    if (!spreadsheetId || spreadsheetId.includes("REPLACE")) {
+      alert("No hay Spreadsheet ID configurado.");
+      return;
+    }
+
+    const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`;
+
+    window.open(url, "_blank", "noopener,noreferrer");
+
+    return;
+  }
+
+  const refreshButton = event.target.closest("#refreshDataBtn");
+
+  if (refreshButton) {
+    refreshButton.disabled = true;
+    refreshButton.textContent = "Actualizando...";
+
+    try {
+      statusEl.textContent = "Sincronizando datos...";
+
+      if (window.APP_CONFIG.useGoogleSheets) {
+        DATA = await loadGoogleSheetsData();
+      }
+
+      render();
+
+      statusEl.textContent = "Datos Google Sheets API v4 actualizados";
+    } catch (error) {
+      console.error(error);
+
+      statusEl.textContent = "Error actualizando datos";
+
+      alert("Error actualizando datos desde Google Sheets.");
+    } finally {
+      refreshButton.disabled = false;
+      refreshButton.textContent = "Actualizar datos";
+    }
+  }
+});
 window.addEventListener("hashchange", render);
 init();
