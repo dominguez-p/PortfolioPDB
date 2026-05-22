@@ -89,16 +89,29 @@
     <button class="ghost-button back-to-program-btn" data-route="">
       ← Volver al programa
     </button>
+
     <section class="section-title-row">
       <h2>Mapa de sistemas</h2>
-      <p>Vista por capas e inventario AS IS.</p>
+      <p>Vista combinada de sistemas, inventario y capacidades funcionales.</p>
     </section>
-    <section class="system-layers" id="systemLayers"></section>
-    <section class="panel">
-      <h3>Inventario de sistemas</h3>
-      <div class="table-wrap">
-        <table id="systemsTable"></table>
-      </div>
+
+    <section class="systems-dashboard-grid">
+      <article class="panel">
+        <h3>Mapa de sistemas</h3>
+        <section class="system-layers" id="systemLayers"></section>
+      </article>
+
+      <article class="panel">
+        <h3>Inventario de sistemas</h3>
+        <div class="table-wrap">
+          <table id="systemsTable"></table>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h3>Mapa funcional</h3>
+        <div class="systems-functional-map" id="systemsFunctionalMap"></div>
+      </article>
     </section>
   </template>
 

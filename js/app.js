@@ -1,6 +1,7 @@
 let DATA = window.SAMPLE_DATA;
 let selectedCountry = "ES";
 let selectedSystemProduct = "blue-buddy";
+let selectedCapability = null;
 const view = document.querySelector("#view");
 const title = document.querySelector("#pageTitle");
 const subtitle = document.querySelector("#pageSubtitle");
@@ -40,19 +41,6 @@ function route(r) {
   location.hash = r;
 }
 
-document.addEventListener("click", (e) => {
-  const b = e.target.closest("[data-route]");
-  if (b) route(b.dataset.route);
-});
-document.addEventListener("click", (e) => {
-  const countryButton = e.target.closest("[data-country]");
-
-  if (!countryButton) return;
-
-  selectedCountry = countryButton.dataset.country;
-
-  render();
-});
 function renderLanding() {
   setHead(
     "Retail Client Solutions Control Tower",
@@ -247,6 +235,7 @@ function renderFunctional(programId) {
 }
 function renderSystems(programId) {
   const p = DATA.programs.find((x) => x.id === programId);
+
   const systemItems = DATA.systems.filter(
     (item) =>
       item.programId === programId &&
@@ -254,7 +243,30 @@ function renderSystems(programId) {
       item.product === selectedSystemProduct,
   );
 
+  const functionalItems = DATA.functional.filter(
+    (item) => item.programId === programId && item.country === selectedCountry,
+  );
+  const affectedSystems = new Set();
+
+  functionalItems.forEach((item) => {
+    if (item.capability !== selectedCapability) return;
+
+    String(item.affectedSystems || "")
+      .split("|")
+      .map((system) => system.trim())
+      .filter(Boolean)
+      .forEach((system) => affectedSystems.add(system));
+  });
   const country = COUNTRIES.find((c) => c.id === selectedCountry);
+  const groupedDomains = {};
+
+  functionalItems.forEach((item) => {
+    if (!groupedDomains[item.domain]) {
+      groupedDomains[item.domain] = [];
+    }
+
+    groupedDomains[item.domain].push(item);
+  });
 
   setHead(
     `${p?.name || "Programa"} · Mapa de capacidades funcionales`,
@@ -264,28 +276,47 @@ function renderSystems(programId) {
 
   view.innerHTML = "";
   view.append(tpl("#systems-template"));
+
   view.insertAdjacentHTML("afterbegin", renderSystemsProductSelector());
   view.insertAdjacentHTML("afterbegin", renderCountrySelector());
+
   const backButton = document.querySelector(".back-to-program-btn");
 
   if (backButton) {
     backButton.dataset.route = `program/${programId}`;
     backButton.textContent = `← Volver a ${p?.name || "programa"}`;
   }
-  document
-    .querySelector('[data-route="program/"]')
-    ?.setAttribute("data-route", `program/${programId}`);
 
   const layers = [...new Set(systemItems.map((s) => s.layer))];
 
   systemLayers.innerHTML = layers
     .map(
-      (l) => `
+      (layerName) => `
         <article class="layer">
-          <h3>${l}</h3>
+          <h3>${layerName}</h3>
+
           ${systemItems
-            .filter((s) => s.layer === l)
-            .map((s) => `<div class="component">${s.component}</div>`)
+            .filter((s) => s.layer === layerName)
+            .map((s) => {
+              const components = String(s.component || "")
+                .split("|")
+                .map((item) => item.trim())
+                .filter(Boolean);
+
+              return `
+                <div class="components-row">
+                  ${components
+                    .map(
+                      (component) => `
+                        <div class="component ${affectedSystems.has(component) ? "affected-by-capability" : ""}">
+                          ${component}
+                        </div>
+                      `,
+                    )
+                    .join("")}
+                </div>
+              `;
+            })
             .join("")}
         </article>
       `,
@@ -308,6 +339,30 @@ function renderSystems(programId) {
       )
       .join("") +
     "</tbody>";
+
+  systemsFunctionalMap.innerHTML = Object.entries(groupedDomains)
+    .map(
+      ([domainName, capabilities]) => `
+        <article class="systems-mini-domain">
+          <h4>${domainName}</h4>
+
+          ${capabilities
+            .map(
+              (capability) => `
+                <div class="systems-mini-capability clickable-capability ${selectedCapability === capability.capability ? "selected" : ""}"data-capability="${capability.capability}">
+                  <strong>${capability.capability}</strong>
+
+                  ${(capability.features || [])
+                    .map((feature) => `<div class="feature">• ${feature}</div>`)
+                    .join("")}
+                </div>
+              `,
+            )
+            .join("")}
+        </article>
+      `,
+    )
+    .join("");
 }
 
 function render() {
@@ -383,6 +438,19 @@ async function init(showMessage = true) {
 
   render();
 }
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-route]");
+  if (b) route(b.dataset.route);
+});
+document.addEventListener("click", (e) => {
+  const countryButton = e.target.closest("[data-country]");
+
+  if (!countryButton) return;
+
+  selectedCountry = countryButton.dataset.country;
+
+  render();
+});
 document.addEventListener("click", (event) => {
   const button = event.target.closest("#openDataSourceBtn");
 
@@ -450,6 +518,18 @@ document.addEventListener("click", (e) => {
   if (!productButton) return;
 
   selectedSystemProduct = productButton.dataset.systemProduct;
+
+  render();
+});
+document.addEventListener("click", (event) => {
+  const capability = event.target.closest("[data-capability]");
+
+  if (!capability) return;
+
+  const capabilityName = capability.dataset.capability;
+
+  selectedCapability =
+    selectedCapability === capabilityName ? null : capabilityName;
 
   render();
 });
