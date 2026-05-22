@@ -2,6 +2,7 @@ let DATA = window.SAMPLE_DATA;
 let selectedCountry = "ES";
 let selectedSystemProduct = "blue-buddy";
 let selectedCapability = null;
+let selectedFunctionalItem = null;
 const view = document.querySelector("#view");
 const title = document.querySelector("#pageTitle");
 const subtitle = document.querySelector("#pageSubtitle");
@@ -249,7 +250,14 @@ function renderSystems(programId) {
   const affectedSystems = new Set();
 
   functionalItems.forEach((item) => {
-    if (item.capability !== selectedCapability) return;
+    const features = item.features || [];
+
+    const selectedFeatureBelongsToThisCapability = features.some((feature) => {
+      const featureKey = `${item.domain}::${item.capability}::${feature}`;
+      return featureKey === selectedCapability;
+    });
+
+    if (!selectedFeatureBelongsToThisCapability) return;
 
     String(item.affectedSystems || "")
       .split("|")
@@ -349,12 +357,29 @@ function renderSystems(programId) {
           ${capabilities
             .map(
               (capability) => `
-                <div class="systems-mini-capability clickable-capability ${selectedCapability === capability.capability ? "selected" : ""}"data-capability="${capability.capability}">
+                  <div class="systems-mini-capability">
+                    <strong>${capability.capability}</strong>
+
+                    <div class="feature-card-list">
+                      ${(capability.features || [])
+                        .map((feature) => {
+                          const featureKey = `${domainName}::${capability.capability}::${feature}`;
+
+                          return `
+                            <button
+                              class="feature-card ${selectedCapability === featureKey ? "selected" : ""}"
+                              type="button"
+                              data-feature="${featureKey}"
+                            >
+                              ${feature}
+                            </button>
+                          `;
+                        })
+                        .join("")}
+                    </div>
+                  </div>
                   <strong>${capability.capability}</strong>
 
-                  ${(capability.features || [])
-                    .map((feature) => `<div class="feature">• ${feature}</div>`)
-                    .join("")}
                 </div>
               `,
             )
@@ -522,14 +547,13 @@ document.addEventListener("click", (e) => {
   render();
 });
 document.addEventListener("click", (event) => {
-  const capability = event.target.closest("[data-capability]");
+  const feature = event.target.closest("[data-feature]");
 
-  if (!capability) return;
+  if (!feature) return;
 
-  const capabilityName = capability.dataset.capability;
+  const featureKey = feature.dataset.feature;
 
-  selectedCapability =
-    selectedCapability === capabilityName ? null : capabilityName;
+  selectedCapability = selectedCapability === featureKey ? null : featureKey;
 
   render();
 });
