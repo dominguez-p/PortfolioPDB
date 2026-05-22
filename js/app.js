@@ -1,5 +1,8 @@
 let DATA = window.SAMPLE_DATA;
 let selectedCountry = "ES";
+let selectedSystemProduct = "blue-buddy";
+let selectedCapability = null;
+let selectedFunctionalItem = null;
 const view = document.querySelector("#view");
 const title = document.querySelector("#pageTitle");
 const subtitle = document.querySelector("#pageSubtitle");
@@ -10,6 +13,16 @@ const COUNTRIES = [
   { id: "MX", label: "México", flagSrc: "assets/flags/mx.svg" },
   { id: "PE", label: "Perú", flagSrc: "assets/flags/pe.svg" },
   { id: "CO", label: "Colombia", flagSrc: "assets/flags/co.svg" },
+];
+const SYSTEM_PRODUCTS = [
+  {
+    id: "blue-buddy",
+    label: "Blue Buddy",
+  },
+  {
+    id: "panorama",
+    label: "Panorama",
+  },
 ];
 function setHead(t, s, c = "Retail Client Solutions") {
   title.textContent = t;
@@ -29,19 +42,6 @@ function route(r) {
   location.hash = r;
 }
 
-document.addEventListener("click", (e) => {
-  const b = e.target.closest("[data-route]");
-  if (b) route(b.dataset.route);
-});
-document.addEventListener("click", (e) => {
-  const countryButton = e.target.closest("[data-country]");
-
-  if (!countryButton) return;
-
-  selectedCountry = countryButton.dataset.country;
-
-  render();
-});
 function renderLanding() {
   setHead(
     "Retail Client Solutions Control Tower",
@@ -168,9 +168,9 @@ function renderFunctional(programId) {
   const country = COUNTRIES.find((c) => c.id === selectedCountry);
 
   setHead(
-    `${p?.name || "Programa"} · Mapa funcional`,
+    `${p?.name || "Programa"} · Mapa de capacidades funcionales`,
     `Dominios, capacidades y funcionalidades · ${country?.label || selectedCountry}`,
-    `Retail Client Solutions > ${p?.name || programId} > ${country?.label || selectedCountry} > Mapa funcional`,
+    `Retail Client Solutions > ${p?.name || programId} > ${country?.label || selectedCountry} > Mapa de capacidades funcionales`,
   );
 
   view.innerHTML = "";
@@ -236,41 +236,95 @@ function renderFunctional(programId) {
 }
 function renderSystems(programId) {
   const p = DATA.programs.find((x) => x.id === programId);
+
   const systemItems = DATA.systems.filter(
-    (item) => item.programId === programId && item.country === selectedCountry,
+    (item) =>
+      item.programId === programId &&
+      item.country === selectedCountry &&
+      item.product === selectedSystemProduct,
   );
 
+  const functionalItems = DATA.functional.filter(
+    (item) => item.programId === programId && item.country === selectedCountry,
+  );
+  const affectedSystems = new Set();
+
+  functionalItems.forEach((item) => {
+    const features = item.features || [];
+
+    const selectedFeatureBelongsToThisCapability = features.some((feature) => {
+      const featureKey = `${item.domain}::${item.capability}::${feature}`;
+      return featureKey === selectedCapability;
+    });
+
+    if (!selectedFeatureBelongsToThisCapability) return;
+
+    String(item.affectedSystems || "")
+      .split("|")
+      .map((system) => system.trim())
+      .filter(Boolean)
+      .forEach((system) => affectedSystems.add(system));
+  });
   const country = COUNTRIES.find((c) => c.id === selectedCountry);
+  const groupedDomains = {};
+
+  functionalItems.forEach((item) => {
+    if (!groupedDomains[item.domain]) {
+      groupedDomains[item.domain] = [];
+    }
+
+    groupedDomains[item.domain].push(item);
+  });
 
   setHead(
-    `${p?.name || "Programa"} · Mapa funcional`,
+    `${p?.name || "Programa"} · Mapa de capacidades funcionales`,
     `Dominios, capacidades y funcionalidades · ${country?.label || selectedCountry}`,
-    `Retail Client Solutions > ${p?.name || programId} > ${country?.label || selectedCountry} > Mapa funcional`,
+    `Retail Client Solutions > ${p?.name || programId} > ${country?.label || selectedCountry} > Mapa de capacidades funcionales`,
   );
 
   view.innerHTML = "";
   view.append(tpl("#systems-template"));
+
+  view.insertAdjacentHTML("afterbegin", renderSystemsProductSelector());
   view.insertAdjacentHTML("afterbegin", renderCountrySelector());
+
   const backButton = document.querySelector(".back-to-program-btn");
 
   if (backButton) {
     backButton.dataset.route = `program/${programId}`;
     backButton.textContent = `← Volver a ${p?.name || "programa"}`;
   }
-  document
-    .querySelector('[data-route="program/"]')
-    ?.setAttribute("data-route", `program/${programId}`);
 
   const layers = [...new Set(systemItems.map((s) => s.layer))];
 
   systemLayers.innerHTML = layers
     .map(
-      (l) => `
+      (layerName) => `
         <article class="layer">
-          <h3>${l}</h3>
+          <h3>${layerName}</h3>
+
           ${systemItems
-            .filter((s) => s.layer === l)
-            .map((s) => `<div class="component">${s.component}</div>`)
+            .filter((s) => s.layer === layerName)
+            .map((s) => {
+              const components = String(s.component || "")
+                .split("|")
+                .map((item) => item.trim())
+                .filter(Boolean);
+
+              return `
+                <div class="components-row">
+                  ${components
+                    .map(
+                      (component) => `
+                        <div class="component ${affectedSystems.has(component) ? "affected-by-capability" : ""}">
+                          ${component}
+                        </div>
+                      `,
+                    )
+                    .join("")}
+                </div>
+              `;
+            })
             .join("")}
         </article>
       `,
@@ -293,6 +347,47 @@ function renderSystems(programId) {
       )
       .join("") +
     "</tbody>";
+
+  systemsFunctionalMap.innerHTML = Object.entries(groupedDomains)
+    .map(
+      ([domainName, capabilities]) => `
+        <article class="systems-mini-domain">
+          <h4>${domainName}</h4>
+
+          ${capabilities
+            .map(
+              (capability) => `
+                  <div class="systems-mini-capability">
+                    <strong>${capability.capability}</strong>
+
+                    <div class="feature-card-list">
+                      ${(capability.features || [])
+                        .map((feature) => {
+                          const featureKey = `${domainName}::${capability.capability}::${feature}`;
+
+                          return `
+                            <button
+                              class="feature-card ${selectedCapability === featureKey ? "selected" : ""}"
+                              type="button"
+                              data-feature="${featureKey}"
+                            >
+                              ${feature}
+                            </button>
+                          `;
+                        })
+                        .join("")}
+                    </div>
+                  </div>
+                  <strong>${capability.capability}</strong>
+
+                </div>
+              `,
+            )
+            .join("")}
+        </article>
+      `,
+    )
+    .join("");
 }
 
 function render() {
@@ -324,8 +419,33 @@ function renderCountrySelector() {
     </div>
   `;
 }
-// <span>${country.flag}</span>
-// <small>${country.id}</small>
+function renderSystemsProductSelector() {
+  return `
+    <div class="systems-product-selector">
+
+      ${SYSTEM_PRODUCTS.map(
+        (product) => `
+
+          <button
+            class="systems-product-btn ${
+              selectedSystemProduct === product.id ? "active" : ""
+            }"
+
+            type="button"
+
+            data-system-product="${product.id}"
+          >
+
+            ${product.label}
+
+          </button>
+
+        `,
+      ).join("")}
+
+    </div>
+  `;
+}
 async function init(showMessage = true) {
   try {
     if (window.APP_CONFIG.useGoogleSheets) {
@@ -343,6 +463,19 @@ async function init(showMessage = true) {
 
   render();
 }
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-route]");
+  if (b) route(b.dataset.route);
+});
+document.addEventListener("click", (e) => {
+  const countryButton = e.target.closest("[data-country]");
+
+  if (!countryButton) return;
+
+  selectedCountry = countryButton.dataset.country;
+
+  render();
+});
 document.addEventListener("click", (event) => {
   const button = event.target.closest("#openDataSourceBtn");
 
@@ -403,6 +536,26 @@ document.addEventListener("click", async (event) => {
       refreshButton.textContent = "Actualizar datos";
     }
   }
+});
+document.addEventListener("click", (e) => {
+  const productButton = e.target.closest("[data-system-product]");
+
+  if (!productButton) return;
+
+  selectedSystemProduct = productButton.dataset.systemProduct;
+
+  render();
+});
+document.addEventListener("click", (event) => {
+  const feature = event.target.closest("[data-feature]");
+
+  if (!feature) return;
+
+  const featureKey = feature.dataset.feature;
+
+  selectedCapability = selectedCapability === featureKey ? null : featureKey;
+
+  render();
 });
 window.addEventListener("hashchange", render);
 init();

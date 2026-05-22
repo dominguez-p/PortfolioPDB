@@ -84,7 +84,7 @@ window.SAMPLE_DATA = {
     },
     {
       id: "functional",
-      title: "Mapa funcional",
+      title: "Mapa de capacidades funcionales",
       description: "Dominios, capacidades y funcionalidades.",
       route: "functional",
       status: "Activo",
