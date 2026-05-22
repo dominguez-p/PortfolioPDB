@@ -1,5 +1,6 @@
 let DATA = window.SAMPLE_DATA;
 let selectedCountry = "ES";
+let selectedSystemProduct = "blue-buddy";
 const view = document.querySelector("#view");
 const title = document.querySelector("#pageTitle");
 const subtitle = document.querySelector("#pageSubtitle");
@@ -10,6 +11,16 @@ const COUNTRIES = [
   { id: "MX", label: "México", flagSrc: "assets/flags/mx.svg" },
   { id: "PE", label: "Perú", flagSrc: "assets/flags/pe.svg" },
   { id: "CO", label: "Colombia", flagSrc: "assets/flags/co.svg" },
+];
+const SYSTEM_PRODUCTS = [
+  {
+    id: "blue-buddy",
+    label: "Blue Buddy",
+  },
+  {
+    id: "panorama",
+    label: "Panorama",
+  },
 ];
 function setHead(t, s, c = "Retail Client Solutions") {
   title.textContent = t;
@@ -168,9 +179,9 @@ function renderFunctional(programId) {
   const country = COUNTRIES.find((c) => c.id === selectedCountry);
 
   setHead(
-    `${p?.name || "Programa"} · Mapa funcional`,
+    `${p?.name || "Programa"} · Mapa de capacidades funcionales`,
     `Dominios, capacidades y funcionalidades · ${country?.label || selectedCountry}`,
-    `Retail Client Solutions > ${p?.name || programId} > ${country?.label || selectedCountry} > Mapa funcional`,
+    `Retail Client Solutions > ${p?.name || programId} > ${country?.label || selectedCountry} > Mapa de capacidades funcionales`,
   );
 
   view.innerHTML = "";
@@ -237,19 +248,23 @@ function renderFunctional(programId) {
 function renderSystems(programId) {
   const p = DATA.programs.find((x) => x.id === programId);
   const systemItems = DATA.systems.filter(
-    (item) => item.programId === programId && item.country === selectedCountry,
+    (item) =>
+      item.programId === programId &&
+      item.country === selectedCountry &&
+      item.product === selectedSystemProduct,
   );
 
   const country = COUNTRIES.find((c) => c.id === selectedCountry);
 
   setHead(
-    `${p?.name || "Programa"} · Mapa funcional`,
+    `${p?.name || "Programa"} · Mapa de capacidades funcionales`,
     `Dominios, capacidades y funcionalidades · ${country?.label || selectedCountry}`,
-    `Retail Client Solutions > ${p?.name || programId} > ${country?.label || selectedCountry} > Mapa funcional`,
+    `Retail Client Solutions > ${p?.name || programId} > ${country?.label || selectedCountry} > Mapa de capacidades funcionales`,
   );
 
   view.innerHTML = "";
   view.append(tpl("#systems-template"));
+  view.insertAdjacentHTML("afterbegin", renderSystemsProductSelector());
   view.insertAdjacentHTML("afterbegin", renderCountrySelector());
   const backButton = document.querySelector(".back-to-program-btn");
 
@@ -324,8 +339,33 @@ function renderCountrySelector() {
     </div>
   `;
 }
-// <span>${country.flag}</span>
-// <small>${country.id}</small>
+function renderSystemsProductSelector() {
+  return `
+    <div class="systems-product-selector">
+
+      ${SYSTEM_PRODUCTS.map(
+        (product) => `
+
+          <button
+            class="systems-product-btn ${
+              selectedSystemProduct === product.id ? "active" : ""
+            }"
+
+            type="button"
+
+            data-system-product="${product.id}"
+          >
+
+            ${product.label}
+
+          </button>
+
+        `,
+      ).join("")}
+
+    </div>
+  `;
+}
 async function init(showMessage = true) {
   try {
     if (window.APP_CONFIG.useGoogleSheets) {
@@ -403,6 +443,15 @@ document.addEventListener("click", async (event) => {
       refreshButton.textContent = "Actualizar datos";
     }
   }
+});
+document.addEventListener("click", (e) => {
+  const productButton = e.target.closest("[data-system-product]");
+
+  if (!productButton) return;
+
+  selectedSystemProduct = productButton.dataset.systemProduct;
+
+  render();
 });
 window.addEventListener("hashchange", render);
 init();
