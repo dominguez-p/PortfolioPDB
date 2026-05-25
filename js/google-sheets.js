@@ -120,7 +120,7 @@ async function loadGoogleSheetsData() {
       ...item,
       features: splitPipeList(item.features),
     })),
-
+    functionalSystemLinks: rowsToObjects(functionalSystemLinksRows),
     systems: rowsToObjects(systemsRows),
   };
 }
