@@ -13,6 +13,7 @@ window.APP_CONFIG = {
     roles: "roles",
     priorities: "priorities",
     functional: "functional_map",
+    functionalSystemLinks: "functional_system_links",
     systems: "systems_inventory",
   },
 };
