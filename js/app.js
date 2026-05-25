@@ -2,6 +2,7 @@ let DATA = window.SAMPLE_DATA;
 let selectedCountry = "ES";
 let selectedSystemProduct = "blue-buddy";
 let selectedCapability = null;
+let selectedSystemComponent = null;
 let selectedFunctionalItem = null;
 const view = document.querySelector("#view");
 const title = document.querySelector("#pageTitle");
@@ -247,7 +248,17 @@ function renderSystems(programId) {
   const functionalItems = DATA.functional.filter(
     (item) => item.programId === programId && item.country === selectedCountry,
   );
-  const affectedSystems = new Set();
+  const affectedSystems = new Set(
+    (DATA.functionalSystemLinks || [])
+      .filter(
+        (link) =>
+          link.programId === programId &&
+          link.country === selectedCountry &&
+          link.product === selectedSystemProduct &&
+          link.functionalKey === selectedCapability,
+      )
+      .map((link) => link.systemComponent),
+  );
 
   functionalItems.forEach((item) => {
     const features = item.features || [];
@@ -265,6 +276,7 @@ function renderSystems(programId) {
       .filter(Boolean)
       .forEach((system) => affectedSystems.add(system));
   });
+
   const country = COUNTRIES.find((c) => c.id === selectedCountry);
   const groupedDomains = {};
 
@@ -296,7 +308,8 @@ function renderSystems(programId) {
   }
 
   const layers = [...new Set(systemItems.map((s) => s.layer))];
-
+  console.log("selectedCapability:", selectedCapability);
+  console.log("affectedSystems:", [...affectedSystems]);
   systemLayers.innerHTML = layers
     .map(
       (layerName) => `
@@ -316,9 +329,21 @@ function renderSystems(programId) {
                   ${components
                     .map(
                       (component) => `
-                        <div class="component ${affectedSystems.has(component) ? "affected-by-capability" : ""}">
+                        <button
+                          class="component system-component-card ${
+                            affectedSystems.has(component)
+                              ? "affected-by-capability"
+                              : ""
+                          } ${
+                            selectedSystemComponent === component
+                              ? "selected-system-component"
+                              : ""
+                          }"
+                          type="button"
+                          data-system-component="${component}"
+                        >
                           ${component}
-                        </div>
+                        </button>
                       `,
                     )
                     .join("")}
@@ -357,29 +382,30 @@ function renderSystems(programId) {
           ${capabilities
             .map(
               (capability) => `
-                  <div class="systems-mini-capability">
-                    <strong>${capability.capability}</strong>
-
-                    <div class="feature-card-list">
-                      ${(capability.features || [])
-                        .map((feature) => {
-                          const featureKey = `${domainName}::${capability.capability}::${feature}`;
-
-                          return `
-                            <button
-                              class="feature-card ${selectedCapability === featureKey ? "selected" : ""}"
-                              type="button"
-                              data-feature="${featureKey}"
-                            >
-                              ${feature}
-                            </button>
-                          `;
-                        })
-                        .join("")}
-                    </div>
-                  </div>
+                <div class="systems-mini-capability">
                   <strong>${capability.capability}</strong>
 
+                  <div class="feature-card-list">
+                    ${(capability.features || [])
+                      .map((feature) => {
+                        const featureKey = `${domainName}::${capability.capability}::${feature}`;
+
+                        return `
+                          <button
+                            class="feature-card ${
+                              selectedCapability === featureKey
+                                ? "selected"
+                                : ""
+                            }"
+                            type="button"
+                            data-feature="${featureKey}"
+                          >
+                            ${feature}
+                          </button>
+                        `;
+                      })
+                      .join("")}
+                  </div>
                 </div>
               `,
             )
@@ -554,6 +580,18 @@ document.addEventListener("click", (event) => {
   const featureKey = feature.dataset.feature;
 
   selectedCapability = selectedCapability === featureKey ? null : featureKey;
+
+  render();
+});
+document.addEventListener("click", (event) => {
+  const componentButton = event.target.closest("[data-system-component]");
+
+  if (!componentButton) return;
+
+  const componentName = componentButton.dataset.systemComponent;
+
+  selectedSystemComponent =
+    selectedSystemComponent === componentName ? null : componentName;
 
   render();
 });

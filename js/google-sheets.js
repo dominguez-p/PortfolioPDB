@@ -86,6 +86,7 @@ async function loadGoogleSheetsData() {
     prioritiesRows,
     functionalRows,
     systemsRows,
+    functionalSystemLinksRows,
   ] = await Promise.all([
     fetchSheetValues(sheetNames.portfolioKpis),
     fetchSheetValues(sheetNames.programs),
@@ -94,9 +95,11 @@ async function loadGoogleSheetsData() {
     fetchSheetValues(sheetNames.priorities),
     fetchSheetValues(sheetNames.functional),
     fetchSheetValues(sheetNames.systems),
+    fetchSheetValues(sheetNames.functionalSystemLinks),
   ]);
 
   return {
+    functionalSystemLinks: rowsToObjects(functionalSystemLinksRows),
     portfolioKpis: rowsToArray(portfolioKpisRows),
 
     programs: rowsToObjects(programsRows).map((program) => ({
@@ -120,7 +123,6 @@ async function loadGoogleSheetsData() {
       ...item,
       features: splitPipeList(item.features),
     })),
-
     systems: rowsToObjects(systemsRows),
   };
 }
