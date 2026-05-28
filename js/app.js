@@ -248,9 +248,8 @@ function renderSystems(programId) {
   const architectureGapItems = (DATA.architectureFeaturesGaps || []).filter(
     (item) =>
       item.programId === programId &&
-      item["RtC Anchor Country"] === selectedCountry,
-    // &&
-    // item.product === selectedSystemProduct,
+      item["RtC Anchor Country"] === selectedCountry &&
+      item.product === selectedSystemProduct,
   );
   const functionalItems = DATA.functional.filter(
     (item) => item.programId === programId && item.country === selectedCountry,
@@ -272,7 +271,7 @@ function renderSystems(programId) {
         [
           item.programId,
           item["RtC Anchor Country"],
-          // item.product,
+          item.product,
           item["GAP Asignado"],
           item.Demanda,
           index,
@@ -388,7 +387,7 @@ function renderSystems(programId) {
         const gapKey = [
           item.programId,
           item["RtC Anchor Country"],
-          // item.product,
+          item.product,
           item["GAP Asignado"],
           item.Demanda,
           index,
