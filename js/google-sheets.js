@@ -88,6 +88,7 @@ async function loadGoogleSheetsData() {
     systemsRows,
     functionalSystemLinksRows,
     architectureFeaturesGapsRows,
+    systemRelationshipsRows,
   ] = await Promise.all([
     fetchSheetValues(sheetNames.portfolioKpis),
     fetchSheetValues(sheetNames.programs),
@@ -98,13 +99,14 @@ async function loadGoogleSheetsData() {
     fetchSheetValues(sheetNames.systems),
     fetchSheetValues(sheetNames.functionalSystemLinks),
     fetchSheetValues(sheetNames.architectureFeaturesGaps),
+    fetchSheetValues(sheetNames.systemRelationships),
   ]);
 
   return {
     functionalSystemLinks: rowsToObjects(functionalSystemLinksRows),
     architectureFeaturesGaps: rowsToObjects(architectureFeaturesGapsRows),
     portfolioKpis: rowsToArray(portfolioKpisRows),
-
+    systemRelationships: rowsToObjects(systemRelationshipsRows),
     programs: rowsToObjects(programsRows).map((program) => ({
       ...program,
       functional: toNumber(program.functional),

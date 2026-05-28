@@ -797,3 +797,95 @@ th {
   color: var(--muted);
   font-size: 13px;
 }
+.system-group-box {
+  border: 1px dashed var(--blue);
+  border-radius: 18px;
+  padding: 14px;
+  background: #fbfdff;
+  margin-top: 12px;
+}
+
+.system-group-title {
+  font-weight: 900;
+  color: var(--blue);
+  margin-bottom: 10px;
+}
+.system-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.system-group-box {
+  border: 1px dashed var(--blue);
+  border-radius: 18px;
+  padding: 14px;
+  background: #fbfdff;
+}
+
+.system-group-title {
+  color: var(--blue);
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+
+.system-group-components {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.system-group-components .component {
+  margin: 0;
+}
+.system-map-canvas {
+  position: relative;
+}
+
+.system-links-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 1;
+}
+
+.system-layers {
+  position: relative;
+  z-index: 2;
+}
+
+.system-relationship-link {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+  opacity: 0.65;
+}
+
+.system-relationship-link.api {
+  stroke: var(--cyan);
+}
+
+.system-relationship-link.dependency {
+  stroke: var(--purple);
+}
+
+.system-relationship-link.orchestration {
+  stroke: var(--green);
+}
+
+.relationship-arrow-head {
+  fill: var(--blue);
+}
+
+.system-relationship-label {
+  font-size: 11px;
+  font-weight: 800;
+  fill: var(--blue);
+  paint-order: stroke;
+  stroke: white;
+  stroke-width: 4px;
+}

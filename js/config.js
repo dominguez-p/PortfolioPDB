@@ -16,5 +16,6 @@ window.APP_CONFIG = {
     functionalSystemLinks: "functional_system_links",
     systems: "systems_inventory",
     architectureFeaturesGaps: "architecture_features_gaps",
+    systemRelationships: "system_relationships",
   },
 };
