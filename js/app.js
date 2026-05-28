@@ -4,6 +4,7 @@ let selectedSystemProduct = "blue-buddy";
 let selectedCapability = null;
 let selectedSystemComponent = null;
 let selectedFunctionalItem = null;
+let selectedArchitectureGap = null;
 const view = document.querySelector("#view");
 const title = document.querySelector("#pageTitle");
 const subtitle = document.querySelector("#pageSubtitle");
@@ -244,7 +245,13 @@ function renderSystems(programId) {
       item.country === selectedCountry &&
       item.product === selectedSystemProduct,
   );
-
+  const architectureGapItems = (DATA.architectureFeaturesGaps || []).filter(
+    (item) =>
+      item.programId === programId &&
+      item["RtC Anchor Country"] === selectedCountry,
+    // &&
+    // item.product === selectedSystemProduct,
+  );
   const functionalItems = DATA.functional.filter(
     (item) => item.programId === programId && item.country === selectedCountry,
   );
@@ -259,7 +266,25 @@ function renderSystems(programId) {
       )
       .map((link) => link.systemComponent),
   );
+  if (selectedArchitectureGap) {
+    const selectedGap = architectureGapItems.find(
+      (item, index) =>
+        [
+          item.programId,
+          item["RtC Anchor Country"],
+          // item.product,
+          item["GAP Asignado"],
+          item.Demanda,
+          index,
+        ].join("::") === selectedArchitectureGap,
+    );
 
+    String(selectedGap?.affectedSystemComponents || "")
+      .split("|")
+      .map((component) => component.trim())
+      .filter(Boolean)
+      .forEach((component) => affectedSystems.add(component));
+  }
   functionalItems.forEach((item) => {
     const features = item.features || [];
 
@@ -356,23 +381,65 @@ function renderSystems(programId) {
     )
     .join("");
 
-  systemsTable.innerHTML =
-    "<thead><tr><th>Capa</th><th>Sistema / componente</th><th>Descripción</th><th>Estado</th><th>País</th></tr></thead><tbody>" +
-    systemItems
-      .map(
-        (s) => `
-          <tr>
-            <td>${s.layer}</td>
-            <td>${s.component}</td>
-            <td>${s.description}</td>
-            <td>${s.status}</td>
-            <td>${s.country}</td>
-          </tr>
-        `,
-      )
-      .join("") +
-    "</tbody>";
+  systemsTable.outerHTML = `
+  <div class="architecture-gap-list" id="architectureGapList">
+    ${architectureGapItems
+      .map((item, index) => {
+        const gapKey = [
+          item.programId,
+          item["RtC Anchor Country"],
+          // item.product,
+          item["GAP Asignado"],
+          item.Demanda,
+          index,
+        ].join("::");
 
+        return `
+          <button
+            class="architecture-gap-card ${
+              selectedArchitectureGap === gapKey ? "selected" : ""
+            }"
+            type="button"
+            data-architecture-gap="${gapKey}"
+          >
+            <div class="architecture-gap-top">
+              <span class="architecture-gap-status">
+                ${item["Estatus revisión PA"] || ""}
+              </span>
+
+              <span class="architecture-gap-priority">
+                ${item.Prioridad || ""}
+              </span>
+            </div>
+
+            <strong class="architecture-gap-title">
+              ${item.Demanda || "Sin demanda"}
+            </strong>
+
+            <div class="architecture-gap-meta">
+              <span>
+                <b>GAP:</b> ${item["GAP asignado"] || "-"}
+              </span>
+
+              <span>
+                <b>País:</b> ${item["RtC Anchor Country"] || "-"}
+              </span>
+
+              <span>
+                <b>Dependencias:</b> ${item.Dependencias || "-"}
+              </span>
+            </div>
+          </button>
+        `;
+      })
+      .join("")}
+  </div>
+    <div>En Analisis == previo a registrarlo en Pilar 2 </div>
+    <div>Requerido == registrado en Pilar 2 y con un ID-NR</div>
+    <div>Listo para release == registrado en Pilar 2, con ID-NR y GAP</div>
+    <div>No Planificado == se ha llevado pero no se ha planificado en la siguiente release </div>
+    <div>Planificado == se ha llevado y se ha planificado en la siguiente release</div>
+`;
   systemsFunctionalMap.innerHTML = Object.entries(groupedDomains)
     .map(
       ([domainName, capabilities]) => `
@@ -580,7 +647,7 @@ document.addEventListener("click", (event) => {
   const featureKey = feature.dataset.feature;
 
   selectedCapability = selectedCapability === featureKey ? null : featureKey;
-
+  selectedArchitectureGap = null;
   render();
 });
 document.addEventListener("click", (event) => {
@@ -593,6 +660,17 @@ document.addEventListener("click", (event) => {
   selectedSystemComponent =
     selectedSystemComponent === componentName ? null : componentName;
 
+  render();
+});
+document.addEventListener("click", (event) => {
+  const gapButton = event.target.closest("[data-architecture-gap]");
+
+  if (!gapButton) return;
+
+  const gapKey = gapButton.dataset.architectureGap;
+
+  selectedArchitectureGap = selectedArchitectureGap === gapKey ? null : gapKey;
+  selectedCapability = null;
   render();
 });
 window.addEventListener("hashchange", render);
