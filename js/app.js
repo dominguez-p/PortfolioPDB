@@ -244,7 +244,13 @@ function renderSystems(programId) {
       item.country === selectedCountry &&
       item.product === selectedSystemProduct,
   );
-
+  const architectureGapItems = (DATA.architectureFeaturesGaps || []).filter(
+    (item) =>
+      item.programId === programId &&
+      item["RtC Anchor Country"] === selectedCountry,
+    // &&
+    // item.product === selectedSystemProduct,
+  );
   const functionalItems = DATA.functional.filter(
     (item) => item.programId === programId && item.country === selectedCountry,
   );
@@ -356,19 +362,48 @@ function renderSystems(programId) {
     )
     .join("");
 
+  // systemsTable.innerHTML =
+  //   "<thead><tr><th>Capa</th><th>Sistema / componente</th><th>Descripción</th><th>Estado</th><th>País</th></tr></thead><tbody>" +
+  //   systemItems
+  //     .map(
+  //       (s) => `
+  //         <tr>
+  //           <td>${s.layer}</td>
+  //           <td>${s.component}</td>
+  //           <td>${s.description}</td>
+  //           <td>${s.status}</td>
+  //           <td>${s.country}</td>
+  //         </tr>
+  //       `,
+  //     )
+  //     .join("") +
+  //   "</tbody>";
   systemsTable.innerHTML =
-    "<thead><tr><th>Capa</th><th>Sistema / componente</th><th>Descripción</th><th>Estado</th><th>País</th></tr></thead><tbody>" +
-    systemItems
+    `
+    <thead>
+      <tr>
+        <th>Estado</th>
+        <th>GAP Asignado</th>
+        <th>Demanda</th>
+        <th>Prioridad</th>
+        <th>Robot</th>
+        <th>Dependencias</th>
+      </tr>
+    </thead>
+    <tbody>
+  ` +
+    architectureGapItems
       .map(
-        (s) => `
-          <tr>
-            <td>${s.layer}</td>
-            <td>${s.component}</td>
-            <td>${s.description}</td>
-            <td>${s.status}</td>
-            <td>${s.country}</td>
-          </tr>
-        `,
+        (item) => `
+        <tr>
+          <td>${item["Estatus revisión PA"] || ""}</td>
+          <td>${item["GAP Asignado"] || ""}</td>
+          <td>${item["Demanda"] || ""}</td>
+          <td>${item["Prioridad"] || ""}</td>
+          <td>${item["Robot"] || ""}</td>
+          <td>${item["Dependencias"] || ""}</td>
+        </tr>
+      `,
       )
       .join("") +
     "</tbody>";
