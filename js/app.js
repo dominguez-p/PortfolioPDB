@@ -5,6 +5,7 @@ let selectedCapability = null;
 let selectedSystemComponent = null;
 let selectedFunctionalItem = null;
 let selectedArchitectureGap = null;
+let isSystemMapExpanded = false;
 const view = document.querySelector("#view");
 const title = document.querySelector("#pageTitle");
 const subtitle = document.querySelector("#pageSubtitle");
@@ -236,6 +237,7 @@ function renderFunctional(programId) {
     )
     .join("");
 }
+
 function renderSystems(programId) {
   const p = DATA.programs.find((x) => x.id === programId);
 
@@ -245,39 +247,52 @@ function renderSystems(programId) {
       item.country === selectedCountry &&
       item.product === selectedSystemProduct,
   );
+
   const architectureGapItems = (DATA.architectureFeaturesGaps || []).filter(
     (item) =>
       item.programId === programId &&
       item["RtC Anchor Country"] === selectedCountry &&
       item.product === selectedSystemProduct,
   );
-  const relationshipItems = (DATA.systemRelationships || []).filter(
-    (item) =>
-      item.programId === programId &&
-      item["RtC Anchor Country"] === selectedCountry &&
-      item.product === selectedSystemProduct,
-  );
+
+  const relationshipItems = (DATA.systemRelationships || []).filter((item) => {
+    const itemCountry = item.country || item["RtC Anchor Country"];
+
+    return (
+      String(item.programId || "").trim() === String(programId || "").trim() &&
+      String(itemCountry || "").trim() ===
+        String(selectedCountry || "").trim() &&
+      String(item.product || "").trim() ===
+        String(selectedSystemProduct || "").trim()
+    );
+  });
+
   const functionalItems = DATA.functional.filter(
     (item) => item.programId === programId && item.country === selectedCountry,
   );
+
   const affectedSystems = new Set(
     (DATA.functionalSystemLinks || [])
       .filter(
         (link) =>
-          link.programId === programId &&
-          link.country === selectedCountry &&
-          link.product === selectedSystemProduct &&
-          link.functionalKey === selectedCapability,
+          String(link.programId || "").trim() ===
+            String(programId || "").trim() &&
+          String(link.country || "").trim() ===
+            String(selectedCountry || "").trim() &&
+          String(link.product || "").trim() ===
+            String(selectedSystemProduct || "").trim() &&
+          String(link.functionalKey || "").trim() ===
+            String(selectedCapability || "").trim(),
       )
-      .map((link) => link.systemComponent),
+      .map((link) => String(link.systemComponent || "").trim()),
   );
+
   if (selectedArchitectureGap) {
     const selectedGap = architectureGapItems.find(
       (item, index) =>
         [
           item.programId,
           item["RtC Anchor Country"],
-          // item.product,
           item["GAP Asignado"],
           item.Demanda,
           index,
@@ -290,24 +305,9 @@ function renderSystems(programId) {
       .filter(Boolean)
       .forEach((component) => affectedSystems.add(component));
   }
-  functionalItems.forEach((item) => {
-    const features = item.features || [];
-
-    const selectedFeatureBelongsToThisCapability = features.some((feature) => {
-      const featureKey = `${item.domain}::${item.capability}::${feature}`;
-      return featureKey === selectedCapability;
-    });
-
-    if (!selectedFeatureBelongsToThisCapability) return;
-
-    String(item.affectedSystems || "")
-      .split("|")
-      .map((system) => system.trim())
-      .filter(Boolean)
-      .forEach((system) => affectedSystems.add(system));
-  });
 
   const country = COUNTRIES.find((c) => c.id === selectedCountry);
+
   const groupedDomains = {};
 
   functionalItems.forEach((item) => {
@@ -319,199 +319,279 @@ function renderSystems(programId) {
   });
 
   setHead(
-    `${p?.name || "Programa"} · Mapa de capacidades funcionales`,
-    `Dominios, capacidades y funcionalidades · ${country?.label || selectedCountry}`,
-    `Retail Client Solutions > ${p?.name || programId} > ${country?.label || selectedCountry} > Mapa de capacidades funcionales`,
+    `${p?.name || "Programa"} · Mapa de sistemas`,
+    `Arquitectura y capacidades · ${country?.label || selectedCountry}`,
+    `Retail Client Solutions > ${
+      p?.name || programId
+    } > ${country?.label || selectedCountry}`,
   );
 
   view.innerHTML = "";
+
   view.append(tpl("#systems-template"));
 
+  const systemsDashboardGrid = document.querySelector("#systemsDashboardGrid");
+
+  const expandSystemMapBtn = document.querySelector("#expandSystemMapBtn");
+
+  if (systemsDashboardGrid) {
+    systemsDashboardGrid.classList.toggle(
+      "system-map-expanded",
+      isSystemMapExpanded,
+    );
+  }
+
+  if (expandSystemMapBtn) {
+    expandSystemMapBtn.textContent = isSystemMapExpanded
+      ? "Contraer mapa"
+      : "Expandir mapa";
+  }
+
   view.insertAdjacentHTML("afterbegin", renderSystemsProductSelector());
+
   view.insertAdjacentHTML("afterbegin", renderCountrySelector());
 
   const backButton = document.querySelector(".back-to-program-btn");
 
   if (backButton) {
     backButton.dataset.route = `program/${programId}`;
+
     backButton.textContent = `← Volver a ${p?.name || "programa"}`;
   }
 
-  const layers = [...new Set(systemItems.map((s) => s.layer))];
-  console.log("selectedCapability:", selectedCapability);
-  console.log("affectedSystems:", [...affectedSystems]);
-  systemLayers.innerHTML = layers
-    .map((layerName) => {
-      const layerItems = systemItems.filter((s) => s.layer === layerName);
+  const groupedSystems = {};
 
-      const groupedSystems = {};
+  systemItems.forEach((item) => {
+    const layerName = item.layer || "General";
 
-      layerItems.forEach((item) => {
-        const groupName = item.groupName || "Sin agrupación";
+    if (!groupedSystems[layerName]) {
+      groupedSystems[layerName] = {};
+    }
 
-        if (!groupedSystems[groupName]) {
-          groupedSystems[groupName] = [];
-        }
+    const groupName = item.groupName || "Sin agrupación";
 
-        groupedSystems[groupName].push(item);
-      });
+    if (!groupedSystems[layerName][groupName]) {
+      groupedSystems[layerName][groupName] = [];
+    }
 
-      return `
-      <article class="layer">
-        <h3>${layerName}</h3>
+    groupedSystems[layerName][groupName].push(item);
+  });
 
-        <div class="system-groups">
-          ${Object.entries(groupedSystems)
-            .map(
-              ([groupName, groupItems]) => `
-              <section class="system-group-box">
-                <div class="system-group-title">
-                  ${groupName}
-                </div>
+  systemLayers.innerHTML = Object.entries(groupedSystems)
+    .map(
+      ([layerName, groups]) => `
+        <article class="layer">
 
-                <div class="system-group-components">
-                  ${groupItems
-                    .map((s) => {
-                      const components = String(s.component || "")
-                        .split("|")
-                        .map((item) => item.trim())
-                        .filter(Boolean);
+          <h3>${layerName}</h3>
 
-                      return components
-                        .map(
-                          (component) => `
-                            <button
-                              class="component system-component-card ${
-                                affectedSystems.has(component)
-                                  ? "affected-by-capability"
-                                  : ""
-                              } ${
-                                selectedSystemComponent === component
-                                  ? "selected-system-component"
-                                  : ""
-                              }"
-                              type="button"
-                              data-system-component="${component}"
-                              data-system-node="${component}"
-                            >
-                              ${component}
-                            </button>
-                          `,
-                        )
-                        .join("");
-                    })
-                    .join("")}
-                </div>
-              </section>
-            `,
-            )
-            .join("")}
-        </div>
-      </article>
-    `;
-    })
+          <div class="system-groups">
+
+            ${Object.entries(groups)
+              .map(([groupName, groupItems]) => {
+                const componentsByLevel = {};
+
+                groupItems.forEach((s) => {
+                  const level = s.level || "1";
+
+                  const components = String(s.component || "")
+                    .split("|")
+                    .map((item) => item.trim())
+                    .filter(Boolean);
+
+                  if (!componentsByLevel[level]) {
+                    componentsByLevel[level] = [];
+                  }
+
+                  componentsByLevel[level].push(...components);
+                });
+
+                return `
+                  <div class="system-group-box">
+
+                    <div class="system-group-title">
+                      ${groupName}
+                    </div>
+
+                    ${Object.entries(componentsByLevel)
+                      .sort(([a], [b]) => Number(a) - Number(b))
+                      .map(
+                        ([level, components]) => `
+                          <div
+                            class="system-level-row"
+                            data-level="${level}"
+                          >
+
+                            ${components
+                              .map((component) => {
+                                const isAffected =
+                                  affectedSystems.has(component);
+
+                                const isSelected =
+                                  selectedSystemComponent === component;
+
+                                return `
+                                  <button
+                                    class="
+                                      component
+                                      system-component-card
+                                      ${
+                                        isAffected
+                                          ? "affected-by-capability"
+                                          : ""
+                                      }
+                                      ${
+                                        isSelected
+                                          ? "selected-system-component"
+                                          : ""
+                                      }
+                                    "
+                                    type="button"
+                                    data-system-component="${component}"
+                                    data-system-node="${component}"
+                                  >
+                                    ${component}
+                                  </button>
+                                `;
+                              })
+                              .join("")}
+
+                          </div>
+                        `,
+                      )
+                      .join("")}
+
+                  </div>
+                `;
+              })
+              .join("")}
+
+          </div>
+
+        </article>
+      `,
+    )
     .join("");
+
   requestAnimationFrame(() => {
     renderSystemRelationships(relationshipItems);
   });
+
   systemsTable.outerHTML = `
-  <div class="architecture-gap-list" id="architectureGapList">
-    ${architectureGapItems
-      .map((item, index) => {
-        const gapKey = [
-          item.programId,
-          item["RtC Anchor Country"],
-          // item.product,
-          item["GAP Asignado"],
-          item.Demanda,
-          index,
-        ].join("::");
+    <div class="architecture-gap-list">
 
-        return `
-          <button
-            class="architecture-gap-card ${
-              selectedArchitectureGap === gapKey ? "selected" : ""
-            }"
-            type="button"
-            data-architecture-gap="${gapKey}"
-          >
-            <div class="architecture-gap-top">
-              <span class="architecture-gap-status">
-                ${item["Estatus revisión PA"] || ""}
-              </span>
+      ${architectureGapItems
+        .map((item, index) => {
+          const gapKey = [
+            item.programId,
+            item["RtC Anchor Country"],
+            item["GAP Asignado"],
+            item.Demanda,
+            index,
+          ].join("::");
 
-              <span class="architecture-gap-priority">
-                ${item.Prioridad || ""}
-              </span>
-            </div>
+          return `
+            <button
+              class="
+                architecture-gap-card
+                ${selectedArchitectureGap === gapKey ? "selected" : ""}
+              "
+              type="button"
+              data-architecture-gap="${gapKey}"
+            >
 
-            <strong class="architecture-gap-title">
-              ${item.Demanda || "Sin demanda"}
-            </strong>
+              <div class="architecture-gap-top">
 
-            <div class="architecture-gap-meta">
-              <span>
-                <b>GAP:</b> ${item["GAP asignado"] || "-"}
-              </span>
+                <span class="architecture-gap-status">
+                  ${item["Estatus revisión PA"] || ""}
+                </span>
 
-              <span>
-                <b>País:</b> ${item["RtC Anchor Country"] || "-"}
-              </span>
+                <span class="architecture-gap-priority">
+                  ${item.Prioridad || ""}
+                </span>
 
-              <span>
-                <b>Dependencias:</b> ${item.Dependencias || "-"}
-              </span>
-            </div>
-          </button>
-        `;
-      })
-      .join("")}
-  </div>
-    <div>En Analisis == previo a registrarlo en Pilar 2 </div>
-    <div>Requerido == registrado en Pilar 2 y con un ID-NR</div>
-    <div>Listo para release == registrado en Pilar 2, con ID-NR y GAP</div>
-    <div>No Planificado == se ha llevado pero no se ha planificado en la siguiente release </div>
-    <div>Planificado == se ha llevado y se ha planificado en la siguiente release</div>
-`;
+              </div>
+
+              <strong class="architecture-gap-title">
+                ${item.Demanda || "Sin demanda"}
+              </strong>
+
+              <div class="architecture-gap-meta">
+
+                <span>
+                  <b>GAP:</b>
+                  ${item["GAP asignado"] || "-"}
+                </span>
+
+                <span>
+                  <b>País:</b>
+                  ${item["RtC Anchor Country"] || "-"}
+                </span>
+
+                <span>
+                  <b>Dependencias:</b>
+                  ${item.Dependencias || "-"}
+                </span>
+
+              </div>
+
+            </button>
+          `;
+        })
+        .join("")}
+
+    </div>
+  `;
+
   systemsFunctionalMap.innerHTML = Object.entries(groupedDomains)
     .map(
       ([domainName, capabilities]) => `
-        <article class="systems-mini-domain">
-          <h4>${domainName}</h4>
+          <article class="systems-mini-domain">
 
-          ${capabilities
-            .map(
-              (capability) => `
-                <div class="systems-mini-capability">
-                  <strong>${capability.capability}</strong>
+            <h4>${domainName}</h4>
 
-                  <div class="feature-card-list">
-                    ${(capability.features || [])
-                      .map((feature) => {
-                        const featureKey = `${domainName}::${capability.capability}::${feature}`;
+            ${capabilities
+              .map(
+                (capability) => `
+                  <div class="systems-mini-capability">
 
-                        return `
-                          <button
-                            class="feature-card ${
-                              selectedCapability === featureKey
-                                ? "selected"
-                                : ""
-                            }"
-                            type="button"
-                            data-feature="${featureKey}"
-                          >
-                            ${feature}
-                          </button>
-                        `;
-                      })
-                      .join("")}
+                    <strong>
+                      ${capability.capability}
+                    </strong>
+
+                    <div class="feature-card-list">
+
+                      ${(capability.features || [])
+                        .map((feature) => {
+                          const featureKey = `${domainName}::${capability.capability}::${feature}`;
+
+                          return `
+                            <button
+                              class="
+                                feature-card
+                                ${
+                                  selectedCapability === featureKey
+                                    ? "selected"
+                                    : ""
+                                }
+                              "
+                              type="button"
+                              data-feature="${featureKey}"
+                            >
+                              ${feature}
+                            </button>
+                          `;
+                        })
+                        .join("")}
+
+                    </div>
+
                   </div>
-                </div>
-              `,
-            )
-            .join("")}
-        </article>
-      `,
+                `,
+              )
+              .join("")}
+
+          </article>
+        `,
     )
     .join("");
 }
@@ -572,7 +652,7 @@ function renderSystemsProductSelector() {
     </div>
   `;
 }
-function renderSystemRelationships(relationshipItems) {
+function renderSystemRelationships(relationships) {
   const canvas = document.querySelector("#systemMapCanvas");
   const svg = document.querySelector("#systemLinksSvg");
 
@@ -600,56 +680,84 @@ function renderSystemRelationships(relationshipItems) {
     </defs>
   `;
 
-  relationshipItems.forEach((relationship, index) => {
+  relationships.forEach((relationship, index) => {
     const fromNode = document.querySelector(
-      `[data-system-node="${CSS.escape(relationship.fromComponent)}"]`,
+      `[data-system-node="${CSS.escape(
+        String(relationship.fromComponent || "").trim(),
+      )}"]`,
     );
 
     const toNode = document.querySelector(
-      `[data-system-node="${CSS.escape(relationship.toComponent)}"]`,
+      `[data-system-node="${CSS.escape(
+        String(relationship.toComponent || "").trim(),
+      )}"]`,
     );
 
     if (!fromNode || !toNode) return;
 
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+
+    path.classList.add("system-relationship-link");
+
     const fromRect = fromNode.getBoundingClientRect();
     const toRect = toNode.getBoundingClientRect();
 
-    const startX = fromRect.right - canvasRect.left;
-    const startY = fromRect.top + fromRect.height / 2 - canvasRect.top;
+    const offset = ((index % 3) - 1) * 18;
 
-    const endX = toRect.left - canvasRect.left;
-    const endY = toRect.top + toRect.height / 2 - canvasRect.top;
+    const fromCenterX = fromRect.left + fromRect.width / 2 - canvasRect.left;
+    const fromBottomY = fromRect.bottom - canvasRect.top;
 
-    const midX = startX + Math.max(40, (endX - startX) / 2);
+    const toCenterX = toRect.left + toRect.width / 2 - canvasRect.left;
+    const toTopY = toRect.top - canvasRect.top;
 
-    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    const isDownward = toTopY >= fromBottomY;
 
+    const startX = fromCenterX;
+    const startY = isDownward
+      ? fromBottomY + 4
+      : fromRect.top - canvasRect.top - 4;
+
+    const endX = toCenterX;
+    const endY = isDownward ? toTopY - 4 : toRect.bottom - canvasRect.top + 4;
+
+    const verticalDistance = Math.abs(endY - startY);
+    const midY = startY + (endY - startY) / 2;
+
+    const sideOffset = ((index % 3) - 1) * 22;
+    const sameGroup =
+      fromNode.closest(".system-group-box") ===
+      toNode.closest(".system-group-box");
+
+    if (sameGroup) {
+      path.setAttribute(
+        "d",
+        `
+      M ${startX} ${startY}
+      L ${endX} ${endY}
+    `,
+      );
+    } else {
+      path.setAttribute(
+        "d",
+        `
+      M ${startX} ${startY}
+      C ${startX + sideOffset} ${startY + Math.min(36, verticalDistance / 2)},
+        ${endX + sideOffset} ${endY - Math.min(36, verticalDistance / 2)},
+        ${endX} ${endY}
+    `,
+      );
+    }
     path.setAttribute(
       "d",
-      `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`,
+      `
+    M ${startX} ${startY}
+    C ${startX + sideOffset} ${startY + Math.min(36, verticalDistance / 2)},
+      ${endX + sideOffset} ${endY - Math.min(36, verticalDistance / 2)},
+      ${endX} ${endY}
+  `,
     );
-
-    path.setAttribute(
-      "class",
-      `system-relationship-link ${relationship.type || ""}`,
-    );
-    path.setAttribute("marker-end", "url(#arrowhead)");
-
+    // path.setAttribute("marker-end", "url(#arrowhead)");
     svg.appendChild(path);
-
-    if (relationship.label) {
-      const label = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "text",
-      );
-
-      label.setAttribute("x", midX);
-      label.setAttribute("y", (startY + endY) / 2 - 6);
-      label.setAttribute("class", "system-relationship-label");
-      label.textContent = relationship.label;
-
-      svg.appendChild(label);
-    }
   });
 }
 async function init(showMessage = true) {
@@ -784,6 +892,15 @@ document.addEventListener("click", (event) => {
 
   selectedArchitectureGap = selectedArchitectureGap === gapKey ? null : gapKey;
   selectedCapability = null;
+  render();
+});
+document.addEventListener("click", (event) => {
+  const expandButton = event.target.closest("#expandSystemMapBtn");
+
+  if (!expandButton) return;
+
+  isSystemMapExpanded = !isSystemMapExpanded;
+
   render();
 });
 window.addEventListener("hashchange", render);
