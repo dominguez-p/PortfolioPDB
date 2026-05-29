@@ -376,7 +376,8 @@ function renderSystems(programId) {
 
     groupedSystems[layerName][groupName].push(item);
   });
-
+  console.log("selectedCapability:", selectedCapability);
+  console.log("affectedSystems:", [...affectedSystems]);
   systemLayers.innerHTML = Object.entries(groupedSystems)
     .map(
       ([layerName, groups]) => `
