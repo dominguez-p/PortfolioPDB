@@ -1043,3 +1043,22 @@ th {
   fill: rgba(255, 255, 255, 0.9);
   stroke: rgba(0, 19, 145, 0.18);
 }
+.footer {
+  width: 100%;
+  padding: 24px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  color: rgba(0, 19, 145, 0.55);
+
+  border-top: 1px solid rgba(0, 19, 145, 0.08);
+
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+}
