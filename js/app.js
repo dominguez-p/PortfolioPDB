@@ -6,6 +6,7 @@ let selectedSystemComponent = null;
 let selectedFunctionalItem = null;
 let selectedArchitectureGap = null;
 let isSystemMapExpanded = false;
+let showProgramLocalisms = false;
 const view = document.querySelector("#view");
 const title = document.querySelector("#pageTitle");
 const subtitle = document.querySelector("#pageSubtitle");
@@ -112,7 +113,9 @@ function renderProgram(programId) {
     return;
   }
 
-  const modules = DATA.modules.filter((m) => m.programId === programId);
+  const modules = DATA.modules.filter(
+    (m) => m.programId === programId && m.route !== "backlog",
+  );
   const roles = DATA.roles.filter(
     (r) => r.programId === programId && r.country === selectedCountry,
   );
@@ -120,11 +123,23 @@ function renderProgram(programId) {
   const priorities = DATA.priorities.filter(
     (x) => x.programId === programId && x.country === selectedCountry,
   );
+  const impediments = (DATA.impediments || []).filter(
+    (x) => x.programId === programId && x.country === selectedCountry,
+  );
+
+  const decisionsPending = (DATA.decisionsPending || []).filter(
+    (x) => x.programId === programId && x.country === selectedCountry,
+  );
+
+  const decisionsDone = (DATA.decisionsDone || []).filter(
+    (x) => x.programId === programId && x.country === selectedCountry,
+  );
 
   setHead(p.name, p.description, `Retail Client Solutions > ${p.name}`);
 
   view.innerHTML = "";
   view.append(tpl("#program-template"));
+  document.querySelector("#rolesList")?.closest(".two-column")?.remove();
   view.insertAdjacentHTML("afterbegin", renderCountrySelector());
   programName.textContent = p.name;
   programDescription.textContent = p.description;
@@ -154,13 +169,156 @@ function renderProgram(programId) {
     )
     .join("");
 
-  rolesList.innerHTML = roles
-    .map((r) => `<span class="tag">${r.role} · ${r.description}</span>`)
-    .join("");
+  view.insertAdjacentHTML(
+    "beforeend",
+    `
+    <section class="localisms-toggle-section">
+      <button class="localisms-toggle-btn" type="button" id="localismsToggleBtn">
+        ${showProgramLocalisms ? "Contraer" : "Localismos del programa"}
+      </button>
+    </section>
 
-  prioritiesList.innerHTML = priorities
-    .map((x) => `<div class="stack-item">${x.priority}</div>`)
-    .join("");
+    <section class="program-localisms ${showProgramLocalisms ? "is-open" : ""}">      
+      <section class="two-column management-section">
+        <article class="panel">
+          <h3>Impedimentos</h3>
+          <div class="management-list">
+            ${
+              impediments.length
+                ? impediments
+                    .map(
+                      (item) => `
+                        <div class="management-card">
+                          <div class="management-card-top">
+                            <strong>${item.title}</strong>
+                            <span class="pill ${item.severity === "high" ? "red" : item.severity === "medium" ? "yellow" : ""}">
+                              ${item.severity || "low"}
+                            </span>
+                          </div>
+                          <p>${item.impact || ""}</p>
+                          <small><b>Owner:</b> ${item.owner || "-"} · <b>Objetivo:</b> ${item.targetResolutionDate || "-"}</small>
+                          <small><b>Mitigación:</b> ${item.mitigation || "-"}</small>
+                        </div>
+                      `,
+                    )
+                    .join("")
+                : `<p class="empty-state">No hay impedimentos registrados.</p>`
+            }
+          </div>
+        </article>
+
+        <article class="panel">
+          <h3>Decisiones</h3>
+
+          <h4 class="management-subtitle">Pendientes</h4>
+          <div class="management-list">
+            ${
+              decisionsPending.length
+                ? decisionsPending
+                    .map(
+                      (item) => `
+                        <div class="management-card">
+                          <div class="management-card-top">
+                            <strong>${item.title}</strong>
+                            <span class="pill yellow">${item.status || "pending"}</span>
+                          </div>
+                          <small><b>Owner:</b> ${item.owner || "-"} · <b>Fecha:</b> ${item.dueDate || "-"}</small>
+                          <p>${item.impact || ""}</p>
+                        </div>
+                      `,
+                    )
+                    .join("")
+                : `<p class="empty-state">No hay decisiones pendientes.</p>`
+            }
+          </div>
+
+          <h4 class="management-subtitle">Tomadas</h4>
+          <div class="management-list">
+            ${
+              decisionsDone.length
+                ? decisionsDone
+                    .map(
+                      (item) => `
+                        <div class="management-card done">
+                          <div class="management-card-top">
+                            <strong>${item.title}</strong>
+                            <span class="pill">${item.status || "done"}</span>
+                          </div>
+                          <small><b>Owner:</b> ${item.owner || "-"} · <b>Fecha:</b> ${item.dueDate || "-"}</small>
+                          <p>${item.impact || ""}</p>
+                        </div>
+                      `,
+                    )
+                    .join("")
+                : `<p class="empty-state">No hay decisiones tomadas.</p>`
+            }
+          </div>
+        </article>
+      </section> 
+    <section class="module-grid secondary-module-grid">
+       <article class="module-card" onclick="alert('Backlog próximamente disponible')">
+        <span class="pill yellow">Próximamente</span>
+        <h3>Backlog estratégico</h3>
+        <p>Demanda, gaps e iniciativas priorizadas.</p>
+      </article>
+
+      <article class="module-card" onclick="alert('Roadmap próximamente disponible')">
+        <span class="pill yellow">Próximamente</span>
+        <h3>Roadmap</h3>
+        <p>Hitos, entregas y planificación temporal.</p>
+      </article>
+      <article class="module-card" onclick="alert('Hitos próximamente disponible')">
+        <span class="pill yellow">Próximamente</span>
+        <h3>Hitos</h3>
+        <p>Hitos, entregas y planificación temporal.</p>
+      </article>
+    </section>
+     <section class="two-column final-info-section">
+    <article class="panel">
+      <h3>Roles clave</h3>
+      <div class="tag-list">
+        ${roles
+          .map((r) => `<span class="tag">${r.role} · ${r.description}</span>`)
+          .join("")}
+      </div>
+    </article>
+
+    <article class="panel">
+      <h3>Prioridades</h3>
+      <div class="stack-list">
+        ${priorities
+          .map((x) => `<div class="stack-item">${x.priority}</div>`)
+          .join("")}
+      </div>
+    </article>
+  </section>
+    `,
+  );
+
+  // view.insertAdjacentHTML(
+  //   "beforeend",
+  //   `
+  //   <section class="two-column final-info-section">
+  //     <article class="panel">
+  //       <h3>Roles clave</h3>
+  //       <div class="tag-list">
+  //         ${roles
+  //           .map((r) => `<span class="tag">${r.role} · ${r.description}</span>`)
+  //           .join("")}
+  //       </div>
+  //     </article>
+
+  //     <article class="panel">
+  //       <h3>Prioridades</h3>
+  //       <div class="stack-list">
+  //         ${priorities
+  //           .map((x) => `<div class="stack-item">${x.priority}</div>`)
+  //           .join("")}
+  //       </div>
+  //     </article>
+  //   </section>
+  // `,
+  // );
 }
 function renderFunctional(programId) {
   const p = DATA.programs.find((x) => x.id === programId);
@@ -606,6 +764,8 @@ function render() {
   if (routeName === "program") renderProgram(programId);
   else if (routeName === "functional") renderFunctional(programId);
   else if (routeName === "systems") renderSystems(programId);
+  else if (routeName === "impediments") renderImpediments(programId);
+  else if (routeName === "decisions") renderDecisions(programId);
   else renderLanding();
 }
 function renderCountrySelector() {
@@ -973,6 +1133,15 @@ document.addEventListener("click", (event) => {
   if (!expandButton) return;
 
   isSystemMapExpanded = !isSystemMapExpanded;
+
+  render();
+});
+document.addEventListener("click", (event) => {
+  const button = event.target.closest("#localismsToggleBtn");
+
+  if (!button) return;
+
+  showProgramLocalisms = !showProgramLocalisms;
 
   render();
 });

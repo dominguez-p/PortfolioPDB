@@ -17,5 +17,8 @@ window.APP_CONFIG = {
     systems: "systems_inventory",
     architectureFeaturesGaps: "architecture_features_gaps",
     systemRelationships: "system_relationships",
+    impediments: "impediments",
+    decisionsPending: "decisions_pending",
+    decisionsDone: "decisions_done",
   },
 };

@@ -290,10 +290,12 @@ h4 {
 .program-card h3,
 .module-card h3,
 .panel h3 {
-  margin: 0;
-  font-size: 24px;
+  margin-bottom: 14px;
+  line-height: 1.1;
 }
-
+.management-section .panel h3 {
+  margin-bottom: 18px;
+}
 .program-card p,
 .module-card p {
   margin: 4px 0;
@@ -1061,4 +1063,145 @@ th {
 
   background: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(8px);
+}
+.management-section {
+  margin-top: 22px;
+}
+
+.management-list {
+  display: grid;
+  gap: 12px;
+}
+
+.management-card {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  background: #f6f8fc;
+}
+
+.management-card.done {
+  background: #f7fffb;
+}
+
+.management-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.management-card p {
+  margin: 8px 0;
+  color: var(--muted);
+}
+
+.management-card small {
+  display: block;
+  color: var(--muted);
+  margin-top: 5px;
+}
+
+.management-subtitle {
+  margin: 18px 0 10px;
+  font-family: Georgia, serif;
+  color: var(--blue);
+}
+
+.empty-state {
+  color: var(--muted);
+  margin: 0;
+}
+.secondary-module-grid,
+.final-info-section {
+  margin-top: 22px;
+}
+.management-section,
+.secondary-module-grid,
+.final-info-section {
+  margin-top: 22px;
+}
+
+.secondary-module-grid {
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+}
+/* Compactar pantalla de programa */
+.main {
+  padding-top: 28px;
+}
+
+.topbar {
+  margin-bottom: 22px;
+}
+
+.country-selector {
+  margin-bottom: 14px;
+}
+
+.program-hero {
+  margin-bottom: 18px;
+  padding: 18px;
+}
+
+.program-hero h2 {
+  margin-top: 10px;
+}
+
+/* Evita hueco al tener 3 cards */
+.module-grid {
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.module-card {
+  min-height: 130px;
+}
+
+/* Reduce aire interno en cards */
+.module-card h3 {
+  line-height: 1.05;
+}
+
+.module-card p {
+  margin-top: 4px;
+}
+
+/* Secciones inferiores más compactas */
+.management-section,
+.secondary-module-grid,
+.final-info-section {
+  margin-top: 18px;
+}
+
+.panel {
+  padding: 18px;
+}
+
+.management-card {
+  padding: 12px;
+}
+.localisms-toggle-section {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+}
+
+.localisms-toggle-btn {
+  border: 1px solid var(--line);
+  background: var(--blue);
+  color: #fff;
+  border-radius: 999px;
+  padding: 12px 22px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(7, 46, 111, 0.12);
+}
+
+.program-localisms {
+  display: none;
+}
+
+.program-localisms.is-open {
+  display: block;
 }

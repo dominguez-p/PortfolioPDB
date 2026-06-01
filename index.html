@@ -94,6 +94,41 @@
       <h2>Mapa de sistemas</h2>
       <p>Vista combinada de sistemas, inventario y capacidades funcionales.</p>
     </section>
+    <template id="impediments-template">
+      <button class="ghost-button back-to-program-btn" data-route="">
+        ← Volver al programa
+      </button>
+
+      <section class="section-title-row">
+        <h2>Impedimentos</h2>
+        <p>Bloqueos, riesgos y mitigaciones activas.</p>
+      </section>
+
+      <section id="impedimentsList" class="management-list"></section>
+    </template>
+
+    <template id="decisions-template">
+      <button class="ghost-button back-to-program-btn" data-route="">
+        ← Volver al programa
+      </button>
+
+      <section class="section-title-row">
+        <h2>Decisiones</h2>
+        <p>Decisiones pendientes y decisiones ya tomadas.</p>
+      </section>
+
+      <section class="two-column">
+        <article class="panel">
+          <h3>Decisiones pendientes</h3>
+          <div id="decisionsPendingList" class="management-list"></div>
+        </article>
+
+        <article class="panel">
+          <h3>Decisiones tomadas</h3>
+          <div id="decisionsDoneList" class="management-list"></div>
+        </article>
+      </section>
+    </template>
 
     <section class="systems-dashboard-grid" id="systemsDashboardGrid">
       <article class="panel">
