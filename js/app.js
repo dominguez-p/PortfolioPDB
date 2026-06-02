@@ -6,6 +6,7 @@ let selectedSystemComponent = null;
 let selectedFunctionalItem = null;
 let selectedArchitectureGap = null;
 let isSystemMapExpanded = false;
+let isToBeMapExpanded = false;
 let showProgramLocalisms = false;
 const view = document.querySelector("#view");
 const title = document.querySelector("#pageTitle");
@@ -294,31 +295,6 @@ function renderProgram(programId) {
   </section>
     `,
   );
-
-  // view.insertAdjacentHTML(
-  //   "beforeend",
-  //   `
-  //   <section class="two-column final-info-section">
-  //     <article class="panel">
-  //       <h3>Roles clave</h3>
-  //       <div class="tag-list">
-  //         ${roles
-  //           .map((r) => `<span class="tag">${r.role} · ${r.description}</span>`)
-  //           .join("")}
-  //       </div>
-  //     </article>
-
-  //     <article class="panel">
-  //       <h3>Prioridades</h3>
-  //       <div class="stack-list">
-  //         ${priorities
-  //           .map((x) => `<div class="stack-item">${x.priority}</div>`)
-  //           .join("")}
-  //       </div>
-  //     </article>
-  //   </section>
-  // `,
-  // );
 }
 function renderFunctional(programId) {
   const p = DATA.programs.find((x) => x.id === programId);
@@ -396,7 +372,7 @@ function renderFunctional(programId) {
     .join("");
 }
 
-function renderSystems(programId) {
+function renderSystems(programId, mode = "systems") {
   const p = DATA.programs.find((x) => x.id === programId);
 
   const systemItems = DATA.systems.filter(
@@ -468,6 +444,10 @@ function renderSystems(programId) {
 
   const groupedDomains = {};
 
+  const sourceSystems = mode === "architecture" ? DATA.systems : DATA.systems;
+
+  const targetSystems = mode === "architecture" ? DATA.systemsToBe || [] : [];
+
   functionalItems.forEach((item) => {
     if (!groupedDomains[item.domain]) {
       groupedDomains[item.domain] = [];
@@ -486,12 +466,25 @@ function renderSystems(programId) {
 
   view.innerHTML = "";
 
-  view.append(tpl("#systems-template"));
+  const templateId =
+    mode === "architecture" ? "#architecture-template" : "#systems-template";
+
+  view.append(tpl(templateId));
 
   const systemsDashboardGrid = document.querySelector("#systemsDashboardGrid");
 
   const expandSystemMapBtn = document.querySelector("#expandSystemMapBtn");
+  const expandToBeMapBtn = document.querySelector("#expandToBeMapBtn");
+  const toBePanel = document.querySelector(".systems-tobe-panel");
+  if (toBePanel) {
+    toBePanel.classList.toggle("tobe-map-expanded", isToBeMapExpanded);
+  }
 
+  if (expandToBeMapBtn) {
+    expandToBeMapBtn.textContent = isToBeMapExpanded
+      ? "Contraer mapa"
+      : "Expandir mapa";
+  }
   if (systemsDashboardGrid) {
     systemsDashboardGrid.classList.toggle(
       "system-map-expanded",
@@ -536,9 +529,131 @@ function renderSystems(programId) {
   });
   console.log("selectedCapability:", selectedCapability);
   console.log("affectedSystems:", [...affectedSystems]);
+
   systemLayers.innerHTML = Object.entries(groupedSystems)
     .map(
       ([layerName, groups]) => `
+      <article class="layer">
+
+        <h3>${layerName}</h3>
+
+        <div class="system-groups">
+
+          ${Object.entries(groups)
+            .map(([groupName, groupItems]) => {
+              const componentsByLevel = {};
+
+              groupItems.forEach((s) => {
+                const level = s.level || "1";
+
+                const components = String(s.component || "")
+                  .split("|")
+                  .map((item) => item.trim())
+                  .filter(Boolean);
+
+                if (!componentsByLevel[level]) {
+                  componentsByLevel[level] = [];
+                }
+
+                componentsByLevel[level].push(...components);
+              });
+
+              return `
+                <div
+                  class="system-group-box"
+                  data-system-group="${groupName}"
+                >
+
+                  <div class="system-group-title">
+                    ${groupName}
+                  </div>
+
+                  ${Object.entries(componentsByLevel)
+                    .sort(([a], [b]) => Number(a) - Number(b))
+                    .map(
+                      ([level, components]) => `
+                        <div
+                          class="system-level-row"
+                          data-level="${level}"
+                        >
+
+                          ${components
+                            .map((component) => {
+                              const isAffected = affectedSystems.has(component);
+
+                              const isSelected =
+                                selectedSystemComponent === component;
+
+                              return `
+                                <button
+                                  class="
+                                    component
+                                    system-component-card
+                                    ${
+                                      isAffected ? "affected-by-capability" : ""
+                                    }
+                                    ${
+                                      isSelected
+                                        ? "selected-system-component"
+                                        : ""
+                                    }
+                                  "
+                                  type="button"
+                                  data-system-component="${component}"
+                                  data-system-node="${component}"
+                                >
+                                  ${component}
+                                </button>
+                              `;
+                            })
+                            .join("")}
+
+                        </div>
+                      `,
+                    )
+                    .join("")}
+
+                </div>
+              `;
+            })
+            .join("")}
+
+        </div>
+
+      </article>
+    `,
+    )
+    .join("");
+
+  if (mode === "architecture") {
+    const toBeItems = (DATA.systemsToBe || []).filter(
+      (item) =>
+        item.programId === programId &&
+        item.country === selectedCountry &&
+        item.product === selectedSystemProduct,
+    );
+
+    const groupedToBeSystems = {};
+
+    toBeItems.forEach((item) => {
+      const layerName = item.layer || "General";
+
+      if (!groupedToBeSystems[layerName]) {
+        groupedToBeSystems[layerName] = {};
+      }
+
+      const groupName = item.groupName || "Sin agrupación";
+
+      if (!groupedToBeSystems[layerName][groupName]) {
+        groupedToBeSystems[layerName][groupName] = [];
+      }
+
+      groupedToBeSystems[layerName][groupName].push(item);
+    });
+
+    systemLayersToBe.innerHTML = Object.entries(groupedToBeSystems)
+      .map(
+        ([layerName, groups]) => `
         <article class="layer">
 
           <h3>${layerName}</h3>
@@ -565,10 +680,11 @@ function renderSystems(programId) {
                 });
 
                 return `
-                    <div
-                      class="system-group-box"
-                      data-system-group="${groupName}"
-                    >
+                  <div
+                    class="system-group-box"
+                    data-system-group="${groupName}"
+                  >
+
                     <div class="system-group-title">
                       ${groupName}
                     </div>
@@ -583,37 +699,21 @@ function renderSystems(programId) {
                           >
 
                             ${components
-                              .map((component) => {
-                                const isAffected =
-                                  affectedSystems.has(component);
-
-                                const isSelected =
-                                  selectedSystemComponent === component;
-
-                                return `
+                              .map(
+                                (component) => `
                                   <button
                                     class="
                                       component
                                       system-component-card
-                                      ${
-                                        isAffected
-                                          ? "affected-by-capability"
-                                          : ""
-                                      }
-                                      ${
-                                        isSelected
-                                          ? "selected-system-component"
-                                          : ""
-                                      }
+                                      ${affectedSystems.has(component) ? "affected-by-capability" : ""}
                                     "
                                     type="button"
-                                    data-system-component="${component}"
                                     data-system-node="${component}"
                                   >
                                     ${component}
-                                  </button>
-                                `;
-                              })
+                                  </button> 
+                                `,
+                              )
                               .join("")}
 
                           </div>
@@ -630,14 +730,29 @@ function renderSystems(programId) {
 
         </article>
       `,
-    )
-    .join("");
+      )
+      .join("");
+
+    requestAnimationFrame(() => {
+      renderSystemRelationships(
+        (DATA.systemRelationshipsToBe || []).filter(
+          (item) =>
+            item.programId === programId &&
+            item.country === selectedCountry &&
+            item.product === selectedSystemProduct,
+        ),
+        "#systemMapCanvasToBe",
+        "#systemLinksSvgToBe",
+      );
+    });
+  }
 
   requestAnimationFrame(() => {
     renderSystemRelationships(relationshipItems);
   });
 
-  systemsTable.outerHTML = `
+  if (mode === "architecture" && typeof systemsTable !== "undefined") {
+    systemsTable.outerHTML = `
     <div class="architecture-gap-list">
 
       ${architectureGapItems
@@ -702,10 +817,16 @@ function renderSystems(programId) {
 
     </div>
   `;
+  }
 
-  systemsFunctionalMap.innerHTML = Object.entries(groupedDomains)
-    .map(
-      ([domainName, capabilities]) => `
+  const systemsFunctionalMapEl = document.querySelector(
+    "#systemsFunctionalMap",
+  );
+
+  if (systemsFunctionalMapEl) {
+    systemsFunctionalMapEl.innerHTML = Object.entries(groupedDomains)
+      .map(
+        ([domainName, capabilities]) => `
           <article class="systems-mini-domain">
 
             <h4>${domainName}</h4>
@@ -753,17 +874,19 @@ function renderSystems(programId) {
 
           </article>
         `,
-    )
-    .join("");
+      )
+      .join("");
+  }
 }
-
 function render() {
   const h = location.hash.replace("#", "") || "landing";
   const [routeName, programId] = h.split("/");
 
   if (routeName === "program") renderProgram(programId);
   else if (routeName === "functional") renderFunctional(programId);
-  else if (routeName === "systems") renderSystems(programId);
+  else if (routeName === "systems") renderSystems(programId, "systems");
+  else if (routeName === "architecture")
+    renderSystems(programId, "architecture");
   else if (routeName === "impediments") renderImpediments(programId);
   else if (routeName === "decisions") renderDecisions(programId);
   else renderLanding();
@@ -815,9 +938,13 @@ function renderSystemsProductSelector() {
     </div>
   `;
 }
-function renderSystemRelationships(relationships) {
-  const canvas = document.querySelector("#systemMapCanvas");
-  const svg = document.querySelector("#systemLinksSvg");
+function renderSystemRelationships(
+  relationships,
+  canvasSelector = "#systemMapCanvas",
+  svgSelector = "#systemLinksSvg",
+) {
+  const canvas = document.querySelector(canvasSelector);
+  const svg = document.querySelector(svgSelector);
 
   if (!canvas || !svg) return;
 
@@ -847,14 +974,13 @@ function renderSystemRelationships(relationships) {
     function getRelationshipNode(type, id) {
       const cleanType = String(type || "component").trim();
       const cleanId = String(id || "").trim();
-
       if (cleanType === "group") {
-        return document.querySelector(
+        return canvas.querySelector(
           `[data-system-group="${CSS.escape(cleanId)}"]`,
         );
       }
 
-      return document.querySelector(
+      return canvas.querySelector(
         `[data-system-node="${CSS.escape(cleanId)}"]`,
       );
     }
@@ -1142,6 +1268,15 @@ document.addEventListener("click", (event) => {
   if (!button) return;
 
   showProgramLocalisms = !showProgramLocalisms;
+
+  render();
+});
+document.addEventListener("click", (event) => {
+  const expandButton = event.target.closest("#expandToBeMapBtn");
+
+  if (!expandButton) return;
+
+  isToBeMapExpanded = !isToBeMapExpanded;
 
   render();
 });

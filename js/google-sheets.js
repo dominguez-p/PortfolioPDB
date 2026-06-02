@@ -92,6 +92,8 @@ async function loadGoogleSheetsData() {
     impedimentsRows,
     decisionsPendingRows,
     decisionsDoneRows,
+    systemsToBeRows,
+    systemRelationshipsToBeRows,
   ] = await Promise.all([
     fetchSheetValues(sheetNames.portfolioKpis),
     fetchSheetValues(sheetNames.programs),
@@ -106,9 +108,13 @@ async function loadGoogleSheetsData() {
     fetchSheetValues(sheetNames.impediments),
     fetchSheetValues(sheetNames.decisionsPending),
     fetchSheetValues(sheetNames.decisionsDone),
+    fetchSheetValues(sheetNames.systemsToBe),
+    fetchSheetValues(sheetNames.systemRelationshipsToBe),
   ]);
 
   return {
+    systemsToBe: rowsToObjects(systemsToBeRows),
+    systemRelationshipsToBe: rowsToObjects(systemRelationshipsToBeRows),
     impediments: rowsToObjects(impedimentsRows),
     decisionsPending: rowsToObjects(decisionsPendingRows),
     decisionsDone: rowsToObjects(decisionsDoneRows),
