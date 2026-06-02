@@ -1205,3 +1205,47 @@ th {
 .program-localisms.is-open {
   display: block;
 }
+.systems-dashboard-grid.systems-two-columns {
+  grid-template-columns: minmax(620px, 1.5fr) minmax(320px, 0.8fr);
+}
+
+.systems-dashboard-grid.systems-two-columns.system-map-expanded {
+  grid-template-columns: minmax(900px, 2fr) minmax(260px, 0.45fr);
+}
+
+.systems-dashboard-grid.systems-two-columns.system-map-expanded
+  .systems-functional-panel {
+  max-height: 760px;
+  overflow: auto;
+  opacity: 0.72;
+}
+
+.systems-map-panel {
+  min-width: 0;
+}
+
+.systems-functional-panel {
+  min-width: 0;
+}
+.systems-tobe-panel.tobe-map-expanded {
+  grid-column: 1 / -1;
+}
+
+.systems-tobe-panel.tobe-map-expanded .system-map-canvas {
+  min-height: 900px;
+}
+.systems-dashboard-grid:has(.systems-tobe-panel.tobe-map-expanded) {
+  grid-template-columns: 0.45fr 0.45fr 2.2fr;
+}
+
+.systems-tobe-panel.tobe-map-expanded {
+  min-height: 900px;
+}
+
+.systems-tobe-panel.tobe-map-expanded .system-map-canvas {
+  min-height: 820px;
+}
+
+.systems-tobe-panel.tobe-map-expanded .system-layers {
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+}

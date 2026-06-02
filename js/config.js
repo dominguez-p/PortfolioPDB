@@ -20,5 +20,7 @@ window.APP_CONFIG = {
     impediments: "impediments",
     decisionsPending: "decisions_pending",
     decisionsDone: "decisions_done",
+    systemsToBe: "systems_inventory_tobe",
+    systemRelationshipsToBe: "system_relationships_tobe",
   },
 };
