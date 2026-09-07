@@ -4665,7 +4665,91 @@ function installProductPlanComparison() {
   function renderProductPlanLinkedRow(row, year, sourceType) {
     const layout = rowLayout(row, year);
 
-    const label = sourceType === "msa" ? "MSA" : "FEATURE";
+    const isMsa = sourceType === "msa";
+
+    const label = isMsa ? "MSA" : "FEATURE";
+
+    /*
+     * El row.raw del MSA conserva el
+     * roadmap item original.
+     *
+     * Debemos navegar utilizando item.id,
+     * porque el detalle busca el elemento
+     * exactamente por:
+     *
+     * type = msa
+     * id   = roadmapItem.id
+     *
+     * No utilizamos sourceKey como id de
+     * navegación porque normalmente muestra
+     * jiraKey y no queremos asumir que ambos
+     * identificadores sean siempre iguales.
+     */
+    const detailId = isMsa ? String(row?.raw?.id || "").trim() : "";
+
+    const canNavigate = isMsa && Boolean(detailId);
+
+    const barTitle = [
+      row.sourceKey,
+      row.title,
+
+      `${formatShortDate(row.startDate)} → ${formatShortDate(row.endDate)}`,
+
+      canNavigate ? "Abrir detalle del MSA" : "",
+    ]
+      .filter(Boolean)
+      .join(" · ");
+
+    const timelineBar = canNavigate
+      ? `
+          <button
+            type="button"
+            class="
+              product-plan-bar
+              product-plan-bar-${escapeHtml(sourceType)}
+            "
+            data-roadmap-detail-type="msa"
+            data-roadmap-detail-id="${escapeHtml(detailId)}"
+            style="
+              left:${layout.left}%;
+              width:${layout.width}%;
+              border:0;
+              cursor:pointer;
+              font:inherit;
+            "
+            title="${escapeHtml(barTitle)}"
+            aria-label="${escapeHtml(`Abrir detalle del MSA ${row.title}`)}"
+          >
+            <span>
+              ${escapeHtml(row.sourceKey)}
+              ·
+              ${escapeHtml(formatShortDate(row.startDate))}
+              →
+              ${escapeHtml(formatShortDate(row.endDate))}
+            </span>
+          </button>
+        `
+      : `
+          <span
+            class="
+              product-plan-bar
+              product-plan-bar-${escapeHtml(sourceType)}
+            "
+            style="
+              left:${layout.left}%;
+              width:${layout.width}%;
+            "
+            title="${escapeHtml(barTitle)}"
+          >
+            <span>
+              ${escapeHtml(row.sourceKey)}
+              ·
+              ${escapeHtml(formatShortDate(row.startDate))}
+              →
+              ${escapeHtml(formatShortDate(row.endDate))}
+            </span>
+          </span>
+        `;
 
     return `
     <article
@@ -4728,30 +4812,7 @@ function installProductPlanComparison() {
       >
         ${renderTodayLine(year)}
 
-        <span
-          class="
-            product-plan-bar
-            product-plan-bar-${escapeHtml(sourceType)}
-          "
-          style="
-            left:${layout.left}%;
-            width:${layout.width}%;
-          "
-          title="${escapeHtml(
-            `${row.sourceKey} · ${row.title} · ` +
-              `${formatShortDate(row.startDate)} → ${formatShortDate(
-                row.endDate,
-              )}`,
-          )}"
-        >
-          <span>
-            ${escapeHtml(row.sourceKey)}
-            ·
-            ${escapeHtml(formatShortDate(row.startDate))}
-            →
-            ${escapeHtml(formatShortDate(row.endDate))}
-          </span>
-        </span>
+        ${timelineBar}
       </div>
     </article>
   `;
