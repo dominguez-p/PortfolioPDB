@@ -3866,31 +3866,18 @@ function renderAIxBankerHome(programId, requestedProductId = null) {
 
       return {
         programId: normalizedProgramId,
-
         productId,
-
         year: currentYear,
-
         sdaCode: "",
-
         productName: product?.label || productId,
-
         programName: program.name || "AIxBanker",
-
         country: "Holding",
-
         description: product?.description || "",
-
         sponsor: "",
-
         productOwner: "",
-
         programManager: "",
-
         engineeringResponsible: "",
-
         startQuarter: `Q1 ${currentYear}`,
-
         endQuarter: `Q4 ${currentYear}`,
       };
     });
@@ -3925,16 +3912,14 @@ function renderAIxBankerHome(programId, requestedProductId = null) {
 
   /*
    * =====================================================
-   * LANDING · DEPARTURES
+   * LANDING · PRODUCTOS
    * =====================================================
    */
   if (!activeFlight) {
     setHead(
-      `${program.name || "AIxBanker"} Departures`,
-
-      "Selecciona un vuelo para acceder a su Flight Deck",
-
-      `Retail Client Solutions > ${program.name || "AIxBanker"} > Departures`,
+      `${program.name || "AIxBanker"}`,
+      "Selecciona un producto para acceder a su espacio de gestión",
+      `Retail Client Solutions > ${program.name || "AIxBanker"} > Productos`,
     );
 
     view.innerHTML = "";
@@ -3980,170 +3965,164 @@ function renderAIxBankerHome(programId, requestedProductId = null) {
         ).length;
 
         return `
-            <article
-              class="
-                flight-gate-board
-                flight-gate-board-clickable
-                ${productId === "panorama" ? "is-panorama" : ""}
-              "
-              data-route="${rcsEsc(routeValue)}"
-              role="link"
-              tabindex="0"
-              aria-label="${rcsEsc(`Abrir Flight Deck de ${productLabel}`)}"
-              title="${rcsEsc(`Abrir Flight Deck de ${productLabel}`)}"
+          <article
+            class="
+              flight-gate-board
+              flight-gate-board-clickable
+              ${productId === "panorama" ? "is-panorama" : ""}
+            "
+            data-route="${rcsEsc(routeValue)}"
+            role="link"
+            tabindex="0"
+            aria-label="${rcsEsc(`Abrir producto ${productLabel}`)}"
+            title="${rcsEsc(`Abrir producto ${productLabel}`)}"
+            style="
+              cursor:pointer;
+            "
+          >
+            <div
+              class="flight-gate-sign"
+              aria-label="${rcsEsc(`SDA ${sdaCode}`)}"
               style="
-                cursor:pointer;
+                font-size:
+                  clamp(
+                    20px,
+                    2.7vw,
+                    36px
+                  );
+                letter-spacing:
+                  0.015em;
+                min-height:
+                  76px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                white-space:nowrap;
+              "
+            >
+              ${rcsEsc(sdaCode)}
+            </div>
+
+            <div
+              class="
+                flight-gate-monitor-frame
               "
             >
               <div
-                class="flight-gate-sign"
-                aria-label="${rcsEsc(`SDA ${sdaCode}`)}"
-                style="
-                  font-size:
-                    clamp(
-                      20px,
-                      2.7vw,
-                      36px
-                    );
-                  letter-spacing:
-                    0.015em;
-                  min-height:
-                    76px;
-                  display:flex;
-                  align-items:center;
-                  justify-content:center;
-                  white-space:nowrap;
-                "
-              >
-                ${rcsEsc(sdaCode)}
-              </div>
-
-              <div
                 class="
-                  flight-gate-monitor-frame
+                  flight-gate-monitor
                 "
               >
                 <div
                   class="
-                    flight-gate-monitor
+                    flight-gate-monitor-top
                   "
                 >
                   <div
                     class="
-                      flight-gate-monitor-top
+                      flight-gate-airline
                     "
                   >
-                    <div
-                      class="
-                        flight-gate-airline
-                      "
-                    >
-                      AIxBANKER
-                    </div>
-
-                    <div
-                      class="
-                        flight-gate-flight-meta
-                      "
-                    >
-                      <strong>
-                        ${rcsEsc(productLabel)}
-                      </strong>
-
-                      <small>
-                        ${rcsEsc(year)}
-                      </small>
-                    </div>
+                    AIxBANKER
                   </div>
 
                   <div
                     class="
-                      flight-gate-destination
+                      flight-gate-flight-meta
                     "
                   >
-                    ${rcsEsc(productLabel)}
-                  </div>
+                    <strong>
+                      ${rcsEsc(productLabel)}
+                    </strong>
 
-                  <div
-                    class="
-                      flight-gate-info
-                    "
-                  >
-                    <div>
-                      <span>
-                        Window
-                      </span>
-
-                      <strong>
-                        ${rcsEsc(startQuarter)}
-                        →
-                        ${rcsEsc(endQuarter)}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>
-                        SDA
-                      </span>
-
-                      <strong>
-                        ${rcsEsc(deliverableCount)}
-                      </strong>
-                    </div>
-
-                    <div>
-                      <span>
-                        JIRA
-                      </span>
-
-                      <strong>
-                        ${rcsEsc(jiraCount)}
-                      </strong>
-                    </div>
-                  </div>
-
-                  <div
-                    class="
-                      flight-gate-status
-                    "
-                  >
-                    BOARDING
-                  </div>
-
-                  <div
-                    class="
-                      flight-gate-open
-                    "
-                    aria-hidden="true"
-                  >
-                    Abrir Flight Deck
-
-                    <span>
-                      →
-                    </span>
+                    <small>
+                      ${rcsEsc(year)}
+                    </small>
                   </div>
                 </div>
 
-                <span
+                <div
                   class="
-                    flight-gate-monitor-brand
+                    flight-gate-destination
+                  "
+                >
+                  ${rcsEsc(productLabel)}
+                </div>
+
+                <div
+                  class="
+                    flight-gate-info
+                  "
+                >
+                  <div>
+                    <span>
+                      Window
+                    </span>
+
+                    <strong>
+                      ${rcsEsc(startQuarter)}
+                      →
+                      ${rcsEsc(endQuarter)}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>
+                      SDA
+                    </span>
+
+                    <strong>
+                      ${rcsEsc(deliverableCount)}
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>
+                      JIRA
+                    </span>
+
+                    <strong>
+                      ${rcsEsc(jiraCount)}
+                    </strong>
+                  </div>
+                </div>
+
+                <div
+                  class="
+                    flight-gate-status
+                  "
+                >
+                  DISPONIBLE
+                </div>
+
+                <div
+                  class="
+                    flight-gate-open
                   "
                   aria-hidden="true"
                 >
-                  RCS CONTROL DISPLAY
-                </span>
+                  Abrir producto
+
+                  <span>
+                    →
+                  </span>
+                </div>
               </div>
-            </article>
-          `;
+
+              <span
+                class="
+                  flight-gate-monitor-brand
+                "
+                aria-hidden="true"
+              >
+                RCS CONTROL DISPLAY
+              </span>
+            </div>
+          </article>
+        `;
       })
       .join("");
 
-    /*
-     * Accesibilidad teclado.
-     *
-     * El click normal ya lo resuelve
-     * el listener global de data-route.
-     */
     boardGrid
       .querySelectorAll(".flight-gate-board[data-route]")
       .forEach((panel) => {
@@ -4163,7 +4142,7 @@ function renderAIxBankerHome(programId, requestedProductId = null) {
 
   /*
    * =====================================================
-   * FLIGHT DECK
+   * PRODUCT DETAIL · FLIGHT DECK
    * =====================================================
    */
 
@@ -4241,10 +4220,113 @@ function renderAIxBankerHome(programId, requestedProductId = null) {
   };
 
   /*
-   * El antiguo GATE A01/A02
-   * pasa también a identificar
-   * directamente la SDA.
+   * =====================================================
+   * COPY DE LOS CUATRO BLOQUES
+   * =====================================================
    */
+
+  const setInstrumentCopy = (selector, code, metaphor, functionalTitle) => {
+    const instrument = document.querySelector(selector);
+
+    if (!instrument) {
+      return;
+    }
+
+    const codeElement = instrument.querySelector(
+      ".flight-deck-instrument-code",
+    );
+
+    const labelElement = instrument.querySelector(
+      ".flight-deck-instrument-label",
+    );
+
+    const titleElement = instrument.querySelector("strong");
+
+    if (codeElement) {
+      codeElement.textContent = code;
+    }
+
+    if (labelElement) {
+      labelElement.textContent = metaphor;
+    }
+
+    if (titleElement) {
+      titleElement.textContent = functionalTitle;
+    }
+  };
+
+  setInstrumentCopy(
+    "#flightDeckProjectTracking",
+    "PFD",
+    "FLIGHT PLAN",
+    "Project Tracking",
+  );
+
+  setInstrumentCopy("#flightDeckTeamPlanning", "TEAM", "CREW", "Staffing");
+
+  setInstrumentCopy(
+    "#flightDeckTrendingTopics",
+    "ND",
+    "RADAR",
+    "Trending Topics",
+  );
+
+  setInstrumentCopy(
+    "#flightDeckManagementReports",
+    "EICAS",
+    "INSTRUMENTS",
+    "Management Reports",
+  );
+
+  /*
+   * =====================================================
+   * FLIGHT BRIEF · MÁS MARGEN
+   * =====================================================
+   *
+   * La ventana derecha está recortada
+   * mediante un borde inclinado.
+   *
+   * Desplazamos más el contenido hacia
+   * el centro para que ninguna línea quede
+   * pegada visualmente al recorte.
+   */
+
+  const flightBriefContent = document.querySelector(
+    ".flight-deck-window-right .flight-deck-window-content",
+  );
+
+  if (flightBriefContent) {
+    flightBriefContent.style.paddingTop = "34px";
+
+    flightBriefContent.style.paddingRight = "44px";
+
+    flightBriefContent.style.paddingBottom = "34px";
+
+    flightBriefContent.style.paddingLeft = "96px";
+
+    flightBriefContent.style.boxSizing = "border-box";
+  }
+
+  const flightBriefGrid = document.querySelector(
+    ".flight-deck-window-right .flight-deck-brief-grid",
+  );
+
+  if (flightBriefGrid) {
+    flightBriefGrid.style.paddingLeft = "0";
+
+    flightBriefGrid.style.minWidth = "0";
+
+    flightBriefGrid.style.columnGap = "48px";
+
+    flightBriefGrid.style.rowGap = "18px";
+  }
+
+  /*
+   * =====================================================
+   * DATOS SDA
+   * =====================================================
+   */
+
   setText("#flightDeckGateCode", activeSdaCode);
 
   setText("#flightDeckActiveFlightLabel", activeProductLabel);
@@ -4266,6 +4348,7 @@ function renderAIxBankerHome(programId, requestedProductId = null) {
 
   setText(
     "#flightDeckMission",
+
     activeFlight.description ||
       activeFlight.rationale ||
       activeProduct?.description ||
@@ -4274,6 +4357,7 @@ function renderAIxBankerHome(programId, requestedProductId = null) {
 
   setText(
     "#flightDeckProgramName",
+
     activeFlight.programName || program.name || "AIxBanker",
   );
 
@@ -4305,7 +4389,7 @@ function renderAIxBankerHome(programId, requestedProductId = null) {
     "#flightDeckTeamPlanningSummary",
 
     restrictedAvailable
-      ? "Crew y capacidad restringida disponibles"
+      ? "Staffing y capacidad restringida disponibles"
       : "Scrums y staffing disponibles",
   );
 
@@ -4346,6 +4430,12 @@ function renderAIxBankerHome(programId, requestedProductId = null) {
       ? "Origen restringido disponible"
       : "Origen restringido no disponible";
   }
+
+  /*
+   * =====================================================
+   * NAVEGACIÓN
+   * =====================================================
+   */
 
   const projectTrackingButton = document.querySelector(
     "#flightDeckProjectTracking",
@@ -5958,30 +6048,31 @@ async function loadPortfolioData(forceRefresh = false) {
 
   /*
    * =====================================================
-   * PORTFOLIO · FAST FAIL
+   * PORTFOLIO · CARGA ÚNICA
    * =====================================================
    *
-   * El portfolio es únicamente la puerta
-   * de entrada al Cockpit.
+   * El Portfolio General es la única carga
+   * obligatoria al arrancar la aplicación.
    *
-   * Hacemos UN único intento de 8 segundos.
+   * Ya no utilizamos esta carga para calcular
+   * contribuciones de cada programa a las
+   * ambiciones RCS.
    *
-   * Antes utilizábamos:
+   * Por tanto:
    *
-   * attempts: 1
+   * - una sola petición
+   * - ningún retry
+   * - 25 segundos para permitir que Apps Script
+   *   complete un cold start
    *
-   * pero loadJsonp() utiliza "retries".
-   * Eso hacía que el valor fuese ignorado y
-   * se ejecutasen dos peticiones:
+   * Antes utilizábamos 8 segundos.
    *
-   * Intento 1/2
-   * Intento 2/2
-   *
-   * Si falla este único intento activamos
-   * inmediatamente el modo demo.
+   * Ese límite era demasiado agresivo y
+   * provocaba que una respuesta lenta pero
+   * válida activase inmediatamente el modo DEMO.
    */
   const rawData = await loadConfiguredSource(source, {
-    timeoutMs: 8000,
+    timeoutMs: 25000,
 
     retries: 0,
   });
