@@ -650,7 +650,7 @@ function portfolioUxRefreshContributions(programs, forceRefresh = false) {
   }
 }
 
-renderPortfolioProgramCard = function renderProgramCardWithContribution(
+renderPortfolioProgramCard = function renderProgramCardWithoutContribution(
   program,
 ) {
   const enabled = portfolioUxProgramEnabled(program.enabled);
@@ -659,111 +659,173 @@ renderPortfolioProgramCard = function renderProgramCardWithContribution(
 
   const programId = String(program.id || "").trim();
 
+  /*
+   * =====================================================
+   * MODO DEMO
+   * =====================================================
+   *
+   * Conservamos exclusivamente la señal visual
+   * de que un programa está utilizando datos
+   * sintéticos.
+   *
+   * No calculamos contribuciones ni cargamos
+   * ningún origen adicional para hacerlo.
+   */
+  const portfolioIsDemo =
+    typeof getRcsDataMode === "function" &&
+    getRcsDataMode("portfolio") === "demo";
+
+  const demoProgramData =
+    portfolioIsDemo && typeof getDemoProgramData === "function"
+      ? getDemoProgramData(programId)
+      : null;
+
+  const isDemo = Boolean(enabled && demoProgramData);
+
   return `
-      <article
+    <article
+      class="
+        portfolio-program-card
+        ${enabled ? "" : "disabled"}
+        ${isDemo ? "is-demo" : ""}
+      "
+    >
+      <header
         class="
-          portfolio-program-card
-          ${enabled ? "" : "disabled"}
+          portfolio-program-heading
         "
       >
-        <header class="portfolio-program-heading">
-          <span
-            class="portfolio-program-icon"
-            aria-hidden="true"
-          >
-            ${portfolioUxEscape(program.icon || "●")}
-          </span>
-
-          <div>
-            <h3>
-              ${portfolioUxEscape(program.name || "Programa")}
-            </h3>
-
-            <p>
-              ${portfolioUxEscape(program.description || "")}
-            </p>
-          </div>
-        </header>
-
         <span
           class="
-            pill
-            ${portfolioStatusClass(status)}
+            portfolio-program-icon
           "
+          aria-hidden="true"
         >
-          ${portfolioUxEscape(status)}
+          ${portfolioUxEscape(program.icon || "●")}
         </span>
 
-        <section
-          class="portfolio-program-contribution"
-          data-portfolio-program-contribution="${portfolioUxEscape(programId)}"
-          data-state="${enabled ? "loading" : "disabled"}"
-          aria-label="Contribución real a las ambiciones RCS"
-        >
-          ${
-            enabled
-              ? `
-                  <div
-                    class="
-                      portfolio-program-contribution-loading
-                    "
-                  >
-                    <span></span>
-                    <span></span>
+        <div>
+          <h3>
+            ${portfolioUxEscape(program.name || "Programa")}
+          </h3>
 
-                    <small>
-                      Calculando contribución real…
-                    </small>
-                  </div>
-                `
-              : `
-                  <div
-                    class="
-                      portfolio-program-contribution-empty
-                    "
-                  >
-                    <strong>
-                      Sin datos disponibles
-                    </strong>
+          <p>
+            ${portfolioUxEscape(program.description || "")}
+          </p>
+        </div>
+      </header>
 
-                    <span>
-                      El programa todavía no está habilitado.
-                    </span>
-                  </div>
-                `
-          }
-        </section>
+      <span
+        class="
+          pill
+          ${portfolioStatusClass(status)}
+        "
+      >
+        ${portfolioUxEscape(status)}
+      </span>
 
-        <button
-          class="portfolio-program-action"
-          type="button"
-          ${
-            enabled
-              ? `data-route="program/${portfolioUxEscape(programId)}"`
-              : "disabled"
-          }
-        >
-          ${
-            enabled
-              ? "Entrar en el programa →"
-              : "Programa próximamente disponible"
-          }
-        </button>
-      </article>
-    `;
+      ${
+        isDemo
+          ? `
+              <section
+                class="
+                  portfolio-program-demo-message
+                "
+                aria-label="
+                  Programa en modo demo
+                "
+              >
+                <span
+                  class="
+                    portfolio-program-demo-badge
+                  "
+                >
+                  DEMO
+                </span>
+
+                <div>
+                  <strong>
+                    Datos sintéticos
+                  </strong>
+
+                  <small>
+                    No representan información
+                    operativa real
+                  </small>
+                </div>
+              </section>
+            `
+          : ""
+      }
+
+      ${
+        !enabled
+          ? `
+              <section
+                class="
+                  portfolio-program-contribution
+                "
+                data-state="disabled"
+              >
+                <div
+                  class="
+                    portfolio-program-contribution-empty
+                  "
+                >
+                  <strong>
+                    Sin datos disponibles
+                  </strong>
+
+                  <span>
+                    El programa todavía no está
+                    habilitado.
+                  </span>
+                </div>
+              </section>
+            `
+          : ""
+      }
+
+      <button
+        class="
+          portfolio-program-action
+        "
+        type="button"
+        ${
+          enabled
+            ? `data-route="program/${portfolioUxEscape(programId)}"`
+            : "disabled"
+        }
+      >
+        ${
+          enabled
+            ? isDemo
+              ? "Entrar en modo demo →"
+              : "Entrar en el programa →"
+            : "Programa próximamente disponible"
+        }
+      </button>
+    </article>
+  `;
 };
 
 const portfolioUxBaseRenderLanding = renderLanding;
 
-renderLanding = function renderLandingWithProgramContributions(...args) {
+renderLanding = function renderLandingWithoutProgramContributions(...args) {
   const result = portfolioUxBaseRenderLanding(...args);
 
-  const programs = Array.isArray(DATA?.programs) ? DATA.programs : [];
-
-  const forceRefresh = portfolioUxForceContributionRefresh;
-
-  portfolioUxForceContributionRefresh = false;
-
+  /*
+   * =====================================================
+   * PROGRAMAS RCS
+   * =====================================================
+   *
+   * La landing es únicamente una puerta
+   * de entrada al portfolio.
+   *
+   * No cargamos datasets de cada programa
+   * para calcular contribuciones a
+   * ambiciones.
+   */
   const programsSection = [
     ...document.querySelectorAll(".portfolio-home-section"),
   ].find(
@@ -779,9 +841,18 @@ renderLanding = function renderLandingWithProgramContributions(...args) {
 
   if (description) {
     description.textContent =
-      "Cada tarjeta agrega la contribución real de su roadmap a las ambiciones RCS.";
+      "Acceso a los programas de Retail Client Solutions.";
   }
 
+  /*
+   * =====================================================
+   * AMBICIONES RCS
+   * =====================================================
+   *
+   * Conservamos el marco estratégico,
+   * pero ya no indicamos que las tarjetas
+   * calculan una contribución agregada.
+   */
   const ambitionsSection = [
     ...document.querySelectorAll(".portfolio-home-section"),
   ].find(
@@ -797,11 +868,22 @@ renderLanding = function renderLandingWithProgramContributions(...args) {
 
   if (ambitionsDescription) {
     ambitionsDescription.textContent =
-      "Las ocho ambiciones forman el marco común y las tarjetas de programa muestran su contribución agregada.";
+      "Las ocho ambiciones forman el marco estratégico común de Retail Client Solutions.";
   }
 
-  portfolioUxRefreshContributions(programs, forceRefresh);
-
+  /*
+   * IMPORTANTE:
+   *
+   * Antes:
+   *
+   * portfolioUxRefreshContributions(...)
+   *
+   * recorría todos los programas habilitados
+   * y lanzaba peticiones Apps Script.
+   *
+   * Ya no se realiza ninguna carga adicional
+   * desde la landing.
+   */
   return result;
 };
 
