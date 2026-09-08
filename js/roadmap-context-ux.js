@@ -3377,6 +3377,40 @@ function installProductPlanComparison() {
   }
 
   function handleComparisonClick(event) {
+    const sdaToggle = event.target.closest("[data-product-plan-sda-toggle]");
+
+    if (sdaToggle) {
+      event.preventDefault();
+
+      event.stopPropagation();
+
+      toggleProductPlanSdaGroup(sdaToggle);
+
+      return;
+    }
+
+    const sdaAction = event.target.closest("[data-product-plan-sda-action]");
+
+    if (sdaAction) {
+      event.preventDefault();
+
+      const action = String(
+        sdaAction.dataset.productPlanSdaAction || "",
+      ).trim();
+
+      if (action === "expand-all") {
+        setProductPlanAllSdaGroupsExpanded(true);
+
+        return;
+      }
+
+      if (action === "collapse-all") {
+        setProductPlanAllSdaGroupsExpanded(false);
+
+        return;
+      }
+    }
+
     const sourceButton = event.target.closest("[data-product-plan-source]");
 
     if (sourceButton) {
@@ -3403,6 +3437,8 @@ function installProductPlanComparison() {
       event.preventDefault();
 
       selectYear(yearButton);
+
+      return;
     }
   }
 
@@ -4817,7 +4853,193 @@ function installProductPlanComparison() {
     </article>
   `;
   }
+  function productPlanSdaCollapseKey(row) {
+    const directId =
+      typeof productPlanSdaDeliverableId === "function"
+        ? productPlanSdaDeliverableId(row)
+        : "";
 
+    if (directId) {
+      return String(directId).trim();
+    }
+
+    const raw = row?.raw && typeof row.raw === "object" ? row.raw : {};
+
+    return String(
+      raw.deliverableId ||
+        raw.sdaDeliverableId ||
+        row?.deliverableId ||
+        row?.id ||
+        row?.sourceKey ||
+        row?.title ||
+        "",
+    ).trim();
+  }
+
+  function productPlanExpandedSdaSet(state) {
+    if (
+      !state.expandedSdaDeliverables ||
+      !(state.expandedSdaDeliverables instanceof Set)
+    ) {
+      /*
+       * Vacío por defecto:
+       *
+       * el cronograma siempre arranca
+       * colapsado por SDA.
+       */
+      state.expandedSdaDeliverables = new Set();
+    }
+
+    return state.expandedSdaDeliverables;
+  }
+
+  function toggleProductPlanSdaGroup(button) {
+    const context =
+      typeof roadmapWorkspaceParseRoute === "function"
+        ? roadmapWorkspaceParseRoute()
+        : null;
+
+    const programId = String(context?.programId || "").trim();
+
+    const productId = normalizeProduct(context?.productId);
+
+    if (programId !== PROGRAM_ID || !productId || productId === ALL_ID) {
+      return;
+    }
+
+    const collapseKey = String(
+      button.dataset.productPlanSdaToggle || "",
+    ).trim();
+
+    if (!collapseKey) {
+      return;
+    }
+
+    const state = comparisonState(programId, productId);
+
+    const expanded = productPlanExpandedSdaSet(state);
+
+    if (expanded.has(collapseKey)) {
+      expanded.delete(collapseKey);
+    } else {
+      expanded.add(collapseKey);
+    }
+
+    rerenderComparison();
+  }
+
+  function setProductPlanAllSdaGroupsExpanded(expanded) {
+    const context =
+      typeof roadmapWorkspaceParseRoute === "function"
+        ? roadmapWorkspaceParseRoute()
+        : null;
+
+    const programId = String(context?.programId || "").trim();
+
+    const productId = normalizeProduct(context?.productId);
+
+    if (programId !== PROGRAM_ID || !productId || productId === ALL_ID) {
+      return;
+    }
+
+    const state = comparisonState(programId, productId);
+
+    const expandedSet = productPlanExpandedSdaSet(state);
+
+    if (!expanded) {
+      expandedSet.clear();
+
+      rerenderComparison();
+
+      return;
+    }
+
+    document
+      .querySelectorAll(".product-plan-sda-group[data-sda-collapse-key]")
+      .forEach((group) => {
+        const collapseKey = String(group.dataset.sdaCollapseKey || "").trim();
+
+        if (collapseKey) {
+          expandedSet.add(collapseKey);
+        }
+      });
+
+    rerenderComparison();
+  }
+
+  function renderProductPlanCollapseToolbar(groups, state) {
+    const availableGroups = Array.isArray(groups) ? groups : [];
+
+    if (!availableGroups.length) {
+      return "";
+    }
+
+    const expanded = productPlanExpandedSdaSet(state);
+
+    const keys = availableGroups
+      .map((group) => productPlanSdaCollapseKey(group.sda))
+      .filter(Boolean);
+
+    const expandedCount = keys.filter((key) => expanded.has(key)).length;
+
+    const allExpanded = keys.length > 0 && expandedCount === keys.length;
+
+    const allCollapsed = expandedCount === 0;
+
+    return `
+    <section
+      class="
+        product-plan-collapse-toolbar
+      "
+      aria-label="
+        Control de despliegue SDA
+      "
+    >
+      <div
+        class="
+          product-plan-collapse-toolbar-copy
+        "
+      >
+        <span>
+          DETALLE SDA
+        </span>
+
+        <strong>
+          ${expandedCount}
+          de
+          ${keys.length}
+          desplegados
+        </strong>
+      </div>
+
+      <div
+        class="
+          product-plan-collapse-actions
+        "
+      >
+        <button
+          type="button"
+          data-product-plan-sda-action="
+            collapse-all
+          "
+          ${allCollapsed ? "disabled" : ""}
+        >
+          Colapsar todo
+        </button>
+
+        <button
+          type="button"
+          data-product-plan-sda-action="
+            expand-all
+          "
+          ${allExpanded ? "disabled" : ""}
+        >
+          Expandir todo
+        </button>
+      </div>
+    </section>
+  `;
+  }
   function renderProductPlanSdaGroup(group, year, state, relationshipsReady) {
     const sda = group.sda;
 
@@ -4831,12 +5053,24 @@ function installProductPlanComparison() {
 
     const hasVisibleChildren = visibleMsas.length || visibleFeatures.length;
 
+    const collapseKey = productPlanSdaCollapseKey(sda);
+
+    const expandedSet = productPlanExpandedSdaSet(state);
+
+    /*
+     * Por defecto todos los grupos están
+     * colapsados porque el Set comienza vacío.
+     */
+    const expanded = collapseKey ? expandedSet.has(collapseKey) : false;
+
     return `
     <section
       class="
         product-plan-sda-group
+        ${expanded ? "is-expanded" : "is-collapsed"}
       "
       data-sda-deliverable="${escapeHtml(String(sda.raw?.deliverableId || ""))}"
+      data-sda-collapse-key="${escapeHtml(collapseKey)}"
     >
       <header
         class="
@@ -4847,11 +5081,17 @@ function installProductPlanComparison() {
           SDA DELIVERABLE
         </span>
 
-        <strong>
+        <strong
+          title="${escapeHtml(sda.title)}"
+        >
           ${escapeHtml(sda.title)}
         </strong>
 
-        <div>
+        <div
+          class="
+            product-plan-sda-group-counts
+          "
+        >
           <span>
             ${msas.length}
             ${msas.length === 1 ? "MSA" : "MSAs"}
@@ -4862,12 +5102,43 @@ function installProductPlanComparison() {
             ${features.length === 1 ? "Feature" : "Features"}
           </span>
         </div>
+
+        <button
+          type="button"
+          class="
+            product-plan-sda-expand-button
+          "
+          data-product-plan-sda-toggle="${escapeHtml(collapseKey)}"
+          aria-expanded="${expanded ? "true" : "false"}"
+          aria-label="${escapeHtml(
+            expanded ? `Colapsar ${sda.title}` : `Desplegar ${sda.title}`,
+          )}"
+          title="${expanded ? "Colapsar SDA" : "Desplegar SDA"}"
+        >
+          <span
+            aria-hidden="true"
+          >
+            ⌄
+          </span>
+        </button>
       </header>
 
-      ${renderProductPlanSdaAnchor(sda, year, state.sources.sda)}
+      ${
+        /*
+         * La fila SDA nunca desaparece.
+         *
+         * Incluso colapsada mantenemos:
+         *
+         * - nombre
+         * - estado
+         * - países
+         * - barra de planificación
+         */
+        renderProductPlanSdaAnchor(sda, year, state.sources.sda)
+      }
 
       ${
-        relationshipsReady && hasVisibleChildren
+        expanded && relationshipsReady && hasVisibleChildren
           ? `
               <div
                 class="
@@ -4889,6 +5160,7 @@ function installProductPlanComparison() {
       }
 
       ${
+        expanded &&
         relationshipsReady &&
         !hasVisibleChildren &&
         (state.sources.msa || state.sources.features)
@@ -4898,8 +5170,9 @@ function installProductPlanComparison() {
                   product-plan-no-linked-jira
                 "
               >
-                Sin elementos JIRA relacionados
-                con este entregable SDA.
+                Sin elementos JIRA
+                relacionados con este
+                entregable SDA.
               </div>
             `
           : ""
@@ -4956,6 +5229,8 @@ function installProductPlanComparison() {
     relationshipsReady,
     selectedSdaDeliverableId = ALL_ID,
   ) {
+    installProductPlanCollapseStyles();
+
     const relations = productPlanBuildSdaRelations(
       sdaRows,
       msaRows,
@@ -4972,6 +5247,8 @@ function installProductPlanComparison() {
         product-plan-linked-timeline
       "
     >
+      ${renderProductPlanCollapseToolbar(relations.groups, state)}
+
       ${renderMonthAxis(year)}
 
       ${
@@ -4982,8 +5259,9 @@ function installProductPlanComparison() {
                   product-plan-relations-loading
                 "
               >
-                Relacionando entregables SDA
-                con MSAs y Features JIRA...
+                Relacionando entregables
+                SDA con MSAs y Features
+                JIRA...
               </div>
             `
           : ""
@@ -5048,6 +5326,7 @@ function installProductPlanComparison() {
 
   installStyles();
 }
+
 function installProductPlanRelationStyles() {
   if (document.getElementById("productPlanRelationStyles")) {
     return;
@@ -5236,6 +5515,166 @@ function installProductPlanRelationStyles() {
     .product-plan-unlinked > summary span {
       font-size: 11px;
       font-weight: 800;
+    }
+  `;
+
+  document.head.append(style);
+}
+function installProductPlanCollapseStyles() {
+  if (document.getElementById("productPlanCollapseStyles")) {
+    return;
+  }
+
+  const style = document.createElement("style");
+
+  style.id = "productPlanCollapseStyles";
+
+  style.textContent = `
+    .product-plan-collapse-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 52px;
+      padding: 9px 14px 9px 22px;
+      border-bottom: 1px solid #dbe4f0;
+      background: #ffffff;
+    }
+
+    .product-plan-collapse-toolbar-copy {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .product-plan-collapse-toolbar-copy > span {
+      color: #1464c9;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .product-plan-collapse-toolbar-copy > strong {
+      color: #526783;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .product-plan-collapse-actions {
+      display: inline-flex;
+      gap: 7px;
+      flex: 0 0 auto;
+    }
+
+    .product-plan-collapse-actions button {
+      min-height: 32px;
+      padding: 5px 11px;
+      border: 1px solid #cbd7e7;
+      border-radius: 8px;
+      background: #f7f9fc;
+      color: #29466e;
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      transition:
+        border-color 120ms ease,
+        background 120ms ease,
+        color 120ms ease;
+    }
+
+    .product-plan-collapse-actions button:hover:not(:disabled) {
+      border-color: #1464c9;
+      background: #edf5ff;
+      color: #0b35b7;
+    }
+
+    .product-plan-collapse-actions button:disabled {
+      cursor: default;
+      opacity: 0.42;
+    }
+
+    .product-plan-sda-group-header {
+      position: relative;
+    }
+
+    .product-plan-sda-group-counts {
+      display: inline-flex;
+      gap: 6px;
+      flex: 0 0 auto;
+    }
+
+    .product-plan-sda-expand-button {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      place-items: center;
+      padding: 0;
+      border: 1px solid #cdd9e8;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #315276;
+      cursor: pointer;
+      transition:
+        border-color 120ms ease,
+        background 120ms ease,
+        color 120ms ease,
+        transform 120ms ease;
+    }
+
+    .product-plan-sda-expand-button:hover {
+      border-color: #1464c9;
+      background: #edf5ff;
+      color: #0b35b7;
+    }
+
+    .product-plan-sda-expand-button > span {
+      display: block;
+      font-size: 17px;
+      font-weight: 900;
+      line-height: 1;
+      transform: rotate(-90deg);
+      transition:
+        transform 140ms ease;
+    }
+
+    .product-plan-sda-group.is-expanded
+      .product-plan-sda-expand-button > span {
+      transform: rotate(0deg);
+    }
+
+    .product-plan-sda-group.is-collapsed
+      .product-plan-sda-anchor {
+      border-bottom: 0;
+    }
+
+    .product-plan-sda-group.is-expanded
+      .product-plan-sda-group-header {
+      background: #f3f8ff;
+    }
+
+    .product-plan-sda-group.is-expanded
+      .product-plan-sda-expand-button {
+      border-color: #a9c8ed;
+      background: #eaf3ff;
+      color: #0b35b7;
+    }
+
+    @media (max-width: 980px) {
+      .product-plan-collapse-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .product-plan-collapse-actions {
+        width: 100%;
+      }
+
+      .product-plan-collapse-actions button {
+        flex: 1;
+      }
     }
   `;
 
